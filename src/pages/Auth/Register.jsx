@@ -6,22 +6,21 @@ import useAuth from "../../hooks/useAuth";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import SocialLogin from "./SocialLogin";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const [preview, setPreview] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
-
   const { registerUser, user, updateUserProfile } = useAuth();
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const axiosSecure = useAxiosSecure();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -33,6 +32,7 @@ const Register = () => {
       toast.error("Photo is required");
       return;
     }
+    console.log(data);
     const profileImg = data.photo[0];
 
     try {
@@ -53,9 +53,28 @@ const Register = () => {
       // Update user profile
       await updateUserProfile({ displayName: data.name, photoURL });
       toast.success("Account created successfully!");
-      navigate(location.state || "/");
+      // Save to Database
+      if (data.role === "Tutor") {
+        axiosSecure
+          .post("/tutors", data)
+          .then((res) => {
+            console.log("after saving tutor in DB", res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        axiosSecure
+          .post("/students", data)
+          .then((res) => {
+            console.log("after saving student in DB", res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
 
-      toast.success("Account created successfully!");
+      navigate(location.state || "/");
     } catch (err) {
       toast.error(err.message || "Registration failed");
     } finally {
@@ -102,7 +121,6 @@ const Register = () => {
             <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
           )}
 
-          {/* Photo image field*/}
           {/* Photo image field */}
           <fieldset className="fieldset">
             <label
@@ -172,6 +190,48 @@ const Register = () => {
             )}
           </fieldset>
 
+          {/* Role selection field */}
+          <label className="label text-[16px] text-base-content" htmlFor="role">
+            Role
+          </label>
+          <select
+            id="role"
+            {...register("role", { required: "Role is required" })}
+            className="select select-bordered w-full rounded-full mb-2"
+          >
+            <option value="">Select Role</option>
+            <option value="Student">Student</option>
+            <option value="Tutor">Tutor</option>
+          </select>
+          {errors.role && (
+            <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
+          )}
+
+          {/* Phone number field */}
+          <label
+            className="label text-[16px] text-base-content"
+            htmlFor="phone"
+          >
+            Phone
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            {...register("phone", {
+              required: "Phone number is required",
+              pattern: {
+                value: /^\+?\d{10,15}$/,
+                message:
+                  "Invalid phone number. Only digits allowed, 10-15 digits.",
+              },
+            })}
+            className="input input-bordered w-full text-[16px] rounded-full mb-2"
+            placeholder="Your Phone Number"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+          )}
+
           {/* Email field */}
           <label
             className="label text-[16px] text-base-content"
@@ -189,7 +249,7 @@ const Register = () => {
               },
             })}
             type="email"
-            className="input input-bordered w-full text-[16px] rounded-full"
+            className="input input-bordered w-full text-[16px] rounded-full mb-2"
             placeholder="Your Email"
           />
           {errors.email && (
