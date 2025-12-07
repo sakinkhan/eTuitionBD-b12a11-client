@@ -14,12 +14,16 @@ import { GoLocation } from "react-icons/go";
 const Footer = () => {
   return (
     <div>
-      <footer className="footer sm:footer-horizontal bg-base-200 p-10 md:px-20">
+      <footer className="footer sm:footer-horizontal bg-neutral p-10 md:px-20">
         <aside>
           <Logo></Logo>
           <p className="text">
             Connecting Students & Tutors. <br />
             Built on 25+ Years of Trust.
+          </p>
+          <p className="mt-15">
+            Copyright © {new Date().getFullYear()} - All rights reserved by
+            eTuitionBD
           </p>
         </aside>
         <nav>
@@ -38,15 +42,15 @@ const Footer = () => {
         <nav>
           <h6 className="footer-title">Contact</h6>
           <div className="flex items-center gap-2 text-sm">
-            <HiOutlineMail size={18} />
+            <HiOutlineMail size={18} color="var(--icon-color)" />
             <span>support@etuitionbd.com</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <BsTelephone size={16} />
+            <BsTelephone size={16} color="var(--icon-color)" />
             <span>+880 1234 567890</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <GoLocation size={16} />
+            <GoLocation size={16} color="var(--icon-color)" />
             <span>Dhaka, Bangladesh</span>
           </div>
         </nav>
@@ -68,14 +72,6 @@ const Footer = () => {
           </div>
         </nav>
       </footer>
-      <div className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
-        <aside>
-          <p className="">
-            Copyright © {new Date().getFullYear()} - All rights reserved by
-            eTuitionBD
-          </p>
-        </aside>
-      </div>
     </div>
   );
 };

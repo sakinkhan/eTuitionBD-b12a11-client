@@ -1,7 +1,7 @@
 import React from "react";
 import Logo from "../components/Logo/Logo";
 import { Outlet } from "react-router";
-import WelcomeLottie from "../components/WelcomeLottie/WelcomeLottie";
+import WelcomeLottie from "../components/Lotties/WelcomeLottie";
 
 const AuthLayout = () => {
   return (

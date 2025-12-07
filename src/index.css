@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
-
-
 @import "tailwindcss";
 @plugin "daisyui";
 
@@ -16,6 +12,7 @@
     --color-secondary: #f8e152;
     --color-accent: #fef5bd;
     --icon-color: #ff7100;
+    --color-neutral: #FFF4E0;
     --color-base-content: #4B5563;
 }
 
@@ -25,7 +22,9 @@
 
     --color-primary: #ff7100;
     --color-secondary: #f8e152;
+    --color-accent: #3B382D;
     --icon-color: #f8e152;
+    --color-neutral: #33332A;
     --color-base-content: oklch(4.87 0.01 258.34 / 1);
 }
 

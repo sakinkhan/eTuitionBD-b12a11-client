@@ -90,8 +90,11 @@ const Navbar = () => {
 
       {/* Right: Theme, Login/Signup or Profile */}
       <div className="navbar-end flex items-center gap-2">
-        {/* Theme toggle (visible everywhere) */}
-        <div className="tooltip tooltip-bottom" data-tip="Change Theme">
+        {/* Theme toggle */}
+        <div
+          className="tooltip tooltip-bottom tooltip-primary"
+          data-tip="Change Theme"
+        >
           <button
             onClick={toggleTheme}
             className="btn btn-ghost btn-circle text-lg"

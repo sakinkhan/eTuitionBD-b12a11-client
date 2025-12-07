@@ -1,60 +1,62 @@
 import React from "react";
 import { Link } from "react-router";
-import { BsCheckCircleFill } from "react-icons/bs";
-import Logo from "../../components/Logo/Logo";
-import KeyFeatures from "../../components/KeyFeatures/KeyFeatures";
-import aboutBG from "../../assets/about-us-bg.jpg";
+import AboutLottie from "../../components/Lotties/AboutLottie";
 
 const AboutUs = () => {
   return (
-    <div className="min-h-screen bg-base-100 text-base-content transition-colors duration-300">
-      <section className="relative bg-base-200 py-16">
-        {/* Background image with gradient overlay */}
-        <div
-          className="absolute inset-0 w-full h-full"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url(${aboutBG})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        ></div>
-
-        {/* Content on top */}
-        <div className="relative max-w-6xl mx-auto px-5">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary text-center z-10 relative">
-            About eTuitionBD
-          </h1>
-        </div>
+    <div className="min-h-screen bg-base-200 text-base-content pb-24 pt-10 transition-colors duration-300">
+      {/* Header Section */}
+      <section className="mx-6 md:mx-20 rounded-3xl shadow-xl bg-base-100 backdrop-blur-xl border border-base-300 py-10 px-8 transition-colors duration-300">
+        <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight text-center">
+          About Us
+        </h1>
+        <p className="max-w-2xl mx-auto mt-6 text-lg md:text-xl text-center text-base-content/80 leading-relaxed">
+          A simpler, more trustworthy way for students and tutors to find each
+          other — without the noise, confusion, or guesswork.
+        </p>
       </section>
 
-      {/* Purpose Section */}
-      <section className="py-16">
-        <div className="px-10 md:px-20">
-          <h2 className="text-3xl font-bold  text-primary mb-6">Our Purpose</h2>
-          <p className="text-lg text-base-content leading-relaxed">
-            Finding the right tutor or tuition can often be confusing and
-            time-consuming. eTuitionBD solves real problems by helping students
-            find verified tutors, reducing friction through automated workflows,
-            and providing structured communication and transparent payments. Our
-            platform also supports admins in monitoring and regulating all
-            activities efficiently.
-          </p>
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-12 px-6 md:px-20 mt-20">
+        {/* Lottie */}
+        <div className="flex-1 max-w-md">
+          <AboutLottie />
         </div>
-      </section>
 
-      {/* Call to Action Section */}
-      <section className="py-16 text-center">
-        <h3 className="text-2xl md:text-3xl font-bold mb-4 text-primary">
+        {/* Editorial Text */}
+        <div className="flex-1 max-w-2xl">
+          <div className="bg-base-100 backdrop-blur-xl p-10 rounded-3xl shadow-xl border border-base-300 transition-colors duration-300">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
+              What eTuitionBD Really Does
+            </h2>
+
+            <p className="text-lg text-base-content/80 leading-relaxed mb-6">
+              We make it simple for students to find trustworthy tutors — and
+              for tutors to reach the right students. No noise, no confusion,
+              just a clean and reliable way to connect.
+            </p>
+
+            <p className="text-lg text-base-content/80 leading-relaxed">
+              Profiles are verified, communication stays organised, and payments
+              are secure. You focus on learning or teaching — we take care of
+              the rest.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Join eTuitionBD Section */}
+      <section className="mx-6 md:mx-20 mt-24 py-20 bg-accent/80 backdrop-blur-xl rounded-3xl shadow-xl border border-base-300 text-center transition-colors duration-300">
+        <h3 className="text-3xl md:text-4xl font-extrabold text-primary mb-4">
           Join eTuitionBD Today
         </h3>
-        <p className="text-base-content mb-6">
-          Whether you're a student seeking quality tuition or a tutor looking
-          for opportunities, our platform makes it simple and secure.
+        <p className="max-w-xl mx-auto text-lg text-base-content/80 mb-10">
+          Whether you're here to learn or teach, this is your space.
         </p>
+
         <Link
           to="/register"
-          className="btn bg-primary text-white hover:bg-secondary transition-colors duration-200 rounded-full px-8 py-3"
+          className="px-10 py-4 rounded-full text-white font-semibold text-lg bg-primary hover:bg-secondary hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-2xl active:scale-95"
         >
           Get Started
         </Link>
