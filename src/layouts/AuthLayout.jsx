@@ -9,10 +9,10 @@ const AuthLayout = () => {
   return (
     <div className="min-h-screen">
       <Navbar></Navbar>
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-2 pb-5 py-5 md:gap-20 md:py-10">
-        <dev className="left hidden lg:block">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-2 pb-5 py-5 md:gap-35 md:py-10 px-5 md:px-20">
+        <div className="left hidden lg:block">
           <WelcomeLottie></WelcomeLottie>
-        </dev>
+        </div>
         <div className="right">
           <Outlet></Outlet>
         </div>

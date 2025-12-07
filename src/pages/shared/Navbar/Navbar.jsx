@@ -6,9 +6,10 @@ import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import MyLink from "../../../components/MyLink/MyLink";
 import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { user, logOut } = useAuth();
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleLogout = () => {

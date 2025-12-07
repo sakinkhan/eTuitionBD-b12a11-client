@@ -8,6 +8,7 @@ import Tuitions from "../pages/Tuitions/Tuitions";
 import About from "../pages/About/About";
 import ErrorPage from "../pages/shared/ErrorPage/ErrorPage";
 import LoadingLottie from "../components/Lotties/LoadingLottie";
+import ForgetPassword from "../pages/Auth/ForgetPassword";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,11 @@ export const router = createBrowserRouter([
       {
         path: "register",
         element: <Register></Register>,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+      },
+      {
+        path: "forget-password",
+        element: <ForgetPassword></ForgetPassword>,
         hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
     ],

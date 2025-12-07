@@ -11,6 +11,7 @@
     --color-primary: #ff7100;
     --color-secondary: #f8e152;
     --color-accent: #fef5bd;
+    --color-accent-content: #cce8ff;
     --icon-color: #ff7100;
     --color-neutral: #FFF4E0;
     --color-base-content: #4B5563;
@@ -23,6 +24,7 @@
     --color-primary: #ff7100;
     --color-secondary: #f8e152;
     --color-accent: #3B382D;
+    --color-accent-content: #002b4c;
     --icon-color: #f8e152;
     --color-neutral: #33332A;
     --color-base-content: oklch(4.87 0.01 258.34 / 1);
