@@ -29,9 +29,7 @@ const Navbar = () => {
 
   const protectedLinks = user && (
     <>
-      <MyLink to="/dashboard">My Dashboard</MyLink>
-      <MyLink to="/myProperties">My Properties</MyLink>
-      <MyLink to="/myRatings">My Ratings</MyLink>
+      <MyLink to="/dashboard">Protected LINK</MyLink>
     </>
   );
 
@@ -95,34 +93,42 @@ const Navbar = () => {
         </div>
 
         {user ? (
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  src={
-                    user.photoURL ||
-                    "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
-                  }
-                  alt="User Avatar"
-                />
+          <div className="flex items-center gap-3">
+            <Link
+              to="/login"
+              className="btn btn-outline btn-primary rounded-full text-sm border-2"
+            >
+              My Dashboard
+            </Link>
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img
+                    src={
+                      user.photoURL ||
+                      "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
+                    }
+                    alt="User Avatar"
+                  />
+                </div>
               </div>
+              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-48 p-2 shadow space-y-2">
+                <li>
+                  <p className="font-semibold text-sm">{user?.displayName}</p>
+                </li>
+                <li>
+                  <p className="text-xs text-gray-500">{user?.email}</p>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="btn btn-error text-white text-sm rounded-full w-full"
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
             </div>
-            <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-48 p-2 shadow space-y-2">
-              <li>
-                <p className="font-semibold text-sm">{user?.displayName}</p>
-              </li>
-              <li>
-                <p className="text-xs text-gray-500">{user?.email}</p>
-              </li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="btn btn-error text-white text-sm rounded-full w-full"
-                >
-                  Logout
-                </button>
-              </li>
-            </ul>
           </div>
         ) : (
           <>

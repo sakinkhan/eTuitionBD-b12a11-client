@@ -23,10 +23,12 @@ export const router = createBrowserRouter([
       {
         path: "/tuitions",
         element: <Tuitions></Tuitions>,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
       {
         path: "/about",
         element: <About></About>,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
     ],
   },
@@ -38,10 +40,12 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login></Login>,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
       {
         path: "register",
         element: <Register></Register>,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
     ],
   },
