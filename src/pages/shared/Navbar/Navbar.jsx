@@ -113,17 +113,21 @@ const Navbar = () => {
                   />
                 </div>
               </div>
-              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-48 p-2 shadow space-y-2">
+              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48 max-w-[90vw]">
                 <li>
-                  <p className="font-semibold text-sm">{user?.displayName}</p>
+                  <p className="font-semibold text-base-content text-sm wrap-break-word">
+                    {user?.displayName}
+                  </p>
                 </li>
                 <li>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+                  <p className="text-xs text-base-content wrap-break-word">
+                    {user?.email}
+                  </p>
                 </li>
                 <li>
                   <button
                     onClick={handleLogout}
-                    className="btn btn-error text-white text-sm rounded-full w-full"
+                    className="btn btn-primary text-white text-sm rounded-full w-full"
                   >
                     Logout
                   </button>

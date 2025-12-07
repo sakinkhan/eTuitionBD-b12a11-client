@@ -48,11 +48,6 @@ export const router = createBrowserRouter([
         element: <Register></Register>,
         hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
-      {
-        path: "forget-password",
-        element: <ForgetPassword></ForgetPassword>,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
-      },
     ],
   },
 ]);

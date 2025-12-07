@@ -2,24 +2,26 @@ import React, { useState } from "react";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { AuthContext } from "../../contexts/AuthContext/AuthContext";
 import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
+import ForgotPassword from "./ForgetPassword";
+import SocialLogin from "./SocialLogin";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
-    getValues,
+    watch,
     formState: { errors },
   } = useForm();
+  const emailValue = watch("email");
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const location = useLocation();
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, logInUser, loginWithGoogle } = useAuth();
+  const { user, logInUser } = useAuth();
+  const location = useLocation();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -38,30 +40,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-  // Google Sign in
-  const handleGoogleSignIn = () => {
-    loginWithGoogle()
-      .then(() => {
-        toast.success("Signed in with Google successfully!");
-        navigate(location.state ? location.state : "/");
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Google sign-in failed. Please try again.");
-      });
-  };
-
-  // Forget Password
-  const handleForgetPassword = () => {
-    const emailValue = getValues("email")?.trim();
-    if (!emailValue) {
-      toast.error("Please enter your email first.");
-      return;
-    }
-    navigate("/forget-password", { state: { email: emailValue } });
-  };
-
   // If already logged in
   if (user) {
     return (
@@ -154,11 +132,19 @@ const Login = () => {
             )}
             <button
               type="button"
-              onClick={handleForgetPassword}
+              onClick={() => setModalOpen(true)}
               className="text-[15px] text-primary hover:underline mb-2 cursor-pointer text-left"
             >
               Forgot password?
             </button>
+
+            {/* Forgot Password Modal */}
+            <ForgotPassword
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              defaultEmail={emailValue}
+            />
+
             <button
               type="submit"
               disabled={loading}
@@ -174,53 +160,15 @@ const Login = () => {
             <p className="py-3 text-center font-semibold text-[16px]">
               Don't have an account? Please{" "}
               <Link
+                state={location.state}
                 to="/register"
                 className="text-primary :text-blue-400 hover:underline"
               >
                 Register
               </Link>
             </p>
-
-            {/* Google */}
-            <div className="border-t border-base-content/20 pt-5">
-              <button
-                type="button"
-                onClick={handleGoogleSignIn}
-                aria-label="Login with Google"
-                className="btn w-full flex items-center justify-center gap-2 
-               text-base-content text-[16px] bg-base-100 border border-base-content/20 
-               rounded-full hover:bg-base-200 transition-colors duration-200 hover:scale-[1.02]"
-              >
-                <svg
-                  aria-label="Google logo"
-                  width="16"
-                  height="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                >
-                  <g>
-                    <path d="m0 0H512V512H0" fill="none"></path>
-                    <path
-                      fill="#34a853"
-                      d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
-                    ></path>
-                    <path
-                      fill="#4285f4"
-                      d="m386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"
-                    ></path>
-                    <path
-                      fill="#fbbc02"
-                      d="m90 341a208 200 0 010-171l63 49q-12 37 0 73"
-                    ></path>
-                    <path
-                      fill="#ea4335"
-                      d="m153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"
-                    ></path>
-                  </g>
-                </svg>
-                Login with Google
-              </button>
-            </div>
+            {/* Google login*/}
+            <SocialLogin></SocialLogin>
           </fieldset>
         </form>
       </div>
