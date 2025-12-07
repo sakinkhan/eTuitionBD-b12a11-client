@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* Light Theme (Default) */
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+
+    --color-primary: #ff7100;
+    --color-secondary: #f8e152;
+    --color-accent: #fef5bd;
+    --icon-color: #ff7100;
+    --color-base-content: #4B5563;
+}
+
+/* Dark Theme */
+@plugin "daisyui/theme" {
+    name: "dark";
+
+    --color-primary: #ff7100;
+    --color-secondary: #f8e152;
+    --icon-color: #f8e152;
+    --color-base-content: oklch(4.87 0.01 258.34 / 1);
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
