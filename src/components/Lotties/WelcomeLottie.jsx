@@ -1,18 +1,16 @@
-import React, { useRef } from "react";
+import React from "react";
 import welcomeAnim from "../../animations/Welcome.json";
 import Lottie from "lottie-react";
 
 const WelcomeLottie = () => {
-  const lottieRef = useRef(null);
   return (
-    <div style={{ width: 300, margin: "0 auto" }}>
-      <Lottie>
-        lottieRef={lottieRef}
+    <div className="w-[450px] max-w-full mx-auto px-4 py-20">
+      <Lottie
         animationData={welcomeAnim}
-        loop={true}
+        loop={false}
         autoplay={true}
-        style={{ width: "100%", height: "auto" }}
-      </Lottie>
+        className="w-full h-auto"
+      />
     </div>
   );
 };

@@ -1,24 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { toast } from "react-toastify";
 import Logo from "../../../components/Logo/Logo";
-import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import MyLink from "../../../components/MyLink/MyLink";
+import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
+import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
 
 const Navbar = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const { user, logOut } = useContext(AuthContext);
-
-  useEffect(() => {
-    const html = document.querySelector("html");
-    html.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleLogout = () => {
     logOut()
@@ -35,21 +26,21 @@ const Navbar = () => {
       <MyLink to="/contact">Contact</MyLink>
     </>
   );
+
   const protectedLinks = user && (
     <>
-      <MyLink to="/">My Dashboard</MyLink>
-      <Mylink to="/myProperties">My Properties</Mylink>
+      <MyLink to="/dashboard">My Dashboard</MyLink>
+      <MyLink to="/myProperties">My Properties</MyLink>
       <MyLink to="/myRatings">My Ratings</MyLink>
     </>
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-lg py-4 pr-4 md:px-20 sticky top-0 z-50">
-      {/* Left: Logo + Dropdown Menu */}
+    <div className="navbar bg-base-100 shadow-md py-4 px-6 md:px-20 sticky top-0 z-50 transition-colors duration-300">
+      {/* Left: Logo + Mobile Menu */}
       <div className="navbar-start">
-        {/* Mobile Menu */}
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -61,34 +52,30 @@ const Navbar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
+                d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 shadow space-y-2 font-primary"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 shadow space-y-2"
           >
             {publicLinks}
             {protectedLinks}
           </ul>
         </div>
-
-        {/* Logo */}
-        <div className="flex items-center gap-1">
-          <Logo></Logo>
-        </div>
+        <Logo />
       </div>
 
-      {/* Center: Navigation (desktop only) */}
+      {/* Center: Desktop Links */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-1 font-primary">
+        <ul className="menu menu-horizontal px-1 space-x-2">
           {publicLinks}
           {protectedLinks}
         </ul>
       </div>
 
-      {/* Right: Theme, Login/Signup or Profile */}
+      {/* Right: Theme toggle + User/Login */}
       <div className="navbar-end flex items-center gap-2">
         {/* Theme toggle */}
         <div
@@ -96,39 +83,31 @@ const Navbar = () => {
           data-tip="Change Theme"
         >
           <button
-            onClick={toggleTheme}
             className="btn btn-ghost btn-circle text-lg"
+            onClick={toggleTheme}
           >
             {theme === "light" ? (
-              <BsMoonStarsFill className="text-gray-700" />
+              <BsMoonStarsFill className="text-(--icon-color)]" />
             ) : (
-              <BsSunFill className="text-yellow-400" />
+              <BsSunFill className="text-(--icon-color)]" />
             )}
           </button>
         </div>
 
-        {/* Logged-in user */}
         {user ? (
           <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-            >
+            <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
-                  alt="User Avatar"
                   src={
                     user.photoURL ||
                     "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
                   }
+                  alt="User Avatar"
                 />
               </div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-48 p-2 shadow font-primary space-y-2"
-            >
+            <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-48 p-2 shadow space-y-2">
               <li>
                 <p className="font-semibold text-sm">{user?.displayName}</p>
               </li>
@@ -138,7 +117,7 @@ const Navbar = () => {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="btn btn-error text-white text-sm rounded-full"
+                  className="btn btn-error text-white text-sm rounded-full w-full"
                 >
                   Logout
                 </button>
@@ -147,29 +126,23 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            {/* Desktop Buttons */}
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:flex gap-2">
               <Link
                 to="/login"
-                className="btn btn-outline btn-primary rounded-full  border-2 text-sm"
+                className="btn btn-outline btn-primary rounded-full text-sm border-2"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="btn btn-secondary text-black rounded-full border-2 text-sm"
+                className="btn btn-secondary rounded-full text-sm border-2 text-black"
               >
                 Sign Up
               </Link>
             </div>
-
-            {/* Mobile Dropdown */}
+            {/* Mobile login/signup */}
             <div className="dropdown dropdown-end lg:hidden">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle"
-              >
+              <div tabIndex={0} className="btn btn-ghost btn-circle">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -185,10 +158,7 @@ const Navbar = () => {
                   />
                 </svg>
               </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-40 shadow space-y-2"
-              >
+              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-40 shadow space-y-2">
                 <li>
                   <Link to="/login">Login</Link>
                 </li>

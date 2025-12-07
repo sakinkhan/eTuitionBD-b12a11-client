@@ -6,15 +6,19 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import Tuitions from "../pages/Tuitions/Tuitions";
 import About from "../pages/About/About";
+import ErrorPage from "../pages/shared/ErrorPage/ErrorPage";
+import LoadingLottie from "../components/Lotties/LoadingLottie";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: RootLayout,
+    element: <RootLayout></RootLayout>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
         Component: Home,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
       {
         path: "/tuitions",
@@ -29,6 +33,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: AuthLayout,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "login",
