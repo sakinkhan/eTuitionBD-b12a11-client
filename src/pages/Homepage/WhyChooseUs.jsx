@@ -19,7 +19,7 @@ const WhyChooseUs = () => {
             />
 
             {/* Top-right rating badge */}
-            <div className="absolute right-4 top-4 flex items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md backdrop-blur">
+            <div className="absolute right-4 top-4 flex items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md backdrop-blur animate-bounce-slow delay-500">
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-full"
                 style={{ background: "var(--color-secondary)" }}
@@ -37,7 +37,7 @@ const WhyChooseUs = () => {
           </div>
 
           {/* Bottom-left enrolled badge */}
-          <div className="absolute -bottom-6 left-2 flex items-center gap-3 rounded-xl bg-white/90 px-3 py-2 shadow-md backdrop-blur">
+          <div className="absolute -bottom-6 left-2 flex items-center gap-3 rounded-xl bg-white/90 px-3 py-2 shadow-md backdrop-blur animate-bounce-slow">
             <div>
               <p className="text-xs font-medium text-gray-500">
                 Enrolled Tutors

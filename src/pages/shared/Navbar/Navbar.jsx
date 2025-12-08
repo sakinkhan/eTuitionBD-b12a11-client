@@ -96,7 +96,7 @@ const Navbar = () => {
         {user ? (
           <div className="flex items-center gap-3">
             <Link
-              to="/login"
+              to="/dashboard"
               className="btn btn-outline btn-primary rounded-full text-sm border-2"
             >
               My Dashboard

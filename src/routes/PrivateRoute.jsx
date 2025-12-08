@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router";
-import Loading from "../components/Loading";
 import useAuth from "../hooks/useAuth";
 import LoadingLottie from "../components/Lotties/LoadingLottie";
 

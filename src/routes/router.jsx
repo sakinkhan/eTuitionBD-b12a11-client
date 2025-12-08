@@ -8,7 +8,10 @@ import Tuitions from "../pages/Tuitions/Tuitions";
 import About from "../pages/About/About";
 import ErrorPage from "../pages/shared/ErrorPage/ErrorPage";
 import LoadingLottie from "../components/Lotties/LoadingLottie";
-import ForgetPassword from "../pages/Auth/ForgetPassword";
+import DashboardLayout from "../layouts/DashboardLayout";
+import MyTuitions from "../pages/Dashboards/MyTuitions/MyTuitions";
+import PrivateRoute from "./PrivateRoute";
+import DashboardHome from "../pages/Dashboards/DashboardHome/DashboardHome";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +50,24 @@ export const router = createBrowserRouter([
         path: "register",
         element: <Register></Register>,
         hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <DashboardHome></DashboardHome>,
+      },
+      {
+        path: "my-tuitions",
+        element: <MyTuitions></MyTuitions>,
       },
     ],
   },
