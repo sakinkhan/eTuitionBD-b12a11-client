@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import AboutLottie from "../../components/Lotties/AboutLottie";
+import PrimaryButton from "../../components/Buttons/PrimaryButton";
 
 const AboutUs = () => {
   return (
@@ -54,13 +55,7 @@ const AboutUs = () => {
         <p className="max-w-xl mx-auto text-lg text-base-content/80 mb-10">
           Whether you're here to learn or teach, this is your space.
         </p>
-
-        <Link
-          to="/register"
-          className="px-10 py-4 rounded-full text-white font-semibold text-lg bg-primary hover:bg-secondary hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-2xl active:scale-95"
-        >
-          Get Started
-        </Link>
+        <PrimaryButton to="/register" label="Get Started" />
       </section>
     </div>
   );

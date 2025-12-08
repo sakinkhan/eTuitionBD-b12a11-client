@@ -35,3 +35,59 @@ body {
     font-optical-sizing: auto;
     font-style: normal;
 }
+
+
+
+/* Floating animation for the main image */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Slow bounce for decorative shapes */
+@keyframes bounce-slow {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.animate-bounce-slow {
+    animation: bounce-slow 5s ease-in-out infinite;
+}
+
+/* Slow spinning shapes */
+@keyframes spin-slow {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 8s linear infinite;
+}
+
+/* Optional: add delay for some variation */
+.delay-2000 {
+    animation-delay: 2s;
+}

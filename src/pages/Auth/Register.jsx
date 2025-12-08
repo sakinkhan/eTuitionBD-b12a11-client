@@ -128,7 +128,7 @@ const Register = () => {
               className="label text-[16px] text-base-content"
               htmlFor="photo"
             >
-              Photo
+              Profile Image
             </label>
             <input
               type="file"
@@ -151,7 +151,7 @@ const Register = () => {
                   fileSize: (files) => {
                     const file = files[0];
                     if (!file) return "Photo is required";
-                    const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+                    const maxSizeInBytes = 2 * 1024 * 1024;
                     return (
                       file.size <= maxSizeInBytes || "Max file size is 2MB"
                     );
@@ -176,7 +176,7 @@ const Register = () => {
                 {errors.photo.message}
               </p>
             )}
-            <label className="label">Max size 2MB</label>
+            <label className="label">PNG, JPG or JPEG (Max 2MB)</label>
 
             {/* Image preview */}
             {preview && (
