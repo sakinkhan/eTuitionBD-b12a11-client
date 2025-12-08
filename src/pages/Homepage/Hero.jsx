@@ -1,21 +1,18 @@
 import React from "react";
-import heroImg from "../../assets/hero4.jpg";
 import { PiPlugsConnectedBold } from "react-icons/pi";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import HeroImage from "../../components/ImageAnimations/HeroImage";
 
 const Hero = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center gap-10 justify-between px-20 py-10">
+    <div className="flex flex-col md:flex-row items-center gap-10 justify-between px-20 py-10 bg-linear-to-bl from-primary/20 via-secondary/10 to-primary/20">
       <div className="left text-center md:text-left md:pr-20">
-        <div className="flex items-center gap-2">
-          <PiPlugsConnectedBold className="text-primary" />
-          <h4 className="text-sm md:text-md font-semibold ">
-            Connecting Students and Tutors, Seamlessly...
-          </h4>
-        </div>
+        <h4 className="text-sm text-center md:text-left md:text-md font-semibold ">
+          Connecting Students and Tutors, Seamlessly...
+        </h4>
         <h3 className="text-4xl md:text-6xl font-bold mt-2">
-          Find, Learn, <span className="text-primary">Excel</span> - All in One
+          Find, Learn, <span className="text-primary">Excel</span>
+          <br />- All in One
           <span className="text-secondary"> Place.</span>
         </h3>
         <p className="mt-8">
