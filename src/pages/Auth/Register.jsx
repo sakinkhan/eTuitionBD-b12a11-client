@@ -28,55 +28,56 @@ const Register = () => {
 
   // Email & Password Registration
   const handleRegistration = async (data) => {
+    // Validate photo
     if (!data.photo || !data.photo[0]) {
       toast.error("Photo is required");
       return;
     }
-    console.log(data);
+
     const profileImg = data.photo[0];
 
     try {
       setLoading(true);
+
+      // 1. Register user in Firebase
       const result = await registerUser(data.email, data.password);
       console.log("User registered:", result.user);
 
-      // Upload image
+      // 2. Upload image to imgbb
       const formData = new FormData();
       formData.append("image", profileImg);
+
       const img_API_URL = `https://api.imgbb.com/1/upload?key=${
         import.meta.env.VITE_image_host_key
       }`;
 
-      const res = await axios.post(img_API_URL, formData);
-      const photoURL = res.data.data.url;
+      const uploadRes = await axios.post(img_API_URL, formData);
+      const photoURL = uploadRes.data.data.url;
 
-      // Update user profile
-      await updateUserProfile({ displayName: data.name, photoURL });
+      // 3. Update Firebase display name + photo
+      await updateUserProfile({
+        displayName: data.name,
+        photoURL,
+      });
+
+      // 4. Prepare unified user object
+      const userToSave = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        role: data.role,
+        photoURL,
+        createdAt: new Date(),
+      };
+
+      // 5. Save user to backend DB
+      await axiosSecure.post("/users", userToSave);
+
       toast.success("Account created successfully!");
-      // Save to Database
-      if (data.role === "Tutor") {
-        axiosSecure
-          .post("/tutors", data)
-          .then((res) => {
-            console.log("after saving tutor in DB", res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        axiosSecure
-          .post("/students", data)
-          .then((res) => {
-            console.log("after saving student in DB", res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-
       navigate(location.state || "/");
     } catch (err) {
-      toast.error(err.message || "Registration failed");
+      console.log(err);
+      toast.error(err?.message || "Registration failed");
     } finally {
       setLoading(false);
     }

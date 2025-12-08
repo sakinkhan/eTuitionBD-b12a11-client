@@ -5,6 +5,7 @@ import AboutLottie from "../../components/Lotties/AboutLottie";
 const AboutUs = () => {
   return (
     <div className="min-h-screen bg-base-200 text-base-content pb-24 pt-10 transition-colors duration-300">
+      <title>eTuitionBD - About Us</title>
       {/* Header Section */}
       <section className="mx-6 md:mx-20 rounded-3xl shadow-xl bg-base-100 backdrop-blur-xl border border-base-300 py-10 px-8 transition-colors duration-300">
         <h1 className="text-3xl md:text-5xl font-bold text-primary tracking-tight text-center">
