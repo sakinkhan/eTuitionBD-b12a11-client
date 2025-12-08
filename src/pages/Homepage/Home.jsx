@@ -3,6 +3,7 @@ import Hero from "./Hero";
 import LatestTuitions from "./LatestTuitions/LatestTuitions";
 import LatestTutors from "./LatestTutors/LatestTutors";
 import WhyChooseUs from "./WhyChooseUs";
+import HowPlatformWorks from "./HowPlatformWorks";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <LatestTuitions></LatestTuitions>
       <LatestTutors></LatestTutors>
       <WhyChooseUs></WhyChooseUs>
+      <HowPlatformWorks></HowPlatformWorks>
     </div>
   );
 };
