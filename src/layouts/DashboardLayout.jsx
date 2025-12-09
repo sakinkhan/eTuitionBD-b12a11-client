@@ -1,9 +1,11 @@
 import React from "react";
 import { FaChalkboardTeacher, FaHome } from "react-icons/fa";
+import { LuNotebookPen } from "react-icons/lu";
 import { Link, NavLink, Outlet } from "react-router";
 import logoImg from "../assets/logo-icon.png";
-import Logo from "../components/Logo/Logo";
 import { VscSettingsGear } from "react-icons/vsc";
+import { FaUsers } from "react-icons/fa6";
+import { BsFillCreditCardFill } from "react-icons/bs";
 
 const DashboardLayout = () => {
   return (
@@ -47,9 +49,9 @@ const DashboardLayout = () => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-40">
+        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-38">
           {/* Sidebar content here */}
-          <ul className="menu w-full grow">
+          <ul className="menu w-full grow space-y-2">
             {/* List item */}
             <li>
               <Link
@@ -78,14 +80,45 @@ const DashboardLayout = () => {
               </Link>
             </li>
             {/* Our Dashboard Links */}
+            {/* STUDENT DASH */}
             <li>
               <NavLink
                 className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                data-tip="MyParcels"
+                data-tip="My Tuitions"
                 to="/dashboard/my-tuitions"
               >
                 <FaChalkboardTeacher size={20} />
                 <span className="is-drawer-close:hidden">My Tuitions</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                data-tip="Post New Tuition"
+                to="/dashboard/post-tuitions"
+              >
+                <LuNotebookPen size={20} />
+                <span className="is-drawer-close:hidden">Post New Tuition</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                data-tip="Applied Tutors"
+                to="/dashboard/applied-tutors"
+              >
+                <FaUsers size={20} />
+                <span className="is-drawer-close:hidden">Applied Tutors</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                data-tip="Payments"
+                to="/dashboard/payments"
+              >
+                <BsFillCreditCardFill size={20} />
+                <span className="is-drawer-close:hidden">Payments</span>
               </NavLink>
             </li>
 

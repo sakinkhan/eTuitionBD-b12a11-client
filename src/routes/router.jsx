@@ -9,9 +9,12 @@ import About from "../pages/About/About";
 import ErrorPage from "../pages/shared/ErrorPage/ErrorPage";
 import LoadingLottie from "../components/Lotties/LoadingLottie";
 import DashboardLayout from "../layouts/DashboardLayout";
-import MyTuitions from "../pages/Dashboards/MyTuitions/MyTuitions";
+import MyTuitions from "../pages/Dashboards/Student Dashboard/MyTuitions/MyTuitions";
 import PrivateRoute from "./PrivateRoute";
 import DashboardHome from "../pages/Dashboards/DashboardHome/DashboardHome";
+import PostTuitions from "../pages/Dashboards/Student Dashboard/PostTuitions/PostTuitions";
+import AppliedTutors from "../pages/Dashboards/Student Dashboard/AppliedTutors/AppliedTutors";
+import Payments from "../pages/Dashboards/Student Dashboard/Payments/Payments";
 
 export const router = createBrowserRouter([
   {
@@ -68,6 +71,18 @@ export const router = createBrowserRouter([
       {
         path: "my-tuitions",
         element: <MyTuitions></MyTuitions>,
+      },
+      {
+        path: "post-tuitions",
+        element: <PostTuitions></PostTuitions>,
+      },
+      {
+        path: "applied-tutors",
+        element: <AppliedTutors></AppliedTutors>,
+      },
+      {
+        path: "payments",
+        element: <Payments></Payments>,
       },
     ],
   },

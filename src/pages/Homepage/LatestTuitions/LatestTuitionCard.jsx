@@ -1,14 +1,6 @@
 import React from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { AiTwotoneMail, AiTwotoneSchedule } from "react-icons/ai";
-import {
-  FaArrowRight,
-  FaClock,
-  FaLocationDot,
-  FaMoneyBillWave,
-  FaUserGraduate,
-} from "react-icons/fa6";
-import PrimaryButton from "../../../components/Buttons/PrimaryButton";
+import { AiTwotoneMail } from "react-icons/ai";
+import { FaLocationDot } from "react-icons/fa6";
 import { PiStudentBold } from "react-icons/pi";
 import { Link } from "react-router";
 import { RiCalendarScheduleLine } from "react-icons/ri";
@@ -23,7 +15,7 @@ const LatestTuitionCard = ({ post }) => {
     location,
     schedule,
   } = post;
-  console.log(post);
+
   return (
     <div className="card w-65 md:w-75 h-100 mx-auto bg-linear-to-tr from-accent/90 via-accent/30 to-accent/90 shadow-sm rounded-3xl overflow-hidden flex flex-col">
       <div className="card-body flex flex-col justify-between h-full">

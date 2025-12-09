@@ -33,7 +33,7 @@ const Login = () => {
       const result = await logInUser(data.email, data.password);
       console.log(result);
       toast.success("You have logged in Successfully");
-      navigate("/");
+      navigate(location?.state || "/");
     } catch (err) {
       toast.error(err.message || "Login failed");
     } finally {
