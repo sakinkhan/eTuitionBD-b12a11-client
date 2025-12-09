@@ -103,18 +103,24 @@ const TuitionDetails = () => {
             <p className="text-lg font-semibold">{tuition.classLevel}</p>
           </div>
 
-          {/* Schedule */}
+          {/* Student Name */}
           <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Schedule</p>
-            <p className="font-medium">{tuition.schedule || "Not provided"}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Student Name
+            </p>
+            <p className="font-medium">{tuition.studentName}</p>
           </div>
-
           {/* Contact */}
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Contact Email
             </p>
             <p className="font-medium">{tuition.contactEmail}</p>
+          </div>
+          {/* Schedule */}
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Schedule</p>
+            <p className="font-medium">{tuition.schedule || "Not provided"}</p>
           </div>
         </div>
 

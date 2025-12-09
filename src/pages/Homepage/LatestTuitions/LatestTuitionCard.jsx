@@ -2,11 +2,13 @@ import React from "react";
 import { AiTwotoneMail } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
 import { PiStudentBold } from "react-icons/pi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { RiCalendarScheduleLine } from "react-icons/ri";
 
 const LatestTuitionCard = ({ post }) => {
+  const navigate = useNavigate();
   const {
+    _id,
     budget,
     contactEmail,
     studentName,
@@ -15,6 +17,7 @@ const LatestTuitionCard = ({ post }) => {
     location,
     schedule,
   } = post;
+  console.log("in the latest tuition card", post);
 
   return (
     <div className="card w-65 md:w-75 h-100 mx-auto bg-linear-to-tr from-accent/90 via-accent/30 to-accent/90 shadow-sm rounded-3xl overflow-hidden flex flex-col">
@@ -47,7 +50,10 @@ const LatestTuitionCard = ({ post }) => {
             {schedule}
           </div>
           <div className="mt-6">
-            <Link className="btn w-full rounded-full text-white font-semibold text-lg bg-primary hover:bg-secondary hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95">
+            <Link
+              onClick={() => navigate(`/tuition/${_id}`)}
+              className="btn w-full rounded-full text-white font-semibold text-lg bg-primary hover:bg-secondary hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95"
+            >
               View Details
             </Link>
           </div>
