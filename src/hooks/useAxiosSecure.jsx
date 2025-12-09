@@ -17,7 +17,7 @@ const useAxiosSecure = () => {
     //  Intercept request
     const reqInterceptor = axiosSecure.interceptors.request.use(
       (config) => {
-        config.headers.Authorization = `Bearer ${user.accessToken}`;
+        config.headers.Authorization = `Bearer ${user?.accessToken}`;
         return config;
       },
       (error) => Promise.reject(error)
@@ -39,9 +39,8 @@ const useAxiosSecure = () => {
     // cleanup
     return () => {
       axiosSecure.interceptors.request.eject(reqInterceptor);
-      axiosSecure.interceptors.request.eject(resInterceptor);
+      axiosSecure.interceptors.response.eject(resInterceptor);
     };
-    
   }, [user, logOut]);
 
   return axiosSecure;

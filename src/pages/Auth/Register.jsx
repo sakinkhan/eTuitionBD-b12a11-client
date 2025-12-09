@@ -201,8 +201,8 @@ const Register = () => {
             className="select select-bordered w-full rounded-full mb-2"
           >
             <option value="">Select Role</option>
-            <option value="Student">Student</option>
-            <option value="Tutor">Tutor</option>
+            <option value="student">Student</option>
+            <option value="tutor">Tutor</option>
           </select>
           {errors.role && (
             <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>

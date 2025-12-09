@@ -28,8 +28,8 @@ const AboutUs = () => {
         {/* Editorial Text */}
         <div className="flex-1 max-w-2xl">
           <div className="bg-base-100 backdrop-blur-xl p-10 rounded-3xl shadow-xl border border-base-300 transition-colors duration-300">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
-              What eTuitionBD Really Does
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              What <span className="text-primary">eTuitionBD</span> Really Does
             </h2>
 
             <p className="text-lg text-base-content/80 leading-relaxed mb-6">
@@ -49,8 +49,8 @@ const AboutUs = () => {
 
       {/* Join eTuitionBD Section */}
       <section className="mx-6 md:mx-20 mt-24 py-20 bg-accent/80 backdrop-blur-xl rounded-3xl shadow-xl border border-base-300 text-center transition-colors duration-300">
-        <h3 className="text-3xl md:text-4xl font-extrabold text-primary mb-4">
-          Join eTuitionBD Today
+        <h3 className="text-3xl md:text-4xl font-extrabold mb-4">
+          Join <span className="text-primary">eTuitionBD</span> Today
         </h3>
         <p className="max-w-xl mx-auto text-lg text-base-content/80 mb-10">
           Whether you're here to learn or teach, this is your space.

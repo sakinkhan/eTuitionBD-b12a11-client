@@ -69,11 +69,13 @@ const TuitionDetails = () => {
       </button>
 
       {/* Main Card */}
-      <div className="bg-accent/50 p-8 rounded-2xl shadow-lg border border-primary">
+      <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 p-8 rounded-2xl shadow-lg border border-primary">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 border-b-2 border-primary pb-6 mb-6">
           <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Subject</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Subject(s)
+            </p>
             <h1 className="text-4xl font-bold leading-tight">
               {tuition.subject}
             </h1>

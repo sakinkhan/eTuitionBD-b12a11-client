@@ -13,7 +13,6 @@ const LatestTuitionCard = ({ post }) => {
     contactEmail,
     studentName,
     subject,
-    description,
     location,
     schedule,
   } = post;
@@ -30,9 +29,6 @@ const LatestTuitionCard = ({ post }) => {
           <div className="mt-2">
             <h2 className="text-3xl font-bold">{subject}</h2>
             <span className="text-xl">৳{budget}/mo</span>
-          </div>
-          <div className="mt-4 flex flex-col gap-2 text-xs overflow-hidden">
-            {description}
           </div>
         </div>
 

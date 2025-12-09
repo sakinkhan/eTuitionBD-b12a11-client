@@ -57,7 +57,7 @@ const PostTuitions = () => {
       <form onSubmit={handleSubmit(handlePostTuition)} className="space-y-4">
         {/* Subject */}
         <div>
-          <label className="block text-sm font-medium">Subject</label>
+          <label className="block text-sm font-medium">Subject(s)</label>
           <input
             {...register("subject", { required: "Subject is required" })}
             className="w-full input rounded-full"
@@ -110,7 +110,7 @@ const PostTuitions = () => {
             })}
             type="number"
             className="w-full input rounded-full"
-            placeholder="e.g. 7000"
+            placeholder="e.g. ৳7000"
           />
           {errors.budget && (
             <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
@@ -121,10 +121,15 @@ const PostTuitions = () => {
         <div>
           <label className="block text-sm font-medium">Schedule</label>
           <input
-            {...register("schedule")}
+            {...register("schedule", { required: "Schedule is required" })}
             className="w-full input rounded-full"
             placeholder="e.g. Tue, Thu, Sat 5:00PM - 7:00PM"
           />
+          {errors.schedule && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.schedule.message}
+            </p>
+          )}
         </div>
 
         {/* Description */}
