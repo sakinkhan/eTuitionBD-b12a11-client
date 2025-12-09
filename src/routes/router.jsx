@@ -15,6 +15,7 @@ import DashboardHome from "../pages/Dashboards/DashboardHome/DashboardHome";
 import PostTuitions from "../pages/Dashboards/Student Dashboard/PostTuitions/PostTuitions";
 import AppliedTutors from "../pages/Dashboards/Student Dashboard/AppliedTutors/AppliedTutors";
 import Payments from "../pages/Dashboards/Student Dashboard/Payments/Payments";
+import TuitionDetails from "../pages/Tuitions/TuitionDetails";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ export const router = createBrowserRouter([
         path: "/tuitions",
         element: <Tuitions></Tuitions>,
         hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+      },
+      {
+        path: "/tuition/:id",
+        element: (
+          <PrivateRoute>
+            <TuitionDetails></TuitionDetails>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/about",
