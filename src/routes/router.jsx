@@ -16,6 +16,9 @@ import PostTuitions from "../pages/Dashboards/Student Dashboard/PostTuitions/Pos
 import AppliedTutors from "../pages/Dashboards/Student Dashboard/AppliedTutors/AppliedTutors";
 import Payments from "../pages/Dashboards/Student Dashboard/Payments/Payments";
 import TuitionDetails from "../pages/Tuitions/TuitionDetails";
+import MyApplications from "../pages/Dashboards/Tutor Dashboard/MyApplications/MyApplications";
+import OngoingTuitions from "../pages/Dashboards/Tutor Dashboard/OngoingTuitions/OngoingTuitions";
+import RevenueHistory from "../pages/Dashboards/Tutor Dashboard/RevenueHistory/RevenueHistory";
 
 export const router = createBrowserRouter([
   {
@@ -92,6 +95,18 @@ export const router = createBrowserRouter([
       {
         path: "payments",
         element: <Payments></Payments>,
+      },
+      {
+        path: "my-applications",
+        element: <MyApplications></MyApplications>,
+      },
+      {
+        path: "ongoing-tuitions",
+        element: <OngoingTuitions></OngoingTuitions>,
+      },
+      {
+        path: "revenue-history",
+        element: <RevenueHistory></RevenueHistory>,
       },
     ],
   },

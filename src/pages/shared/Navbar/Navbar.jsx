@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 import { toast } from "react-toastify";
 import Logo from "../../../components/Logo/Logo";
 import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import MyLink from "../../../components/MyLink/MyLink";
-import { AuthContext } from "../../../contexts/AuthContext/AuthContext";
 import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
 import useAuth from "../../../hooks/useAuth";
 
