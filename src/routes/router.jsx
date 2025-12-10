@@ -22,6 +22,7 @@ import RevenueHistory from "../pages/Dashboards/Tutor Dashboard/RevenueHistory/R
 import UserManagement from "../pages/Dashboards/Admin Dashboard/UserManagement/UserManagement";
 import TutorManagement from "../pages/Dashboards/Admin Dashboard/TutorManagement/TutorManagement";
 import ReportsAnalytics from "../pages/Dashboards/Admin Dashboard/ReportsAnalytics/ReportsAnalytics";
+import UserProfile from "../pages/UserProfile/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,14 @@ export const router = createBrowserRouter([
         path: "/about",
         element: <About></About>,
         hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+      },
+      {
+        path: "/userProfile",
+        element: (
+          <PrivateRoute>
+            <UserProfile></UserProfile>
+          </PrivateRoute>
+        ),
       },
     ],
   },

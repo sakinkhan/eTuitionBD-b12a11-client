@@ -5,6 +5,7 @@ import axios from "axios";
 const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
   const [preview, setPreview] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,6 +47,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
   // Form submit handler
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       let photoURL = user.photoURL;
 
       // only upload to imgBB if image changed
@@ -63,6 +65,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
       };
 
       onSave(updatedUser);
+      setLoading(false);
       onClose();
     } catch (err) {
       console.log(err);
@@ -184,8 +187,12 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
 
           {/* Buttons */}
           <div className="flex justify-center gap-2 mt-5">
-            <button type="submit" className="btn btn-primary rounded-full">
-              Save Changes
+            <button
+              disabled={loading}
+              type="submit"
+              className="btn btn-primary rounded-full"
+            >
+              {loading ? "Saving Changes..." : "Save Changes"}
             </button>
             <button
               type="button"

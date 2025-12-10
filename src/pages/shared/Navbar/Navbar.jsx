@@ -113,20 +113,28 @@ const Navbar = () => {
                 </div>
               </div>
               <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48 max-w-[90vw]">
-                <li>
-                  <p className="font-semibold text-base-content text-sm wrap-break-word">
+                <li className="pointer-events-none justify-center">
+                  <p className="font-semibold text-base-content text-sm text-center wrap-break-word">
                     {user?.displayName}
                   </p>
                 </li>
-                <li>
+                <li className="pointer-events-none justify-center">
                   <p className="text-xs text-base-content wrap-break-word">
                     {user?.email}
                   </p>
                 </li>
                 <li>
+                  <Link
+                    to={"/userProfile"}
+                    className="btn btn-outline btn-primary btn-sm w-full rounded-full text-sm"
+                  >
+                    Manage Profile
+                  </Link>
+                </li>
+                <li>
                   <button
                     onClick={handleLogout}
-                    className="btn btn-primary text-white text-sm rounded-full w-full"
+                    className="btn btn-error btn-sm text-sm rounded-full w-full"
                   >
                     Logout
                   </button>

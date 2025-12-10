@@ -7,7 +7,7 @@ const PrimaryButton = ({ to = "/", label = "Click Here" }) => {
     <div>
       <Link
         to={to}
-        className="px-8 py-3 rounded-full text-white font-semibold text-lg bg-primary hover:bg-secondary hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95"
+        className="px-8 py-2 rounded-full text-white font-semibold text-lg bg-primary hover:bg-secondary hover:text-gray-900 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95"
       >
         {label}
       </Link>
