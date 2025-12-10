@@ -27,11 +27,11 @@ const Navbar = () => {
     </>
   );
 
-  const protectedLinks = user && (
-    <>
-      <MyLink to="/dashboard">Protected LINK</MyLink>
-    </>
-  );
+  // const protectedLinks = user && (
+  //   <>
+  //     <MyLink to="/dashboard">Protected LINK</MyLink>
+  //   </>
+  // );
 
   return (
     <div className="navbar bg-base-100 shadow-md py-4 px-6 md:px-20 sticky top-0 z-50 transition-colors duration-300">
@@ -59,7 +59,7 @@ const Navbar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 shadow space-y-2"
           >
             {publicLinks}
-            {protectedLinks}
+            {/* {protectedLinks} */}
           </ul>
         </div>
         <Logo />
@@ -69,7 +69,7 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 space-x-2">
           {publicLinks}
-          {protectedLinks}
+          {/* {protectedLinks} */}
         </ul>
       </div>
 

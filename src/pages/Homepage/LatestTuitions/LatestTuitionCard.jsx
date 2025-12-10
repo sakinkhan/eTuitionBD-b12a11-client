@@ -16,7 +16,6 @@ const LatestTuitionCard = ({ post }) => {
     location,
     schedule,
   } = post;
-  console.log("in the latest tuition card", post);
 
   return (
     <div className="card w-65 md:w-75 h-100 mx-auto bg-linear-to-tr from-accent/90 via-accent/30 to-accent/90 shadow-sm rounded-3xl overflow-hidden flex flex-col">

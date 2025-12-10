@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { FaLocationDot } from "react-icons/fa6";
 import { IoChevronBack } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
+import { GrSend } from "react-icons/gr";
+import ApplyModal from "../../components/ApplyModal/ApplyModal";
 
 const TuitionDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: tuition,
@@ -22,7 +26,14 @@ const TuitionDetails = () => {
     },
   });
 
-  console.log(tuition);
+  const { data: dbUser } = useQuery({
+    queryKey: ["db-user"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user?.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email, // only fetch if user is logged in
+  });
 
   if (isLoading) {
     return (
@@ -56,17 +67,42 @@ const TuitionDetails = () => {
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-5">
-      {/* Go Back */}
-      <button
-        onClick={() => navigate(-1)}
-        className="btn mb-6 flex items-center gap-2 px-6 py-3 rounded-full
+      {/* Buttons */}
+      <div className="flex items-center justify-between mb-6">
+        {/* Go Back */}
+        <div>
+          <button
+            onClick={() => navigate(-1)}
+            className="btn flex items-center gap-2 px-6 py-3 rounded-full
                bg-primary text-white hover:bg-secondary hover:text-gray-900
                dark:bg-primary dark:hover:bg-secondary
                shadow-md hover:shadow-lg active:scale-95 transition-all"
-      >
-        <IoChevronBack size={18} />
-        Go Back
-      </button>
+          >
+            <IoChevronBack size={18} />
+            Go Back
+          </button>
+        </div>
+
+        {/* Apply Button (Only for tutors) */}
+        <div>
+          {dbUser?.role === "tutor" && (
+            <div>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="btn bg-secondary shadow-md hover:shadow-lg text-gray-800 border border-primary hover:text-white px-6 py-3 rounded-full hover:bg-primary transition-all"
+              >
+                Apply <GrSend />
+              </button>
+            </div>
+          )}
+        </div>
+        {/* Apply Modal opens upon Apply Button click */}
+        <ApplyModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          tutor={{ name: "John Doe", email: "johndoe@example.com" }}
+        />
+      </div>
 
       {/* Main Card */}
       <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 p-8 rounded-2xl shadow-lg border border-primary">
