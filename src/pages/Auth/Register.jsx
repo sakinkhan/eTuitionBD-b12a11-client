@@ -64,8 +64,10 @@ const Register = () => {
       const userToSave = {
         name: data.name,
         email: data.email,
-        phone: data.phone,
-        role: data.role,
+        phone: data.phone?.trim() || "",
+        role: data.role === "tutor" ? "tutor" : "student",
+        isAdmin: false,
+        verified: false,
         photoURL,
         createdAt: new Date(),
       };

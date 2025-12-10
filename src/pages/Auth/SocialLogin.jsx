@@ -23,7 +23,9 @@ const SocialLogin = () => {
       const userToSave = {
         name: user.displayName,
         email: user.email,
-        role: "Student",
+        role: "student",
+        isAdmin: false,
+        verified: false,
         photoURL: user.photoURL,
         createdAt: new Date(),
       };

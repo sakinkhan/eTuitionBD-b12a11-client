@@ -85,9 +85,9 @@ const Navbar = () => {
             onClick={toggleTheme}
           >
             {theme === "light" ? (
-              <BsMoonStarsFill className="text-(--icon-color)]" />
+              <BsMoonStarsFill className="text-base-content" />
             ) : (
-              <BsSunFill className="text-(--icon-color)]" />
+              <BsSunFill className="text-yellow-500" />
             )}
           </button>
         </div>
@@ -102,7 +102,7 @@ const Navbar = () => {
             </Link>
             <div className="dropdown dropdown-end">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
+                <div className="w-12 rounded-full border-2 border-primary">
                   <img
                     src={
                       user.photoURL ||

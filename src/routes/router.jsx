@@ -19,6 +19,9 @@ import TuitionDetails from "../pages/Tuitions/TuitionDetails";
 import MyApplications from "../pages/Dashboards/Tutor Dashboard/MyApplications/MyApplications";
 import OngoingTuitions from "../pages/Dashboards/Tutor Dashboard/OngoingTuitions/OngoingTuitions";
 import RevenueHistory from "../pages/Dashboards/Tutor Dashboard/RevenueHistory/RevenueHistory";
+import UserManagement from "../pages/Dashboards/Admin Dashboard/UserManagement/UserManagement";
+import TutorManagement from "../pages/Dashboards/Admin Dashboard/TutorManagement/TutorManagement";
+import ReportsAnalytics from "../pages/Dashboards/Admin Dashboard/ReportsAnalytics/ReportsAnalytics";
 
 export const router = createBrowserRouter([
   {
@@ -107,6 +110,18 @@ export const router = createBrowserRouter([
       {
         path: "revenue-history",
         element: <RevenueHistory></RevenueHistory>,
+      },
+      {
+        path: "user-management",
+        element: <UserManagement></UserManagement>,
+      },
+      {
+        path: "tutor-management",
+        element: <TutorManagement></TutorManagement>,
+      },
+      {
+        path: "reports-analytics",
+        element: <ReportsAnalytics></ReportsAnalytics>,
       },
     ],
   },

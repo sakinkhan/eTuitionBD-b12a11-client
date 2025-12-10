@@ -5,7 +5,8 @@ import { Link, NavLink, Outlet } from "react-router";
 import logoImg from "../assets/logo-icon.png";
 import { VscSettingsGear } from "react-icons/vsc";
 import { IoDocumentAttachOutline } from "react-icons/io5";
-import { FaMoneyBillTrendUp, FaUsers } from "react-icons/fa6";
+import { FaMoneyBillTrendUp, FaUsers, FaUsersGear } from "react-icons/fa6";
+import { GiTeacher } from "react-icons/gi";
 import {
   BsFillCreditCardFill,
   BsMoonStarsFill,
@@ -14,9 +15,10 @@ import {
 import { ThemeContext } from "../contexts/ThemeContext/ThemeContext";
 import useRole from "../hooks/useRole";
 import { PiFlowArrowBold } from "react-icons/pi";
+import { TbDeviceDesktopAnalytics } from "react-icons/tb";
 
 const DashboardLayout = () => {
-  const { role } = useRole();
+  const { role, isAdmin } = useRole();
   const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <div className="drawer lg:drawer-open">
@@ -58,9 +60,9 @@ const DashboardLayout = () => {
               onClick={toggleTheme}
             >
               {theme === "light" ? (
-                <BsMoonStarsFill className="text-(--icon-color)]" />
+                <BsMoonStarsFill className="text-base-content" />
               ) : (
-                <BsSunFill className="text-(--icon-color)]" />
+                <BsSunFill className="text-yellow-500" />
               )}
             </button>
           </div>
@@ -109,7 +111,7 @@ const DashboardLayout = () => {
             </li>
             {/* Our Dashboard Links */}
             {/* STUDENT DASH */}
-            {role === "student" && (
+            {!isAdmin && role === "student" && (
               <>
                 <li>
                   <NavLink
@@ -157,8 +159,9 @@ const DashboardLayout = () => {
                 </li>
               </>
             )}
+
             {/* TUTOR DASH */}
-            {role === "tutor" && (
+            {!isAdmin && role === "tutor" && (
               <>
                 <li>
                   <NavLink
@@ -193,6 +196,48 @@ const DashboardLayout = () => {
                     <FaMoneyBillTrendUp size={20} />
                     <span className="is-drawer-close:hidden">
                       Revenue History
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* ADMIN DASH */}
+            {isAdmin && (
+              <>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    data-tip="User Management"
+                    to="/dashboard/user-management"
+                  >
+                    <FaUsersGear size={20} />
+                    <span className="is-drawer-close:hidden">
+                      User Management
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    data-tip="Tutor Management"
+                    to="/dashboard/tutor-management"
+                  >
+                    <GiTeacher size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Tutor Management
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    data-tip="Reports & Analytics"
+                    to="/dashboard/reports-analytics"
+                  >
+                    <TbDeviceDesktopAnalytics size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Reports & Analytics
                     </span>
                   </NavLink>
                 </li>

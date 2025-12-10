@@ -63,7 +63,7 @@ const MyTuitions = () => {
 
   return (
     <div className="">
-      <h2 className="text-3xl font-bold text-center py-5">
+      <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
         My Approved <span className="text-primary">Tuition</span> Posts (
         {tuitions.length})
       </h2>

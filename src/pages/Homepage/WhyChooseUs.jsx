@@ -11,12 +11,27 @@ const WhyChooseUs = () => {
         {/* Left Side */}
         <div className="relative">
           {/* Main card image */}
-          <div className="relative rounded-3xl overflow-hidden shadow-lg">
-            <img
-              src={learningImg}
-              alt="Learning session"
-              className="h-80 w-full object-cover"
-            />
+          <div className="relative rounded-4xl overflow-hidden shadow-lg h-60 md:h-[280px] lg:h-[300px]">
+            {/* hover 3D image */}
+            <div className="hover-3d">
+              {/* content */}
+              <figure className="w-full h-full">
+                <img
+                  src={learningImg}
+                  alt="3D card"
+                  className="w-full h-full object-cover"
+                />
+              </figure>
+              {/* 8 empty divs needed for the 3D effect */}
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
 
             {/* Top-right rating badge */}
             <div className="absolute right-4 top-4 flex items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md backdrop-blur animate-bounce-slow delay-500">
