@@ -4,7 +4,7 @@ import Lottie from "lottie-react";
 
 const LoadingLottie = () => {
   return (
-    <div className="w-[450px] max-w-full mx-auto px-4 py-15 min-h-screen">
+    <div className="w-[450px] max-w-full mx-auto px-4 py-15">
       <Lottie
         animationData={animation}
         loop
