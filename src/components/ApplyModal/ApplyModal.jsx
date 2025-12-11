@@ -1,101 +1,177 @@
-import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { GrSend } from "react-icons/gr";
+import { FaTimes } from "react-icons/fa";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
-const ApplyModal = ({ isOpen, onClose, tutor }) => {
-  const [qualifications, setQualifications] = useState("");
-  const [experience, setExperience] = useState("");
-  const [expectedSalary, setExpectedSalary] = useState("");
+const ApplyModal = ({
+  tutor,
+  tuitionPostId,
+  isOpen,
+  onClose,
+  onApplicationSuccess,
+}) => {
+  const axiosSecure = useAxiosSecure();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-    // Prepare application data
-    const applicationData = {
-      name: tutor.name,
+  // Load readonly tutor info when modal opens
+  useEffect(() => {
+    if (!isOpen || !tutor) return;
+
+    reset({
+      name: tutor.displayName,
       email: tutor.email,
-      qualifications,
-      experience,
-      expectedSalary,
-      status: "Pending", // default status
-    };
+      qualifications: "",
+      experience: "",
+      expectedSalary: "",
+    });
+  }, [isOpen, tutor, reset]);
 
-    console.log("Submitting application:", applicationData);
+  if (!isOpen || !tutor) return null;
 
-    // TODO: Send applicationData to backend API
-    // fetch("/api/apply", { method: "POST", body: JSON.stringify(applicationData) })
+  // Submit handler
+  const onSubmit = async (formData) => {
+    try {
+      const payload = {
+        tuitionPostId,
+        qualifications: formData.qualifications,
+        experience: formData.experience,
+        expectedSalary: Number(formData.expectedSalary),
+      };
 
-    // Close modal after submission
-    onClose();
+      await axiosSecure.post("/applications", payload);
+      Swal.fire({
+        title: "Tuition Application Submitted!",
+        text: "Your tuition application has been submitted successfully.",
+        icon: "success",
+        customClass: {
+          confirmButton:
+            "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
+        },
+        buttonsStyling: false,
+      });
+      if (onApplicationSuccess) onApplicationSuccess();
+      reset();
+      onClose();
+    } catch (err) {
+      console.error("Application submission failed:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong! Failed to submit application",
+        customClass: {
+          confirmButton:
+            "btn btn-primary text-white font-semibold rounded-full px-6 py-2 mb-2",
+        },
+        buttonsStyling: false,
+      });
+    }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 bg-opacity-50">
-      <div className="bg-base-100 rounded-xl w-full max-w-md p-6 relative">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+      <div className="bg-base-100 p-6 rounded-2xl w-80 md:w-96 shadow-xl relative">
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-primary"
+          className="absolute top-3 right-3 text-gray-600 hover:text-primary"
         >
-          <FaTimes />
+          <FaTimes size={18} />
         </button>
-        <h2 className="text-2xl font-semibold mb-4">Apply for Tuition</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+        <h3 className="text-xl font-bold mb-4">Apply for Tuition</h3>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+          {/* Name (read-only) */}
           <div>
-            <label className="block font-medium">Name</label>
+            <label className="label text-sm font-medium">Name</label>
             <input
               type="text"
-              value={tutor.name}
               readOnly
-              className="w-full border px-3 py-2 rounded-full"
+              {...register("name")}
+              className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
             />
           </div>
+
+          {/* Email (read-only) */}
           <div>
-            <label className="block font-medium">Email</label>
+            <label className="label text-sm font-medium">Email</label>
             <input
               type="email"
-              value={tutor.email}
               readOnly
-              className="w-full border px-3 py-2 rounded-full"
+              {...register("email")}
+              className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
             />
           </div>
+
+          {/* Qualifications */}
           <div>
-            <label className="block font-medium">Qualifications</label>
-            <input
-              type="text"
-              value={qualifications}
-              onChange={(e) => setQualifications(e.target.value)}
-              required
-              className="w-full border px-3 py-2 rounded-full"
+            <label className="label text-sm font-medium">Qualifications</label>
+            <textarea
+              {...register("qualifications", {
+                required: "Qualifications are required",
+              })}
+              rows={3}
+              className="textarea textarea-bordered w-full rounded-2xl"
               placeholder="Your qualifications"
-            />
+            ></textarea>
+
+            {errors.qualifications && (
+              <p className="text-red-500 text-sm">
+                {errors.qualifications.message}
+              </p>
+            )}
           </div>
+
+          {/* Experience */}
           <div>
-            <label className="block font-medium">Experience</label>
+            <label className="label text-sm font-medium">Experience</label>
             <input
               type="text"
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
-              required
-              className="w-full border px-3 py-2 rounded-full"
+              {...register("experience", {
+                required: "Experience is required",
+              })}
+              className="input input-bordered w-full rounded-full"
               placeholder="Your experience"
             />
+            {errors.experience && (
+              <p className="text-red-500 text-sm">
+                {errors.experience.message}
+              </p>
+            )}
           </div>
+
+          {/* Expected Salary */}
           <div>
-            <label className="block font-medium">Expected Salary</label>
+            <label className="label text-sm font-medium">Expected Salary</label>
             <input
               type="number"
-              value={expectedSalary}
-              onChange={(e) => setExpectedSalary(e.target.value)}
-              required
-              className="w-full border px-3 py-2 rounded-full"
+              {...register("expectedSalary", {
+                required: "Expected salary is required",
+              })}
+              className="input input-bordered w-full rounded-full"
               placeholder="Expected salary"
             />
+            {errors.expectedSalary && (
+              <p className="text-red-500 text-sm">
+                {errors.expectedSalary.message}
+              </p>
+            )}
           </div>
+
+          {/* Submit */}
           <button
             type="submit"
-            className="btn bg-secondary shadow-md hover:shadow-lg text-gray-800 border border-primary hover:text-white px-6 py-3 rounded-full hover:bg-primary transition-all w-full"
+            className="btn bg-secondary shadow-md hover:shadow-lg 
+              text-gray-800 border border-primary hover:text-white 
+              px-6 py-3 rounded-full hover:bg-primary transition-all w-full"
           >
             Submit <GrSend />
           </button>

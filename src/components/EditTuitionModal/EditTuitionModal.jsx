@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { FaTimes } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const EditTuitionModal = ({
@@ -78,10 +79,10 @@ const EditTuitionModal = ({
       <div className="modal-box relative max-w-lg">
         {/* Close button */}
         <button
-          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          className="absolute top-3 right-3 text-gray-600 hover:text-primary"
           onClick={onClose}
         >
-          ✕
+          <FaTimes size={18} />
         </button>
 
         <h3 className="text-xl font-bold mb-4">Edit Tuition Post</h3>
@@ -195,7 +196,7 @@ const EditTuitionModal = ({
 
           <button
             type="submit"
-            className="btn btn-primary rounded-full mt-2"
+            className="btn btn-primary rounded-full mt-2 hover:bg-secondary hover:text-gray-800"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Saving Changes..." : "Save Changes"}

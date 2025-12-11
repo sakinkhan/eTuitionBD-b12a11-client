@@ -44,7 +44,7 @@ const PostTuitions = () => {
         axiosSecure.post("/tuition-posts", data).then((res) => {
           console.log("after saving tuition post", res.data);
           if (res.data.insertedId) {
-            // navigate("/dashboard/my-tuitions");
+            navigate("/dashboard/my-tuitions");
           }
         });
       }
@@ -177,7 +177,7 @@ const PostTuitions = () => {
           <button
             type="button"
             className="btn btn-outline btn-primary rounded-full"
-            // onClick={() => reset()}
+            onClick={() => reset()}
           >
             Reset
           </button>

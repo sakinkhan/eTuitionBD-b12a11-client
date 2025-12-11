@@ -13,6 +13,7 @@ const TuitionDetails = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false);
 
   const {
     data: tuition,
@@ -89,9 +90,15 @@ const TuitionDetails = () => {
             <div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="btn bg-secondary shadow-md hover:shadow-lg text-gray-800 border border-primary hover:text-white px-6 py-3 rounded-full hover:bg-primary transition-all"
+                disabled={hasApplied}
+                className={`btn px-6 py-3 rounded-full shadow-md transition-all flex items-center justify-center gap-2
+                  ${
+                    hasApplied
+                      ? "bg-gray-400 border-gray-400 text-gray-700 cursor-not-allowed shadow-none hover:shadow-none hover:bg-gray-400 hover:text-gray-700"
+                      : "bg-secondary border border-primary text-gray-800 hover:bg-primary hover:text-white hover:shadow-lg"
+                  }`}
               >
-                Apply <GrSend />
+                {hasApplied ? "Already Applied" : "Apply"} <GrSend />
               </button>
             </div>
           )}
@@ -100,7 +107,9 @@ const TuitionDetails = () => {
         <ApplyModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          tutor={{ name: "John Doe", email: "johndoe@example.com" }}
+          tutor={user}
+          tuitionPostId={tuition._id}
+          onApplicationSuccess={() => setHasApplied(true)}
         />
       </div>
 
