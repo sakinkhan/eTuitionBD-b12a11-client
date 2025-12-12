@@ -19,9 +19,10 @@ const MyTuitions = () => {
     queryFn: async () => {
       const res = await axiosSecure.get("/tuition-posts/my-posts");
       console.log(res.data);
-      return res.data.filter((t) => t.status === "Approved");
+      return res.data.filter((t) => t.status === "approved");
     },
   });
+  console.log(tuitions);
 
   const handleTuitionDelete = (id) => {
     console.log(id);
@@ -74,10 +75,10 @@ const MyTuitions = () => {
             <tr>
               <th>#</th>
               <th>Subject</th>
+              <th>Tuition Code</th>
               <th>Class</th>
               <th>Location</th>
               <th>Budget</th>
-              <th>Schedule</th>
               <th>Posted On</th>
               <th>Actions</th>
             </tr>
@@ -87,27 +88,30 @@ const MyTuitions = () => {
               <tr key={tuition._id}>
                 <th>{i + 1}</th>
                 <td>{tuition.subject}</td>
+                <td>{tuition.tuitionCode}</td>
                 <td>{tuition.classLevel}</td>
                 <td>{tuition.location}</td>
                 <td>৳{tuition.budget}</td>
-                <td>{tuition.schedule}</td>
                 <td>{new Date(tuition.createdAt).toLocaleDateString()}</td>
                 <td className="flex items-center gap-1">
                   <button
                     onClick={() => navigate(`/tuition/${tuition._id}`)}
-                    className="btn btn-xs btn-info rounded-full"
+                    className="btn btn-xs btn-info rounded-full tooltip tooltip-primary"
+                    data-tip="View"
                   >
                     <FaEye />
                   </button>
                   <button
                     onClick={() => setEditingTuition(tuition)}
-                    className="btn btn-xs btn-success rounded-full"
+                    className="btn btn-xs btn-success rounded-full tooltip tooltip-primary"
+                    data-tip="Edit"
                   >
                     <AiFillEdit />
                   </button>
                   <button
                     onClick={() => handleTuitionDelete(tuition._id)}
-                    className="btn btn-xs btn-error rounded-full"
+                    className="btn btn-xs btn-error rounded-full tooltip tooltip-primary"
+                    data-tip="Delete"
                   >
                     <FaTrashCan />
                   </button>

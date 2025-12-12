@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -6,6 +6,7 @@ import { IoChevronBack } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import { GrSend } from "react-icons/gr";
 import ApplyModal from "../../components/ApplyModal/ApplyModal";
+import LoadingLottie from "../../components/Lotties/LoadingLottie";
 
 const TuitionDetails = () => {
   const { id } = useParams();
@@ -33,15 +34,26 @@ const TuitionDetails = () => {
       const res = await axiosSecure.get(`/users/${user?.email}`);
       return res.data;
     },
-    enabled: !!user?.email, // only fetch if user is logged in
+    enabled: !!user?.email,
   });
 
+  useEffect(() => {
+    if (!user?.email || !tuition?._id) return;
+
+    axiosSecure
+      .get("/applications/my-applications")
+      .then((res) => {
+        // check if this tutor already applied to this tuition
+        const applied = res.data.some(
+          (app) => String(app.tuitionPostId) === String(tuition._id)
+        );
+        setHasApplied(applied);
+      })
+      .catch((err) => console.error(err));
+  }, [user, tuition, axiosSecure]);
+
   if (isLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <LoadingLottie></LoadingLottie>;
   }
 
   if (isError || !tuition) {
@@ -92,11 +104,11 @@ const TuitionDetails = () => {
                 onClick={() => setIsModalOpen(true)}
                 disabled={hasApplied}
                 className={`btn px-6 py-3 rounded-full shadow-md transition-all flex items-center justify-center gap-2
-                  ${
-                    hasApplied
-                      ? "bg-gray-400 border-gray-400 text-gray-700 cursor-not-allowed shadow-none hover:shadow-none hover:bg-gray-400 hover:text-gray-700"
-                      : "bg-secondary border border-primary text-gray-800 hover:bg-primary hover:text-white hover:shadow-lg"
-                  }`}
+                ${
+                  hasApplied
+                    ? "bg-gray-400 border-gray-400 text-gray-700 cursor-not-allowed shadow-none"
+                    : "bg-secondary border border-primary text-gray-800 hover:bg-primary hover:text-white hover:shadow-lg"
+                }`}
               >
                 {hasApplied ? "Already Applied" : "Apply"} <GrSend />
               </button>
@@ -118,8 +130,8 @@ const TuitionDetails = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 border-b-2 border-primary pb-6 mb-6">
           <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Subject(s)
+            <p className="badge text-xs badge-info badge-xs rounded-full">
+              {tuition.tuitionCode}
             </p>
             <h1 className="text-4xl font-bold leading-tight">
               {tuition.subject}

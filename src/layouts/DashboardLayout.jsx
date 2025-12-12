@@ -16,10 +16,21 @@ import { ThemeContext } from "../contexts/ThemeContext/ThemeContext";
 import useRole from "../hooks/useRole";
 import { PiFlowArrowBold } from "react-icons/pi";
 import { TbDeviceDesktopAnalytics } from "react-icons/tb";
+import { IoMdLogOut } from "react-icons/io";
+import useAuth from "../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const DashboardLayout = () => {
   const { role, isAdmin } = useRole();
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { logOut } = useAuth();
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => toast.error("You have been logged out"))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -253,6 +264,17 @@ const DashboardLayout = () => {
                 {/* Settings icon */}
                 <VscSettingsGear size={20} />
                 <span className="is-drawer-close:hidden">Settings</span>
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                data-tip="Logout"
+              >
+                {/* Settings icon */}
+                <IoMdLogOut size={24} />
+                <span className="is-drawer-close:hidden">Logout</span>
               </button>
             </li>
           </ul>

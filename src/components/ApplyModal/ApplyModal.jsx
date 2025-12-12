@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { GrSend } from "react-icons/gr";
 import { FaTimes } from "react-icons/fa";
+import { GrSend } from "react-icons/gr";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
 const ApplyModal = ({
-  tutor,
-  tuitionPostId,
   isOpen,
   onClose,
+  tutor,
+  tuitionPostId,
+  application,
   onApplicationSuccess,
 }) => {
   const axiosSecure = useAxiosSecure();
@@ -21,51 +22,89 @@ const ApplyModal = ({
     formState: { errors },
   } = useForm();
 
-  // Load readonly tutor info when modal opens
+  // Pre-fill form (edit or create)
   useEffect(() => {
-    if (!isOpen || !tutor) return;
+    if (!isOpen) return;
 
     reset({
-      name: tutor.displayName,
-      email: tutor.email,
-      qualifications: "",
-      experience: "",
-      expectedSalary: "",
+      name: tutor?.displayName || "",
+      email: tutor?.email || "",
+      qualifications: application?.qualifications || "",
+      experience: application?.experience || "",
+      expectedSalary: application?.expectedSalary || "",
     });
-  }, [isOpen, tutor, reset]);
+  }, [isOpen, application, tutor, reset]);
 
-  if (!isOpen || !tutor) return null;
+  if (!isOpen) return null;
 
-  // Submit handler
-  const onSubmit = async (formData) => {
+  // Handle submit
+  const onSubmit = async (data) => {
     try {
       const payload = {
-        tuitionPostId,
-        qualifications: formData.qualifications,
-        experience: formData.experience,
-        expectedSalary: Number(formData.expectedSalary),
+        qualifications: data.qualifications,
+        experience: data.experience,
+        expectedSalary: Number(data.expectedSalary),
       };
 
-      await axiosSecure.post("/applications", payload);
-      Swal.fire({
-        title: "Tuition Application Submitted!",
-        text: "Your tuition application has been submitted successfully.",
-        icon: "success",
-        customClass: {
-          confirmButton:
-            "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
-        },
-        buttonsStyling: false,
-      });
+      // CREATE NEW
+      if (!application) {
+        await axiosSecure
+          .post("/applications", {
+            ...payload,
+            tuitionPostId,
+          })
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.applicationId) {
+              Swal.fire({
+                title: "Application Submitted!",
+                text: "Your tuition application has been submitted successfully.",
+                icon: "success",
+                customClass: {
+                  confirmButton:
+                    "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
+                },
+                buttonsStyling: false,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      // EDIT EXISTING
+      else {
+        await axiosSecure
+          .patch(`/applications/tutor-update/${application._id}`, payload)
+          .then((res) => {
+            if (res.data.modifiedCount > 0) {
+              Swal.fire({
+                title: "Application Updated!",
+                text: "Your tuition Application has been updated successfully.",
+                icon: "success",
+                customClass: {
+                  confirmButton:
+                    "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
+                },
+                buttonsStyling: false,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
       if (onApplicationSuccess) onApplicationSuccess();
-      reset();
       onClose();
     } catch (err) {
-      console.error("Application submission failed:", err);
+      console.log(err);
+      alert(err.response?.data?.error || "Something went wrong");
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Something went wrong! Failed to submit application",
+        text: "Something went wrong!",
         customClass: {
           confirmButton:
             "btn btn-primary text-white font-semibold rounded-full px-6 py-2 mb-2",
@@ -78,7 +117,6 @@ const ApplyModal = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
       <div className="bg-base-100 p-6 rounded-2xl w-80 md:w-96 shadow-xl relative">
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-primary"
@@ -86,94 +124,64 @@ const ApplyModal = ({
           <FaTimes size={18} />
         </button>
 
-        <h3 className="text-xl font-bold mb-4">Apply for Tuition</h3>
+        <h3 className="text-xl font-bold mb-4">
+          {application ? "Edit Application" : "Apply for Tuition"}
+        </h3>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          {/* Name (read-only) */}
-          <div>
-            <label className="label text-sm font-medium">Name</label>
-            <input
-              type="text"
-              readOnly
-              {...register("name")}
-              className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
-            />
-          </div>
+          {/* Read-only name */}
+          <label className="label text-sm">Name</label>
+          <input
+            type="text"
+            {...register("name")}
+            readOnly
+            className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
+          />
 
-          {/* Email (read-only) */}
-          <div>
-            <label className="label text-sm font-medium">Email</label>
-            <input
-              type="email"
-              readOnly
-              {...register("email")}
-              className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
-            />
-          </div>
+          {/* Read-only email */}
+          <label className="label text-sm">Email</label>
+          <input
+            type="email"
+            {...register("email")}
+            readOnly
+            className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
+          />
 
           {/* Qualifications */}
-          <div>
-            <label className="label text-sm font-medium">Qualifications</label>
-            <textarea
-              {...register("qualifications", {
-                required: "Qualifications are required",
-              })}
-              rows={3}
-              className="textarea textarea-bordered w-full rounded-2xl"
-              placeholder="Your qualifications"
-            ></textarea>
-
-            {errors.qualifications && (
-              <p className="text-red-500 text-sm">
-                {errors.qualifications.message}
-              </p>
-            )}
-          </div>
+          <label className="label text-sm">Qualifications</label>
+          <textarea
+            {...register("qualifications", { required: "Required" })}
+            className="textarea textarea-bordered w-full rounded-xl"
+            rows="3"
+          />
+          {errors.qualifications && (
+            <p className="text-red-500 text-sm">
+              {errors.qualifications.message}
+            </p>
+          )}
 
           {/* Experience */}
-          <div>
-            <label className="label text-sm font-medium">Experience</label>
-            <input
-              type="text"
-              {...register("experience", {
-                required: "Experience is required",
-              })}
-              className="input input-bordered w-full rounded-full"
-              placeholder="Your experience"
-            />
-            {errors.experience && (
-              <p className="text-red-500 text-sm">
-                {errors.experience.message}
-              </p>
-            )}
-          </div>
+          <label className="label text-sm">Experience</label>
+          <input
+            type="text"
+            {...register("experience", { required: "Required" })}
+            className="input input-bordered w-full rounded-full"
+          />
 
           {/* Expected Salary */}
-          <div>
-            <label className="label text-sm font-medium">Expected Salary</label>
-            <input
-              type="number"
-              {...register("expectedSalary", {
-                required: "Expected salary is required",
-              })}
-              className="input input-bordered w-full rounded-full"
-              placeholder="Expected salary"
-            />
-            {errors.expectedSalary && (
-              <p className="text-red-500 text-sm">
-                {errors.expectedSalary.message}
-              </p>
-            )}
-          </div>
+          <label className="label text-sm">Expected Salary</label>
+          <input
+            type="number"
+            {...register("expectedSalary", { required: "Required" })}
+            className="input input-bordered w-full rounded-full"
+          />
 
-          {/* Submit */}
           <button
             type="submit"
-            className="btn bg-secondary shadow-md hover:shadow-lg 
-              text-gray-800 border border-primary hover:text-white 
-              px-6 py-3 rounded-full hover:bg-primary transition-all w-full"
+            className="btn bg-secondary text-gray-800 border border-primary hover:bg-primary 
+              hover:text-white transition-all w-full rounded-full mt-3"
           >
-            Submit <GrSend />
+            {application ? "Save Changes" : "Submit"} <GrSend />
           </button>
         </form>
       </div>

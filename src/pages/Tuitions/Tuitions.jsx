@@ -11,7 +11,7 @@ const Tuitions = () => {
   const { data: tuitions = [], isLoading } = useQuery({
     queryKey: ["tuitions", searchText],
     queryFn: async () => {
-      const res = await axiosPublic.get(`tuition-posts?search=${searchText}`);
+      const res = await axiosPublic.get(`/tuition-posts?search=${searchText}`);
       return res.data;
     },
   });

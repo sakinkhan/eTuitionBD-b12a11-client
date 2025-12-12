@@ -8,7 +8,7 @@ import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
 import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
+  const { user: firebaseUser, logOut } = useAuth();
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   const handleLogout = () => {
@@ -34,7 +34,7 @@ const Navbar = () => {
   // );
 
   return (
-    <div className="navbar bg-base-100 shadow-md py-4 px-6 md:px-20 sticky top-0 z-50 transition-colors duration-300">
+    <div className="navbar bg-base-100 shadow-md py-4 px-6  sticky top-0 z-50 transition-colors duration-300 max-w-7xl mx-auto">
       {/* Left: Logo + Mobile Menu */}
       <div className="navbar-start">
         <div className="dropdown">
@@ -92,7 +92,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {user ? (
+        {firebaseUser ? (
           <div className="flex items-center gap-3">
             <Link
               to="/dashboard"
@@ -105,7 +105,7 @@ const Navbar = () => {
                 <div className="w-12 rounded-full border-2 border-primary">
                   <img
                     src={
-                      user.photoURL ||
+                      firebaseUser.photoURL ||
                       "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
                     }
                     alt="User Avatar"
@@ -115,12 +115,12 @@ const Navbar = () => {
               <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48 max-w-[90vw]">
                 <li className="pointer-events-none justify-center">
                   <p className="font-semibold text-base-content text-sm text-center wrap-break-word">
-                    {user?.displayName}
+                    {firebaseUser?.displayName}
                   </p>
                 </li>
                 <li className="pointer-events-none justify-center">
                   <p className="text-xs text-base-content wrap-break-word">
-                    {user?.email}
+                    {firebaseUser?.email}
                   </p>
                 </li>
                 <li>
