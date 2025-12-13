@@ -161,11 +161,13 @@ const DashboardLayout = () => {
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                    data-tip="Payments"
-                    to="/dashboard/payments"
+                    data-tip="Payment History"
+                    to="/dashboard/payment-history"
                   >
                     <BsFillCreditCardFill size={20} />
-                    <span className="is-drawer-close:hidden">Payments</span>
+                    <span className="is-drawer-close:hidden">
+                      Payment History
+                    </span>
                   </NavLink>
                 </li>
               </>

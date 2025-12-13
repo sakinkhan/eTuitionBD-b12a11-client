@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useAuth from "../../../../hooks/useAuth";
 import TutorModal from "../../../../components/TutorModal/TutorModal";
+import Swal from "sweetalert2";
 
 const AppliedTutors = () => {
   const axiosSecure = useAxiosSecure();
@@ -22,15 +23,41 @@ const AppliedTutors = () => {
       return res.data;
     },
   });
-  console.log(applications);
+  console.log("Applications:", applications);
 
-  const handleApprove = (app) => {
-    navigate(`/checkout/${app._id}`, {
-      state: {
-        salary: app.expectedSalary,
-        tutorId: app.tutorId,
-        tuitionId: app.tuitionId,
+  const handleApprove = async (app) => {
+    console.log(app);
+    Swal.fire({
+      title: "Approve this application?",
+      text: `Once you approve, you'll be taken to checkout to complete the payment of ৳${app.expectedSalary}`,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Proceed!",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton:
+          "btn btn-primary hover:bg-secondary hover:text-gray-800 text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+        cancelButton:
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
+      buttonsStyling: false,
+    }).then(async (result) => {
+      if (!result.isConfirmed) return;
+
+      const paymentInfo = {
+        expectedSalary: app.expectedSalary,
+        tuitionCode: app.tuitionCode,
+        tutorName: app.tutorName,
+        studentEmail: app.studentEmail,
+        tuitionPostId: app.tuitionPostId,
+        tuitionTitle: app.tuitionTitle,
+        tutorEmail: app.tutorEmail,
+      };
+      const res = await axiosSecure.post(
+        `/payment-checkout-session`,
+        paymentInfo
+      );
+      window.location.assign(res.data.url);
     });
   };
 
@@ -79,41 +106,30 @@ const AppliedTutors = () => {
                 </td>
 
                 {/* Tuition Info */}
-                <td>
-                  <div className="space-y-1">
-                    <p className="text-sm font-semibold">{app.tuitionTitle}</p>
-
-                    <p className="text-xs text-gray-500">
-                      Class: {app.classLevel}
+                <td className="w-20 md:w-40">
+                  <div className="flex flex-col items-start gap-1">
+                    <p className="badge badge-info rounded-full badge-sm mt-1">
+                      {app.tuitionCode}
                     </p>
-
-                    <p className="text-xs text-gray-500">
-                      Location: {app.location}
-                    </p>
-
-                    <span className="badge badge-primary badge-sm mt-1">
-                      {app.tuitionCode || `TP-${app.tuitionId?.slice(-4)}`}
-                    </span>
-
                     <button
-                      onClick={() => navigate(`/tuition/${app.tuitionId}`)}
-                      className="text-xs text-blue-600 underline hover:text-blue-800"
+                      onClick={() => navigate(`/tuition/${app.tuitionPostId}`)}
+                      className="text-xs text-primary text-left underline hover:text-blue-800 cursor-pointer"
                     >
-                      View Tuition
+                      View Tuition Details
                     </button>
                   </div>
                 </td>
 
                 {/* Tutor Details */}
-                <td>{app.qualifications}</td>
-                <td>{app.experience}</td>
-                <td>৳{app.expectedSalary}</td>
+                <td className="max-w-70">{app.qualifications}</td>
+                <td className="max-w-50">{app.experience}</td>
+                <td className="max-w-30">৳{app.expectedSalary}</td>
 
                 {/* Status */}
                 <td>
                   <span
                     className={`badge rounded-full ${
-                      app.status === "approved"
+                      app.status === "approved & paid"
                         ? "badge-success"
                         : app.status === "rejected"
                         ? "badge-error"
@@ -141,7 +157,7 @@ const AppliedTutors = () => {
                       disabled={app.status !== "pending"}
                       onClick={() => handleApprove(app)}
                       className="btn btn-xs btn-success rounded-full tooltip tooltip-primary"
-                      data-tip="Approve Tutor"
+                      data-tip="Approve & Pay Tutor"
                     >
                       <MdDone size={14} />
                     </button>

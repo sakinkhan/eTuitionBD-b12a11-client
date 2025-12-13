@@ -88,7 +88,8 @@ const MyTuitions = () => {
               <tr key={tuition._id}>
                 <th>{i + 1}</th>
                 <td>{tuition.subject}</td>
-                <td>{tuition.tuitionCode}</td>
+                <td>
+                  <p className="badge badge-info rounded-full badge-sm mt-1">{tuition.tuitionCode}</p></td>
                 <td>{tuition.classLevel}</td>
                 <td>{tuition.location}</td>
                 <td>৳{tuition.budget}</td>

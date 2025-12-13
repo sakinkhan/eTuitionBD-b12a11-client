@@ -16,7 +16,6 @@ const MyApplications = () => {
     queryKey: ["my-applications", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get("/applications/my-applications");
-      console.log(res.data);
       return res.data;
     },
   });
@@ -70,6 +69,7 @@ const MyApplications = () => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Aplication Code</th>
               <th>Subject(s)</th>
               <th>Location</th>
               <th>Budget</th>
@@ -82,6 +82,9 @@ const MyApplications = () => {
             {applications.map((app, i) => (
               <tr key={app._id}>
                 <th>{i + 1}</th>
+                <td>
+                  <p className="badge badge-sm badge-info rounded-full">{app.applicationCode}</p>
+                </td>
                 <td>{app.tuitionPost?.subject}</td>
                 <td>{app.tuitionPost?.location}</td>
                 <td>৳{app.tuitionPost?.budget}</td>

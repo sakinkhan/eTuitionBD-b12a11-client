@@ -34,7 +34,7 @@ const Navbar = () => {
   // );
 
   return (
-    <div className="navbar bg-base-100 shadow-md py-4 px-6  sticky top-0 z-50 transition-colors duration-300 max-w-7xl mx-auto">
+    <div className="navbar bg-base-100 shadow-md py-4 px-6 md:px-20 sticky top-0 z-50 transition-colors duration-300 ">
       {/* Left: Logo + Mobile Menu */}
       <div className="navbar-start">
         <div className="dropdown">

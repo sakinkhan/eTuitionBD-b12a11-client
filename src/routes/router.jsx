@@ -14,7 +14,6 @@ import PrivateRoute from "./PrivateRoute";
 import DashboardHome from "../pages/Dashboards/DashboardHome/DashboardHome";
 import PostTuitions from "../pages/Dashboards/Student Dashboard/PostTuitions/PostTuitions";
 import AppliedTutors from "../pages/Dashboards/Student Dashboard/AppliedTutors/AppliedTutors";
-import Payments from "../pages/Dashboards/Student Dashboard/Payments/Payments";
 import TuitionDetails from "../pages/Tuitions/TuitionDetails";
 import MyApplications from "../pages/Dashboards/Tutor Dashboard/MyApplications/MyApplications";
 import OngoingTuitions from "../pages/Dashboards/Tutor Dashboard/OngoingTuitions/OngoingTuitions";
@@ -23,6 +22,13 @@ import UserManagement from "../pages/Dashboards/Admin Dashboard/UserManagement/U
 import TutorManagement from "../pages/Dashboards/Admin Dashboard/TutorManagement/TutorManagement";
 import ReportsAnalytics from "../pages/Dashboards/Admin Dashboard/ReportsAnalytics/ReportsAnalytics";
 import UserProfile from "../pages/UserProfile/UserProfile";
+import PaymentHistory from "../pages/Dashboards/Student Dashboard/Payments/PaymentHistory";
+import Payment from "../pages/Dashboards/Student Dashboard/Payments/Payment";
+import PaymentSuccess from "../pages/Dashboards/Student Dashboard/Payments/PaymentSuccess";
+import PaymentCancelled from "../pages/Dashboards/Student Dashboard/Payments/PaymentCancelled";
+import StudentRoute from "./StudentRoute";
+import TutorRoute from "./TutorRoute";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -94,43 +100,107 @@ export const router = createBrowserRouter([
       },
       {
         path: "my-tuitions",
-        element: <MyTuitions></MyTuitions>,
+        element: (
+          <StudentRoute>
+            <MyTuitions></MyTuitions>
+          </StudentRoute>
+        ),
       },
       {
         path: "post-tuitions",
-        element: <PostTuitions></PostTuitions>,
+        element: (
+          <StudentRoute>
+            <PostTuitions></PostTuitions>
+          </StudentRoute>
+        ),
       },
       {
         path: "applied-tutors",
-        element: <AppliedTutors></AppliedTutors>,
+        element: (
+          <StudentRoute>
+            <AppliedTutors></AppliedTutors>
+          </StudentRoute>
+        ),
       },
       {
-        path: "payments",
-        element: <Payments></Payments>,
+        path: "payment-history",
+        element: (
+          <StudentRoute>
+            <PaymentHistory></PaymentHistory>
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "payment/:tuitionPostId",
+        element: (
+          <StudentRoute>
+            <Payment />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "payment-success",
+        element: (
+          <StudentRoute>
+            <PaymentSuccess />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "payment-cancelled",
+        element: (
+          <StudentRoute>
+            <PaymentCancelled />
+          </StudentRoute>
+        ),
       },
       {
         path: "my-applications",
-        element: <MyApplications></MyApplications>,
+        element: (
+          <TutorRoute>
+            <MyApplications></MyApplications>
+          </TutorRoute>
+        ),
       },
       {
         path: "ongoing-tuitions",
-        element: <OngoingTuitions></OngoingTuitions>,
+        element: (
+          <TutorRoute>
+            <OngoingTuitions></OngoingTuitions>
+          </TutorRoute>
+        ),
       },
       {
         path: "revenue-history",
-        element: <RevenueHistory></RevenueHistory>,
+        element: (
+          <TutorRoute>
+            <RevenueHistory></RevenueHistory>
+          </TutorRoute>
+        ),
       },
       {
         path: "user-management",
-        element: <UserManagement></UserManagement>,
+        element: (
+          <AdminRoute>
+            <UserManagement></UserManagement>
+          </AdminRoute>
+        ),
       },
       {
         path: "tutor-management",
-        element: <TutorManagement></TutorManagement>,
+        element: (
+          <AdminRoute>
+            <TutorManagement></TutorManagement>
+          </AdminRoute>
+        ),
       },
       {
         path: "reports-analytics",
-        element: <ReportsAnalytics></ReportsAnalytics>,
+        element: (
+          <AdminRoute>
+            <ReportsAnalytics></ReportsAnalytics>
+          </AdminRoute>
+        ),
       },
     ],
   },
