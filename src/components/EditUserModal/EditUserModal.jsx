@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import useRole from "../../hooks/useRole";
 
 const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
+  const { isAdmin, roleLoading } = useRole();
   const [preview, setPreview] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -29,7 +32,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
     }, 0);
   }, [user, isOpen, reset]);
 
-  if (!isOpen || !user) return null;
+  if (!isOpen || !user || roleLoading) return null;
 
   // Upload image to imgbb
   const uploadImageToImgBB = async (file) => {
@@ -62,6 +65,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         role: data.role,
         verified: data.verified,
         photoURL,
+        ...(isAdmin && { verified: data.verified }),
       };
 
       onSave(updatedUser);
@@ -181,6 +185,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
               type="checkbox"
               {...register("verified")}
               className="checkbox text-primary"
+              disabled={!isAdmin}
             />
             <span className="font-semibold text-sm">Verified</span>
           </label>

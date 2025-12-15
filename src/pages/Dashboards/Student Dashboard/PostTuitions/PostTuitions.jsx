@@ -27,8 +27,6 @@ const PostTuitions = () => {
   });
 
   const handlePostTuition = (data) => {
-    console.log(data);
-
     Swal.fire({
       title: "Tuition Post Created",
       text: "Your request is now submitted and waiting for admin approval.",

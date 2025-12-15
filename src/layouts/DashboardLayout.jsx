@@ -94,7 +94,7 @@ const DashboardLayout = () => {
           <ul className="menu w-full grow space-y-2">
             {/* List item */}
             {/* Logo */}
-            <li>
+            <li className="border-b pb-3">
               <Link
                 to="/"
                 className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
@@ -258,15 +258,16 @@ const DashboardLayout = () => {
             )}
 
             {/* List item */}
-            <li>
-              <button
+            <li className="border-t pt-3">
+              <Link
+                to={"/userProfile"}
                 className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                data-tip="Settings"
+                data-tip="Profile Settings"
               >
                 {/* Settings icon */}
                 <VscSettingsGear size={20} />
-                <span className="is-drawer-close:hidden">Settings</span>
-              </button>
+                <span className="is-drawer-close:hidden">Profile Settings</span>
+              </Link>
             </li>
             <li>
               <button

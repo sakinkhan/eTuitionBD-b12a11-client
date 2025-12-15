@@ -5,7 +5,6 @@ import useRole from "../hooks/useRole";
 const StudentRoute = ({ children }) => {
   const { role, roleLoading } = useRole();
   const location = useLocation();
-  console.log(role);
   if (roleLoading) return null;
 
   if (role !== "student") {

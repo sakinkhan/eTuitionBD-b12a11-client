@@ -91,8 +91,10 @@ const MyApplications = () => {
                 <td>৳{app.expectedSalary}</td>
                 <td>
                   <span
-                    className={`badge rounded-full ${
-                      app.status === "approved"
+                    className={`badge inline-flex grow items-center justify-center 
+                   whitespace-nowrap truncate text-center
+                    px-3 py-2 leading-tight rounded-full ${
+                      app.status === "approved & paid"
                         ? "badge-success"
                         : app.status === "rejected"
                         ? "badge-error"

@@ -6,7 +6,7 @@ import learningImg from "../../assets/hero1.jpg";
 
 const WhyChooseUs = () => {
   return (
-    <section className="relative mx-auto max-w-7xl px-5 lg:px-20 py-16 bg-linear-to-bl from-primary/20 via-secondary/20 to-primary/10">
+    <section className="relative px-5 lg:px-20 py-16 bg-linear-to-bl from-primary/20 via-secondary/20 to-primary/10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left Side */}
         <div className="relative">
@@ -88,9 +88,9 @@ const WhyChooseUs = () => {
             Why Choose Us
           </p>
           <h2 className="mt-3 text-3xl sm:text-4xl font-bold leading-tight text-base-content">
-            Our Commitment to Excellence,
+            Our Commitment to <span className="text-primary">Excellence,</span>
             <br className="hidden sm:block" />
-            Learn, Grow &amp; Success.
+            Learn, Grow & Success.
           </h2>
           <p className="mt-4 text-base-content/80 max-w-xl">
             At <span className="text-primary font-medium">eTuitionBD</span>,

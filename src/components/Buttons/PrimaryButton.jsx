@@ -1,5 +1,5 @@
 import React from "react";
-import { FaLocationArrow } from "react-icons/fa";
+import { FaLocationArrow, FaRegPaperPlane } from "react-icons/fa";
 import { Link } from "react-router";
 
 const PrimaryButton = ({ to = "/", label = "Click Here" }) => {

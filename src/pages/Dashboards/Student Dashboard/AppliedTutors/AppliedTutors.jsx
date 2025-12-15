@@ -23,7 +23,6 @@ const AppliedTutors = () => {
       return res.data;
     },
   });
-  console.log("Applications:", applications);
 
   const handleApprove = async (app) => {
     console.log(app);
@@ -61,9 +60,56 @@ const AppliedTutors = () => {
     });
   };
 
-  const handleReject = async (id) => {
-    await axiosSecure.patch(`/applications/reject/${id}`);
-    refetch();
+  const handleReject = (app) => {
+    console.log(app._id);
+    Swal.fire({
+      title: "Reject this application?",
+      text: "The tutor will be informed and the application will be permanently rejected.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Reject",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton:
+          "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+        cancelButton:
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+      },
+      buttonsStyling: false,
+    }).then(async (result) => {
+      if (!result.isConfirmed) return;
+      try {
+        await axiosSecure.patch(`/applications/reject/${app._id}`);
+
+        Swal.fire({
+          title: "Application Rejected",
+          text: "The tutor application has been rejected successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+          customClass: {
+            confirmButton:
+              "btn btn-primary font-semibold rounded-full px-6 py-2",
+          },
+          buttonsStyling: false,
+        });
+
+        refetch();
+      } catch (error) {
+        console.error("Failed to reject application", error);
+
+        Swal.fire({
+          title: "Something went wrong",
+          text: "We couldn't reject the application. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            confirmButton:
+              "btn btn-primary font-semibold rounded-full px-6 py-2",
+          },
+          buttonsStyling: false,
+        });
+      }
+    });
   };
 
   return (
@@ -128,7 +174,9 @@ const AppliedTutors = () => {
                 {/* Status */}
                 <td>
                   <span
-                    className={`badge rounded-full ${
+                    className={`badge inline-flex grow items-center justify-center 
+                   whitespace-nowrap truncate text-center
+                    px-3 py-2 leading-tight rounded-full ${
                       app.status === "approved & paid"
                         ? "badge-success"
                         : app.status === "rejected"
@@ -165,7 +213,7 @@ const AppliedTutors = () => {
                     {/* Reject */}
                     <button
                       disabled={app.status !== "pending"}
-                      onClick={() => handleReject(app._id)}
+                      onClick={() => handleReject(app)}
                       className="btn btn-xs btn-error rounded-full tooltip tooltip-primary"
                       data-tip="Reject Tutor"
                     >

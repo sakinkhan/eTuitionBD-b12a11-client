@@ -68,60 +68,69 @@ const MyTuitions = () => {
         My <span className="text-primary">Tuition</span> Posts (
         {tuitions.length})
       </h2>
-      <div className="overflow-x-auto">
-        <table className="table table-zebra">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Subject</th>
-              <th>Tuition Code</th>
-              <th>Class</th>
-              <th>Location</th>
-              <th>Budget</th>
-              <th>Posted On</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tuitions.map((tuition, i) => (
-              <tr key={tuition._id}>
-                <th>{i + 1}</th>
-                <td>{tuition.subject}</td>
-                <td>
-                  <p className="badge badge-info rounded-full badge-sm mt-1">{tuition.tuitionCode}</p></td>
-                <td>{tuition.classLevel}</td>
-                <td>{tuition.location}</td>
-                <td>৳{tuition.budget}</td>
-                <td>{new Date(tuition.createdAt).toLocaleDateString()}</td>
-                <td className="flex items-center gap-1">
-                  <button
-                    onClick={() => navigate(`/tuition/${tuition._id}`)}
-                    className="btn btn-xs btn-info rounded-full tooltip tooltip-primary"
-                    data-tip="View"
-                  >
-                    <FaEye />
-                  </button>
-                  <button
-                    onClick={() => setEditingTuition(tuition)}
-                    className="btn btn-xs btn-success rounded-full tooltip tooltip-primary"
-                    data-tip="Edit"
-                  >
-                    <AiFillEdit />
-                  </button>
-                  <button
-                    onClick={() => handleTuitionDelete(tuition._id)}
-                    className="btn btn-xs btn-error rounded-full tooltip tooltip-primary"
-                    data-tip="Delete"
-                  >
-                    <FaTrashCan />
-                  </button>
-                </td>
+      {tuitions.length === 0 ? (
+        <p className="text-gray-500 text-center py-5">
+          No Active Tuition Post found.
+        </p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="table table-zebra">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Tuition Code</th>
+                <th>Class</th>
+                <th>Location</th>
+                <th>Budget</th>
+                <th>Posted On</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {tuitions.map((tuition, i) => (
+                <tr key={tuition._id}>
+                  <th>{i + 1}</th>
+                  <td>{tuition.subject}</td>
+                  <td>
+                    <p className="badge badge-info rounded-full badge-sm mt-1">
+                      {tuition.tuitionCode}
+                    </p>
+                  </td>
+                  <td>{tuition.classLevel}</td>
+                  <td>{tuition.location}</td>
+                  <td>৳{tuition.budget}</td>
+                  <td>{new Date(tuition.createdAt).toLocaleDateString()}</td>
+                  <td className="flex items-center gap-1">
+                    <button
+                      onClick={() => navigate(`/tuition/${tuition._id}`)}
+                      className="btn btn-xs btn-info rounded-full tooltip tooltip-primary"
+                      data-tip="View"
+                    >
+                      <FaEye />
+                    </button>
+                    <button
+                      onClick={() => setEditingTuition(tuition)}
+                      className="btn btn-xs btn-success rounded-full tooltip tooltip-primary"
+                      data-tip="Edit"
+                    >
+                      <AiFillEdit />
+                    </button>
+                    <button
+                      onClick={() => handleTuitionDelete(tuition._id)}
+                      className="btn btn-xs btn-error rounded-full tooltip tooltip-primary"
+                      data-tip="Delete"
+                    >
+                      <FaTrashCan />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       {/* Edit Tuition Post Modal */}
       <EditTuitionModal
         tuition={editingTuition}
