@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
 import { useNavigate } from "react-router";
-import { MdDone } from "react-icons/md";
+import { MdDone, MdVerified } from "react-icons/md";
 import { FiCheckCircle } from "react-icons/fi";
 import { GiCancel } from "react-icons/gi";
+import { BsXCircleFill } from "react-icons/bs";
 
 const TuitionPostManagement = () => {
   const axiosSecure = useAxiosSecure();
@@ -49,7 +50,7 @@ const TuitionPostManagement = () => {
           </svg>
           <input
             type="search"
-            placeholder="Search tuitions"
+            placeholder="Search tuition posts..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"
@@ -64,10 +65,10 @@ const TuitionPostManagement = () => {
             <tr>
               <th>#</th>
               <th>Tuition Info</th>
-              <th>Location</th>
               <th>Contact Email</th>
               <th>Budget</th>
               <th>Date Posted</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -89,7 +90,7 @@ const TuitionPostManagement = () => {
                       </button>
                     </div>
                   </td>
-                  <td>{post.location}</td>
+
                   <td>{post.contactEmail}</td>
                   <td>
                     <span className="text-primary font-semibold">
@@ -97,6 +98,24 @@ const TuitionPostManagement = () => {
                     </span>
                   </td>
                   <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    <span
+                      className={`badge inline-flex grow items-center justify-center 
+                   whitespace-nowrap truncate text-center
+                    px-3 py-2 leading-tight rounded-full ${
+                      post.status === "approved & paid"
+                        ? "badge-success"
+                        : post.status === "rejected"
+                        ? "badge-error"
+                        : post.status === "pending"
+                        ? "badge-warning"
+                        : "badge-info"
+                    }`}
+                    >
+                      {post.status.charAt(0).toUpperCase() +
+                        post.status.slice(1)}
+                    </span>
+                  </td>
                   <td>
                     <div className="flex items-center gap-2">
                       {/* Approve */}
