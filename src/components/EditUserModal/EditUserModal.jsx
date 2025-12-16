@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import useRole from "../../hooks/useRole";
+import useAuth from "../../hooks/useAuth";
 
 const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
   const { isAdmin: currentUserIsAdmin, roleLoading } = useRole();
+  const { user: loggedInUser } = useAuth();
   const [preview, setPreview] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const isEditingSelf = loggedInUser?.email === user?.email;
 
   const {
     register,
@@ -199,6 +203,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
                 <input
                   type="checkbox"
                   {...register("isAdmin")}
+                  disabled={isEditingSelf}
                   className="checkbox text-primary"
                 />
                 <span className="font-semibold text-sm">Admin</span>

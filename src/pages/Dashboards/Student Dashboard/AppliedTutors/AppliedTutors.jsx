@@ -186,7 +186,7 @@ const AppliedTutors = () => {
                     </p>
                     <button
                       onClick={() => navigate(`/tuition/${app.tuitionPostId}`)}
-                      className="text-xs text-primary text-left underline hover:text-blue-800 cursor-pointer"
+                      className="text-xs text-primary text-left underline hover:text-blue-500 cursor-pointer"
                     >
                       View Tuition Details
                     </button>

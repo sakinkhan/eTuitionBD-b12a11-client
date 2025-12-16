@@ -4,7 +4,7 @@ import { LuNotebookPen } from "react-icons/lu";
 import { Link, NavLink, Outlet } from "react-router";
 import logoImg from "../assets/logo-icon.png";
 import { VscSettingsGear } from "react-icons/vsc";
-import { IoDocumentAttachOutline } from "react-icons/io5";
+import { IoDocumentAttachOutline, IoDocumentsSharp } from "react-icons/io5";
 import { FaMoneyBillTrendUp, FaUsers, FaUsersGear } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import {
@@ -51,7 +51,7 @@ const DashboardLayout = () => {
               strokeWidth="2"
               fill="none"
               stroke="currentColor"
-              className="my-1.5 inline-block size-4"
+              className="my-1.5 inline-block size-6"
             >
               <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
               <path d="M9 4v16"></path>
@@ -116,7 +116,7 @@ const DashboardLayout = () => {
                 data-tip="Dashboard Home"
               >
                 {/* Home icon */}
-                <FaHome size={20} />
+                <FaHome size={25} />
                 <span className="is-drawer-close:hidden">Homepage</span>
               </Link>
             </li>
@@ -130,7 +130,7 @@ const DashboardLayout = () => {
                     data-tip="My Tuitions"
                     to="/dashboard/my-tuitions"
                   >
-                    <FaChalkboardTeacher size={20} />
+                    <FaChalkboardTeacher size={25} />
                     <span className="is-drawer-close:hidden">My Tuitions</span>
                   </NavLink>
                 </li>
@@ -140,7 +140,7 @@ const DashboardLayout = () => {
                     data-tip="Post New Tuition"
                     to="/dashboard/post-tuitions"
                   >
-                    <LuNotebookPen size={20} />
+                    <LuNotebookPen size={25} />
                     <span className="is-drawer-close:hidden">
                       Post New Tuition
                     </span>
@@ -152,7 +152,7 @@ const DashboardLayout = () => {
                     data-tip="Applied Tutors"
                     to="/dashboard/applied-tutors"
                   >
-                    <FaUsers size={20} />
+                    <FaUsers size={25} />
                     <span className="is-drawer-close:hidden">
                       Applied Tutors
                     </span>
@@ -164,7 +164,7 @@ const DashboardLayout = () => {
                     data-tip="Payment History"
                     to="/dashboard/payment-history"
                   >
-                    <BsFillCreditCardFill size={20} />
+                    <BsFillCreditCardFill size={25} />
                     <span className="is-drawer-close:hidden">
                       Payment History
                     </span>
@@ -182,7 +182,7 @@ const DashboardLayout = () => {
                     data-tip="My Applications"
                     to="/dashboard/my-applications"
                   >
-                    <IoDocumentAttachOutline size={20} />
+                    <IoDocumentAttachOutline size={25} />
                     <span className="is-drawer-close:hidden">
                       My Applications
                     </span>
@@ -194,7 +194,7 @@ const DashboardLayout = () => {
                     data-tip="Ongoing Tuitions"
                     to="/dashboard/ongoing-tuitions"
                   >
-                    <PiFlowArrowBold size={20} />
+                    <PiFlowArrowBold size={25} />
                     <span className="is-drawer-close:hidden">
                       Ongoing Tuitions
                     </span>
@@ -206,7 +206,7 @@ const DashboardLayout = () => {
                     data-tip="Revenue History"
                     to="/dashboard/revenue-history"
                   >
-                    <FaMoneyBillTrendUp size={20} />
+                    <FaMoneyBillTrendUp size={25} />
                     <span className="is-drawer-close:hidden">
                       Revenue History
                     </span>
@@ -224,9 +224,21 @@ const DashboardLayout = () => {
                     data-tip="User Management"
                     to="/dashboard/user-management"
                   >
-                    <FaUsersGear size={20} />
+                    <FaUsersGear size={25} />
                     <span className="is-drawer-close:hidden">
                       User Management
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    data-tip="Tuition Post Management"
+                    to="/dashboard/tuition-post-management"
+                  >
+                    <IoDocumentsSharp size={25} />
+                    <span className="is-drawer-close:hidden">
+                      Tuition Post Management
                     </span>
                   </NavLink>
                 </li>
@@ -236,7 +248,7 @@ const DashboardLayout = () => {
                     data-tip="Tutor Management"
                     to="/dashboard/tutor-management"
                   >
-                    <GiTeacher size={20} />
+                    <GiTeacher size={25} />
                     <span className="is-drawer-close:hidden">
                       Tutor Management
                     </span>
@@ -248,7 +260,7 @@ const DashboardLayout = () => {
                     data-tip="Reports & Analytics"
                     to="/dashboard/reports-analytics"
                   >
-                    <TbDeviceDesktopAnalytics size={20} />
+                    <TbDeviceDesktopAnalytics size={26} />
                     <span className="is-drawer-close:hidden">
                       Reports & Analytics
                     </span>
@@ -265,7 +277,7 @@ const DashboardLayout = () => {
                 data-tip="Profile Settings"
               >
                 {/* Settings icon */}
-                <VscSettingsGear size={20} />
+                <VscSettingsGear size={23} />
                 <span className="is-drawer-close:hidden">Profile Settings</span>
               </Link>
             </li>
@@ -276,7 +288,7 @@ const DashboardLayout = () => {
                 data-tip="Logout"
               >
                 {/* Settings icon */}
-                <IoMdLogOut size={24} />
+                <IoMdLogOut size={27} />
                 <span className="is-drawer-close:hidden">Logout</span>
               </button>
             </li>

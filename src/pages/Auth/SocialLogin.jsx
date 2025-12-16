@@ -18,6 +18,7 @@ const SocialLogin = () => {
       // 1. Sign in with Google
       const result = await loginWithGoogle();
       const { user } = result;
+      console.log(user);
 
       // 2. Prepare user object
       const userToSave = {

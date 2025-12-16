@@ -29,6 +29,7 @@ import PaymentCancelled from "../pages/Dashboards/Student Dashboard/Payments/Pay
 import StudentRoute from "./StudentRoute";
 import TutorRoute from "./TutorRoute";
 import AdminRoute from "./AdminRoute";
+import TuitionPostManagement from "../pages/Dashboards/Admin Dashboard/TuitionPostManagement/TuitionPostManagement";
 
 export const router = createBrowserRouter([
   {
@@ -183,6 +184,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <UserManagement></UserManagement>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "tuition-post-management",
+        element: (
+          <AdminRoute>
+            <TuitionPostManagement></TuitionPostManagement>
           </AdminRoute>
         ),
       },

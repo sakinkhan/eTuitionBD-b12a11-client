@@ -8,6 +8,8 @@ import { BsTrash, BsXCircleFill } from "react-icons/bs";
 import EditUserModal from "../../../../components/EditUserModal/EditUserModal";
 import { MdVerified } from "react-icons/md";
 import useAuth from "../../../../hooks/useAuth";
+import { LiaUserCheckSolid } from "react-icons/lia";
+import { LuUserRoundX } from "react-icons/lu";
 
 const UserManagement = () => {
   const { user: currentUser } = useAuth();
@@ -23,6 +25,8 @@ const UserManagement = () => {
       return res.data;
     },
   });
+
+  console.log(users);
 
   const capitalize = (str) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
@@ -181,7 +185,7 @@ const UserManagement = () => {
               <th>Verified?</th>
               <th>Email</th>
               <th>Role</th>
-              <th>Admin Action</th>
+              <th className="flex items-center justify-center">Admin Action</th>
               <th>Other Actions</th>
             </tr>
           </thead>
@@ -212,38 +216,44 @@ const UserManagement = () => {
                   <td>{user.email}</td>
                   <td>{renderRole(user)}</td>
                   <td>
-                    {user.isAdmin ? (
-                      <button
-                        onClick={() => handleRemoveAdmin(user)}
-                        className="btn btn-sm btn-error rounded-full"
-                        disabled={isCurrentUser(user)}
-                      >
-                        <FiShieldOff />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleAssignAdmin(user)}
-                        className="btn btn-sm btn-success rounded-full"
-                        disabled={isCurrentUser(user)}
-                      >
-                        <FaUserShield />
-                      </button>
-                    )}
+                    <div className="flex items-center justify-center">
+                      {user.isAdmin ? (
+                        <button
+                          onClick={() => handleRemoveAdmin(user)}
+                          className="btn btn-sm btn-error rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
+                          data-tip="Remove Admin"
+                          disabled={isCurrentUser(user)}
+                        >
+                          <FiShieldOff className="w-4 h-4" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleAssignAdmin(user)}
+                          className="btn btn-sm btn-success rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
+                          data-tip="Make Admin"
+                          disabled={isCurrentUser(user)}
+                        >
+                          <FaUserShield className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </td>
                   <td>
                     <div>
                       <button
-                        className="btn btn-sm btn-info rounded-full mx-1"
+                        className="btn btn-sm btn-info rounded-full mx-1 tooltip tooltip-primary p-0.5 w-8 h-8"
+                        data-tip="Edit User"
                         onClick={() => setEditingUser(user)}
                       >
-                        <FaEdit />
+                        <FaEdit className="w-4 h-4" />
                       </button>
                       <button
-                        className="btn btn-sm btn-error rounded-full mx-1"
+                        className="btn btn-sm btn-error rounded-full mx-1 tooltip tooltip-primary p-0.5 w-8 h-8"
+                        data-tip="Delete User"
                         onClick={() => handleDeleteUser(user)}
                         disabled={isCurrentUser(user)}
                       >
-                        <BsTrash />
+                        <BsTrash className="w-4 h-4" />
                       </button>
                     </div>
                   </td>
