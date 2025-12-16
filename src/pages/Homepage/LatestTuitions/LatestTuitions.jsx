@@ -32,7 +32,7 @@ const LatestTuitions = () => {
 
   if (isError)
     return (
-      <p className="text-center py-10 text-red-500 font-medium h-100">
+      <p className="text-center py-20 text-red-500 font-medium h-100">
         Failed to load tuition posts. Please try again later.
       </p>
     );
