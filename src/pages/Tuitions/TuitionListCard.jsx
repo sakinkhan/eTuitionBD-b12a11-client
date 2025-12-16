@@ -25,7 +25,9 @@ const TuitionListCard = ({ t }) => {
     <div className="flex flex-col md:flex-row bg-white shadow-lg hover:shadow-2xl rounded-3xl overflow-hidden transition-transform duration-300 hover:scale-[1.02] mb-6 border-2 border-primary">
       {/* Left Panel: Tuition Details */}
       <div className="flex-1 p-6 bg-linear-to-tl from-accent/90 via-accent/30 to-accent/90 dark:from-base-300 dark:via-base-100 dark:to-base-400">
-        <p className="badge text-xs badge-info badge-xs rounded-full">{tuitionCode}</p>
+        <p className="badge text-xs badge-info badge-xs rounded-full">
+          {tuitionCode}
+        </p>
         <h2 className="text-2xl md:text-3xl font-bold text-base-content mb-3">
           {subject}
         </h2>

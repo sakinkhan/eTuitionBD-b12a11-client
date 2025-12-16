@@ -100,7 +100,9 @@ const MyTuitions = () => {
                   </td>
                   <td>{tuition.classLevel}</td>
                   <td>{tuition.location}</td>
-                  <td>৳{tuition.budget}</td>
+                  <td className="text-primary font-semibold">
+                    ৳ {tuition.budget.toLocaleString("en-BD")}
+                  </td>
                   <td>{new Date(tuition.createdAt).toLocaleDateString()}</td>
                   <td className="flex items-center gap-1">
                     <button

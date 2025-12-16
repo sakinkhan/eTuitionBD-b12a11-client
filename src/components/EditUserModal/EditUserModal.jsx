@@ -4,7 +4,7 @@ import axios from "axios";
 import useRole from "../../hooks/useRole";
 
 const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
-  const { isAdmin, roleLoading } = useRole();
+  const { isAdmin: currentUserIsAdmin, roleLoading } = useRole();
   const [preview, setPreview] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,6 +26,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         phone: user.phone || "",
         role: user.role,
         verified: user.verified,
+        isAdmin: user.isAdmin,
       });
       setImageLoaded(false);
       setPreview(user.photoURL || null);
@@ -58,14 +59,17 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         photoURL = await uploadImageToImgBB(data.photo[0]);
       }
 
-      // Final updated object
+      // Build payload for backend
       const updatedUser = {
         name: data.name.trim(),
         phone: data.phone?.trim() || "",
         role: data.role,
-        verified: data.verified,
         photoURL,
-        ...(isAdmin && { verified: data.verified }),
+        // Only admins can update these fields
+        ...(currentUserIsAdmin && {
+          verified: data.verified,
+          isAdmin: data.isAdmin,
+        }),
       };
 
       onSave(updatedUser);
@@ -73,6 +77,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
       onClose();
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
 
@@ -82,13 +87,11 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         <h3 className="text-xl font-bold mb-4">Edit User</h3>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Phofile Preview */}
-          <div className="flex justify-center mx-auto mt-3 w-28 h-28">
-            {/* Placeholder while image is loading */}
-            {preview && !imageLoaded && (
+          {/* Profile Preview */}
+          <div className="flex justify-center mx-auto mt-3 w-28 h-28 relative">
+            {!imageLoaded && preview && (
               <div className="w-28 h-28 rounded-full border-2 border-gray-300 bg-gray-200 animate-pulse"></div>
             )}
-            {/* Actual preview image */}
             {preview && (
               <img
                 src={preview}
@@ -100,6 +103,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
               />
             )}
           </div>
+
           {/* Photo Upload */}
           <label className="label text-sm font-semibold mt-3">
             Profile Image
@@ -135,13 +139,12 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
               }
             }}
           />
-
           {errors.photo && (
             <p className="text-red-500 text-sm">{errors.photo.message}</p>
           )}
 
           {/* Name */}
-          <label className="label text-sm font-semibold">Name</label>
+          <label className="label text-sm font-semibold mt-2">Name</label>
           <input
             type="text"
             {...register("name", { required: "Name is required" })}
@@ -168,27 +171,40 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
             className="input input-bordered w-full rounded-full"
           />
 
-          {/* Role */}
+          {/* Role (editable by anyone, can lock if needed) */}
           <label className="label text-sm font-semibold mt-2">Role</label>
           <select
             {...register("role", { required: true })}
             className="select select-bordered w-full rounded-full"
-            disabled={user.isAdmin}
+            disabled={!currentUserIsAdmin} // optional: allow role editing only for admin
           >
             <option value="student">Student</option>
             <option value="tutor">Tutor</option>
+            <option value="admin">Admin</option>
           </select>
 
-          {/* Verified */}
-          <label className="flex items-center gap-2 my-4">
-            <input
-              type="checkbox"
-              {...register("verified")}
-              className="checkbox text-primary"
-              disabled={!isAdmin}
-            />
-            <span className="font-semibold text-sm">Verified</span>
-          </label>
+          {/* Verified & isAdmin (admin only) */}
+          {currentUserIsAdmin && (
+            <>
+              <label className="flex items-center gap-2 my-2">
+                <input
+                  type="checkbox"
+                  {...register("verified")}
+                  className="checkbox text-primary"
+                />
+                <span className="font-semibold text-sm">Verified</span>
+              </label>
+
+              <label className="flex items-center gap-2 my-2">
+                <input
+                  type="checkbox"
+                  {...register("isAdmin")}
+                  className="checkbox text-primary"
+                />
+                <span className="font-semibold text-sm">Admin</span>
+              </label>
+            </>
+          )}
 
           {/* Buttons */}
           <div className="flex justify-center gap-2 mt-5">

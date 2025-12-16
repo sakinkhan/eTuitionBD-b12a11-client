@@ -23,7 +23,7 @@ const Tuitions = () => {
         Available <span className="text-primary">Tuition</span> Listings
       </h1>
       <p className="text-base-content text-center mt-2 mb-5">
-        Find tuition opportunities based on your subject, location, and class.
+        Find tuition opportunities based on your subject, location, tuition code, class etc.
       </p>
 
       {/* Search Bar */}
@@ -44,7 +44,7 @@ const Tuitions = () => {
           </svg>
           <input
             type="search"
-            placeholder="Search by subject, location, class..."
+            placeholder="Search by subject, location, tuition code, class..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"

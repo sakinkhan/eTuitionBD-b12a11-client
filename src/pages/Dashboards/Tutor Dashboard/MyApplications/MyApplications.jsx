@@ -11,11 +11,15 @@ const MyApplications = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [editingApplication, setEditingApplication] = useState(null);
+  const [searchText, setSearchText] = useState("");
 
   const { data: applications = [], refetch } = useQuery({
-    queryKey: ["my-applications", user?.email],
+    queryKey: ["my-applications", user?.email, searchText.trim()],
+    enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get("/applications/my-applications");
+      const res = await axiosSecure.get(
+        `/applications/my-applications?search=${searchText}`
+      );
       return res.data;
     },
   });
@@ -63,6 +67,32 @@ const MyApplications = () => {
         My <span className="text-primary">Applications</span> (
         {applications.length})
       </h2>
+      {/* Search Bar */}
+      <div className="mb-10 flex justify-center">
+        <label className="flex items-center w-10/12 md:w-120 bg-accent/70 rounded-full px-3 py-2 shadow-sm">
+          <svg
+            className="h-4 w-4 text-primary mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search by application code, subject(s), location, status..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"
+          />
+        </label>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           {/* head */}
@@ -83,12 +113,18 @@ const MyApplications = () => {
               <tr key={app._id}>
                 <th>{i + 1}</th>
                 <td>
-                  <p className="badge badge-sm badge-info rounded-full">{app.applicationCode}</p>
+                  <p className="badge badge-sm badge-info rounded-full">
+                    {app.applicationCode}
+                  </p>
                 </td>
-                <td>{app.tuitionPost?.subject}</td>
-                <td>{app.tuitionPost?.location}</td>
-                <td>৳{app.tuitionPost?.budget}</td>
-                <td>৳{app.expectedSalary}</td>
+                <td>{app.subject}</td>
+                <td>{app.location}</td>
+                <td className="text-yellow-700 font-semibold">
+                  ৳ {app.budget?.toLocaleString("en-BD")}
+                </td>
+                <td className="text-primary font-semibold">
+                  ৳{app.expectedSalary?.toLocaleString("en-BD")}
+                </td>
                 <td>
                   <span
                     className={`badge inline-flex grow items-center justify-center 

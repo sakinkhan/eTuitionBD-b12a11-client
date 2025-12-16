@@ -13,16 +13,18 @@ const AppliedTutors = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [selectedTutor, setSelectedTutor] = useState(null);
+  const [searchText, setSearchText] = useState("");
 
   const { data: applications = [], refetch } = useQuery({
-    queryKey: ["applied-tutors", user?.email],
+    queryKey: ["applied-tutors", user?.email, searchText],
+    enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/applications?studentEmail=${user?.email}`
-      );
+      const res = await axiosSecure.get(`/applications?search=${searchText}`);
       return res.data;
     },
   });
+
+  console.log(applications);
 
   const handleApprove = async (app) => {
     console.log(app);
@@ -118,6 +120,31 @@ const AppliedTutors = () => {
         Applied <span className="text-primary">Tutors</span> (
         {applications.length})
       </h2>
+      {/* Search Bar */}
+      <div className="mb-10 flex justify-center">
+        <label className="flex items-center w-10/12 md:w-120 bg-accent/70 rounded-full px-3 py-2 shadow-sm">
+          <svg
+            className="h-4 w-4 text-primary mr-2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search by tutor name, tuition code, status..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"
+          />
+        </label>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="table table-zebra">
@@ -169,7 +196,9 @@ const AppliedTutors = () => {
                 {/* Tutor Details */}
                 <td className="max-w-70">{app.qualifications}</td>
                 <td className="max-w-50">{app.experience}</td>
-                <td className="max-w-30">৳{app.expectedSalary}</td>
+                <td className="max-w-30 text-primary font-semibold">
+                  ৳ {app.expectedSalary.toLocaleString("en-BD")}
+                </td>
 
                 {/* Status */}
                 <td>

@@ -17,6 +17,7 @@ const PaymentHistory = () => {
   if (isLoading) {
     return <LoadingLottie></LoadingLottie>;
   }
+  const totalSpent = payments.reduce((sum, item) => sum + item.amount, 0);
 
   return (
     <div className="p-5">
@@ -24,6 +25,12 @@ const PaymentHistory = () => {
         <span className="text-primary">Payment</span> History ({payments.length}
         )
       </h2>
+      <div className="mb-6 text-lg font-semibold text-center">
+        Total Spent:{" "}
+        <span className="text-primary">
+          ৳ {totalSpent.toLocaleString("en-BD")}
+        </span>
+      </div>
 
       {payments.length === 0 ? (
         <p className="text-gray-500 text-center py-5">
@@ -36,8 +43,8 @@ const PaymentHistory = () => {
               <tr>
                 <th>#</th>
                 <th>Tuition Details</th>
-                <th>Amount</th>
                 <th>Transaction ID</th>
+                <th>Amount</th>
                 <th>Status</th>
                 <th>Paid At</th>
               </tr>
@@ -54,9 +61,11 @@ const PaymentHistory = () => {
                       <p className="font-medium mt-2">{payment.tuitionTitle}</p>
                     </div>
                   </td>
-                  <td>৳{payment.amount}</td>
                   <td className="text-sm break-all">
                     {payment.displayTransactionId}
+                  </td>
+                  <td className="text-primary font-semibold">
+                    ৳ {payment.amount.toLocaleString("en-BD")}
                   </td>
                   <td>
                     <span className="badge badge-success rounded-full">

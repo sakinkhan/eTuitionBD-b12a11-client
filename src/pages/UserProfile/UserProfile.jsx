@@ -29,7 +29,8 @@ const UserProfile = () => {
   }
 
   const handleSaveEdit = async (updatedData) => {
-    const payload = { ...updatedData, isAdmin: false };
+    const { name, phone, photoURL } = updatedData;
+    const payload = { name, phone, photoURL };
     await axiosSecure.patch(`/users/${editingUser._id}`, payload);
     setEditingUser(null);
     refetch();
