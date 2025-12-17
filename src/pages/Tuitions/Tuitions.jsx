@@ -16,14 +16,18 @@ const Tuitions = () => {
     },
   });
 
+  const approvedTuitions = tuitions.filter((t) => t.status === "approved");
+
   return (
     <div className="mx-auto px-5 md:px-20 py-10">
       {/* Page Title */}
       <h1 className="text-3xl md:text-4xl font-bold text-base-content text-center">
-        Available <span className="text-primary">Tuition</span> Listings
+        Available <span className="text-primary">Tuition</span> Listings (
+        {approvedTuitions.length})
       </h1>
       <p className="text-base-content text-center mt-2 mb-5">
-        Find tuition opportunities based on your subject, location, tuition code, class etc.
+        Find tuition opportunities based on your subject, location, tuition
+        code, class etc.
       </p>
 
       {/* Search Bar */}
@@ -64,7 +68,7 @@ const Tuitions = () => {
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-2">
-            {tuitions.map((t) => (
+            {approvedTuitions.map((t) => (
               <TuitionListCard key={t._id || t.id} t={t} />
             ))}
           </div>

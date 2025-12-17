@@ -7,6 +7,7 @@ import useAuth from "../../hooks/useAuth";
 import { GrSend } from "react-icons/gr";
 import ApplyModal from "../../components/ApplyModal/ApplyModal";
 import LoadingLottie from "../../components/Lotties/LoadingLottie";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 const TuitionDetails = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const TuitionDetails = () => {
       return res.data;
     },
   });
+  console.log(tuition);
 
   const { data: dbUser } = useQuery({
     queryKey: ["db-user"],
@@ -128,18 +130,22 @@ const TuitionDetails = () => {
       {/* Main Card */}
       <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 p-8 rounded-2xl shadow-lg border border-primary">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 border-b-2 border-primary pb-6 mb-6">
-          <div>
-            <p className="badge text-xs badge-info badge-xs rounded-full">
-              {tuition.tuitionCode}
-            </p>
-            <h1 className="text-4xl font-bold leading-tight">
+        <div className="relative border-b-2 border-primary pb-6 mb-6 pt-8">
+          {/* Top row: always fixed positions */}
+          <p className="absolute top-0 left-0 badge text-xs badge-info badge-sm rounded-full">
+            {tuition.tuitionCode}
+          </p>
+
+          {tuition.status === "approved" && (
+            <VscVerifiedFilled className="absolute top-0 right-0 text-success size-7" />
+          )}
+
+          {/* Main content */}
+          <div className="flex flex-col md:flex-row md:justify-between md:items-end text-center md:text-left gap-4">
+            <h1 className="text-3xl md:text-4xl font-bold leading-tight mx-auto md:mx-0">
               {tuition.subject}
             </h1>
-          </div>
 
-          <div className="text-right">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Budget</p>
             <p className="text-3xl font-bold">
               ৳ <span className="text-primary">{tuition.budget}</span>/mo
             </p>

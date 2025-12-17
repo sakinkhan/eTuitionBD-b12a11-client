@@ -7,13 +7,14 @@ import { MdDone, MdVerified } from "react-icons/md";
 import { FiCheckCircle } from "react-icons/fi";
 import { GiCancel } from "react-icons/gi";
 import { BsXCircleFill } from "react-icons/bs";
+import Swal from "sweetalert2";
 
 const TuitionPostManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
   const navigate = useNavigate();
 
-  const { data: tuitionPosts = [] } = useQuery({
+  const { data: tuitionPosts = [], refetch } = useQuery({
     queryKey: ["tuition-posts", searchText],
     queryFn: async () => {
       const res = await axiosSecure.get(`/tuition-posts?search=${searchText}`);
@@ -22,9 +23,76 @@ const TuitionPostManagement = () => {
   });
   console.log(tuitionPosts);
 
-  const handleApprove = () => {};
-  const handleReject = () => {};
+  const handleApprove = async (tuitionId) => {
+    console.log("PATCH /tuition-posts/", tuitionId);
+    const result = await Swal.fire({
+      title: "Approve and publish tuition post?",
+      text: "Once approved, this post will be visible to everyone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Approve",
+      customClass: {
+        confirmButton:
+          "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+        cancelButton:
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+      },
+      buttonsStyling: false,
+    });
 
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.patch(`/tuition-posts/admin/${tuitionId}`, {
+          status: "approved",
+        });
+        refetch();
+        Swal.fire({
+          title: "Approved and published!",
+          icon: "success",
+          text: "This tuition post has been approved and published.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Failed to approve the post.");
+      }
+    }
+  };
+  const handleReject = async (tuitionId) => {
+    const result = await Swal.fire({
+      title: "Reject tuition post?",
+      text: "Once rejected, this post will not be visible to users.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Reject",
+      customClass: {
+        confirmButton:
+          "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+        cancelButton:
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+      },
+      buttonsStyling: false,
+    });
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.patch(`/tuition-posts/admin/${tuitionId}`, {
+          status: "rejected",
+        });
+        refetch();
+        Swal.fire({
+          title: "Rejected",
+          icon: "success",
+          text: "This tuition post has been rejected.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "Failed to reject the post.");
+      }
+    }
+  };
   return (
     <div>
       <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
@@ -65,6 +133,7 @@ const TuitionPostManagement = () => {
             <tr>
               <th>#</th>
               <th>Tuition Info</th>
+              <th>Student Name</th>
               <th>Contact Email</th>
               <th>Budget</th>
               <th>Date Posted</th>
@@ -74,6 +143,7 @@ const TuitionPostManagement = () => {
           </thead>
           <tbody>
             {tuitionPosts.map((post, index) => {
+              const isActionable = post.status.toLowerCase() === "pending";
               return (
                 <tr key={post._id}>
                   <td>{index + 1}</td>
@@ -90,7 +160,7 @@ const TuitionPostManagement = () => {
                       </button>
                     </div>
                   </td>
-
+                  <td>{post.studentName}</td>
                   <td>{post.contactEmail}</td>
                   <td>
                     <span className="text-primary font-semibold">
@@ -107,7 +177,7 @@ const TuitionPostManagement = () => {
                         ? "badge-success"
                         : post.status === "rejected"
                         ? "badge-error"
-                        : post.status === "pending"
+                        : post.status === "pending" || post.status === "Pending"
                         ? "badge-warning"
                         : "badge-info"
                     }`}
@@ -120,8 +190,8 @@ const TuitionPostManagement = () => {
                     <div className="flex items-center gap-2">
                       {/* Approve */}
                       <button
-                        // disabled={post.status !== "pending"}
-                        onClick={() => handleApprove(post)}
+                        disabled={!isActionable}
+                        onClick={() => handleApprove(post._id)}
                         className="btn btn-xs btn-success rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
                         data-tip="Approve"
                       >
@@ -129,8 +199,8 @@ const TuitionPostManagement = () => {
                       </button>
                       {/* Reject */}
                       <button
-                        // disabled={post.status !== "pending"}
-                        onClick={() => handleReject(post)}
+                        disabled={!isActionable}
+                        onClick={() => handleReject(post._id)}
                         className="btn btn-xs btn-error rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
                         data-tip="Reject"
                       >

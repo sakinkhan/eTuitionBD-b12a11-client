@@ -22,7 +22,7 @@ const MyTuitions = () => {
       return res.data.filter((t) => t.status === "approved");
     },
   });
-  console.log(tuitions);
+  console.log("Inside My tuitions", tuitions);
 
   const handleTuitionDelete = (id) => {
     console.log(id);
