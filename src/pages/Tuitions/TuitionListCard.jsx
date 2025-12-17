@@ -20,9 +20,6 @@ const TuitionListCard = ({ t }) => {
     tuitionCode,
     status,
   } = t;
-
-  console.log(status);
-
   return (
     <div className="flex flex-col md:flex-row bg-white shadow-lg hover:shadow-2xl rounded-3xl overflow-hidden transition-transform duration-300 hover:scale-[1.02] mb-6 border-2 border-primary">
       {/* Left Panel: Tuition Details */}

@@ -6,10 +6,22 @@ import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import MyLink from "../../../components/MyLink/MyLink";
 import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
   const { user: firebaseUser, logOut } = useAuth();
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const axiosSecure = useAxiosSecure();
+
+  const { data: dbUser, isLoading } = useQuery({
+    queryKey: ["dbUser", firebaseUser?.email],
+    enabled: !!firebaseUser?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${firebaseUser.email}`);
+      return res.data;
+    },
+  });
 
   const handleLogout = () => {
     logOut()
@@ -94,22 +106,29 @@ const Navbar = () => {
 
         {firebaseUser ? (
           <div className="flex items-center gap-3">
+            {/* Desktop: show dashboard button */}
             <Link
               to="/dashboard"
-              className="btn btn-outline btn-primary rounded-full text-sm border-2"
+              className="btn btn-outline btn-primary rounded-full text-sm border-2 hidden lg:inline-flex"
             >
               My Dashboard
             </Link>
+            {/* User Menu/dropdown */}
             <div className="dropdown dropdown-end">
               <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-12 rounded-full border-2 border-primary">
-                  <img
-                    src={
-                      firebaseUser.photoURL ||
-                      "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
-                    }
-                    alt="User Avatar"
-                  />
+                <div className="w-15 h-auto rounded-full border-2 border-primary overflow-hidden">
+                  {isLoading ? (
+                    <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+                  ) : (
+                    <img
+                      src={
+                        dbUser?.photoURL ||
+                        firebaseUser.photoURL ||
+                        "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
+                      }
+                      alt={dbUser?.name || firebaseUser.displayName}
+                    />
+                  )}
                 </div>
               </div>
               <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48 max-w-[90vw]">
@@ -123,6 +142,16 @@ const Navbar = () => {
                     {firebaseUser?.email}
                   </p>
                 </li>
+                {/* Mobile: Dashboard button */}
+                <li className="lg:hidden">
+                  <Link
+                    to="/dashboard"
+                    className="btn btn-outline btn-primary btn-sm w-full rounded-full text-sm"
+                  >
+                    My Dashboard
+                  </Link>
+                </li>
+                {/* Manage Profile Button */}
                 <li>
                   <Link
                     to={"/userProfile"}
