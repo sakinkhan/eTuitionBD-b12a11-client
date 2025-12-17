@@ -49,11 +49,13 @@ const AppliedTutors = () => {
         expectedSalary: app.expectedSalary,
         tuitionCode: app.tuitionCode,
         tutorName: app.tutorName,
-        studentEmail: app.studentEmail,
         tuitionPostId: app.tuitionPostId,
         tuitionTitle: app.tuitionTitle,
         tutorEmail: app.tutorEmail,
+        tutorId: app.tutorId,
+        applicationId: app._id,
       };
+      console.log("Front end payment info", paymentInfo);
       const res = await axiosSecure.post(
         `/payment-checkout-session`,
         paymentInfo

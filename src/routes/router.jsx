@@ -196,14 +196,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "tutor-management",
-        element: (
-          <AdminRoute>
-            <TutorManagement></TutorManagement>
-          </AdminRoute>
-        ),
-      },
-      {
         path: "reports-analytics",
         element: (
           <AdminRoute>

@@ -19,11 +19,24 @@ import { TbDeviceDesktopAnalytics } from "react-icons/tb";
 import { IoMdLogOut } from "react-icons/io";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const DashboardLayout = () => {
   const { role, isAdmin } = useRole();
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { logOut } = useAuth();
+  const { user, logOut } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+  const { data: dbUser } = useQuery({
+    queryKey: ["dbUser", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+  });
+  console.log(dbUser);
 
   const handleLogout = () => {
     logOut()
@@ -36,46 +49,64 @@ const DashboardLayout = () => {
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
-          <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
-          >
-            {/* Sidebar toggle icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              strokeWidth="2"
-              fill="none"
-              stroke="currentColor"
-              className="my-1.5 inline-block size-6"
+        <nav className="navbar flex items-center justify-between w-full bg-base-300">
+          <div className="left flex items-center">
+            <label
+              htmlFor="my-drawer-4"
+              aria-label="open sidebar"
+              className="btn btn-square btn-ghost"
             >
-              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
-              <path d="M9 4v16"></path>
-              <path d="M14 10l2 2l-2 2"></path>
-            </svg>
-          </label>
-          <div className="px-4 text-primary font-bold text-xl">
-            eTuitionBD <span className="text-base-content">Dashboard</span>
+              {/* Sidebar toggle icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeWidth="2"
+                fill="none"
+                stroke="currentColor"
+                className="my-1.5 inline-block size-6"
+              >
+                <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
+                <path d="M9 4v16"></path>
+                <path d="M14 10l2 2l-2 2"></path>
+              </svg>
+            </label>
+            <div className="px-4 text-primary font-bold text-xl">
+              eTuitionBD <span className="text-base-content">Dashboard</span>
+            </div>
           </div>
-          {/* Theme toggle */}
-          <div
-            className="tooltip tooltip-bottom tooltip-primary"
-            data-tip="Change Theme"
-          >
-            <button
-              className="btn btn-ghost btn-circle text-lg"
-              onClick={toggleTheme}
+          <div className="right flex items-center gap-2">
+            {/* Theme toggle */}
+            <div
+              className="tooltip tooltip-bottom tooltip-primary"
+              data-tip="Change Theme"
             >
-              {theme === "light" ? (
-                <BsMoonStarsFill className="text-base-content" />
-              ) : (
-                <BsSunFill className="text-yellow-500" />
-              )}
-            </button>
+              <button
+                className="btn btn-ghost btn-circle text-lg"
+                onClick={toggleTheme}
+              >
+                {theme === "light" ? (
+                  <BsMoonStarsFill className="text-base-content" />
+                ) : (
+                  <BsSunFill className="text-yellow-500" />
+                )}
+              </button>
+            </div>
+            {/* Profile photo */}
+            <div
+              className="w-10 h-10 rounded-full border-2 border-primary tooltip tooltip-primary tooltip-bottom"
+              data-tip={dbUser?.name}
+            >
+              <img
+                src={
+                  dbUser?.photoURL ||
+                  "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
+                }
+                alt={dbUser?.name}
+                className="w-full h-full rounded-full overflow-hidden"
+              />
+            </div>
           </div>
         </nav>
 
@@ -104,7 +135,7 @@ const DashboardLayout = () => {
                 <img
                   src={logoImg}
                   alt="logoImg"
-                  className="w-20 is-drawer-open:pb-5"
+                  className="w-20 mx-auto is-drawer-open:py-5"
                 />
               </Link>
             </li>
@@ -236,21 +267,9 @@ const DashboardLayout = () => {
                     data-tip="Tuition Post Management"
                     to="/dashboard/tuition-post-management"
                   >
-                    <IoDocumentsSharp size={25} />
-                    <span className="is-drawer-close:hidden">
-                      Tuition Post Management
-                    </span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                    data-tip="Tutor Management"
-                    to="/dashboard/tutor-management"
-                  >
                     <GiTeacher size={25} />
                     <span className="is-drawer-close:hidden">
-                      Tutor Management
+                      Tuition Post Management
                     </span>
                   </NavLink>
                 </li>
