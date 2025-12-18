@@ -15,7 +15,7 @@ const LatestTuitions = () => {
   const axiosInstance = useAxios();
 
   const {
-    data: tuitionPosts = [],
+    data: tuitionPostsData,
     isLoading,
     isError,
   } = useQuery({
@@ -27,6 +27,7 @@ const LatestTuitions = () => {
     staleTime: 1000 * 60 * 2,
     refetchOnWindowFocus: false,
   });
+  const tuitionPosts = tuitionPostsData?.posts || [];
 
   if (isLoading) return <LoadingLottie />;
 
@@ -39,7 +40,7 @@ const LatestTuitions = () => {
 
   if (!tuitionPosts.length)
     return (
-      <p className="text-center py-10 text-gray-500 font-medium">
+      <p className="text-center py-40 text-gray-500 font-medium">
         No tuition posts available at the moment.
       </p>
     );

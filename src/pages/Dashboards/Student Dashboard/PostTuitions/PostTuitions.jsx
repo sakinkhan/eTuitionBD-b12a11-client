@@ -39,7 +39,7 @@ const PostTuitions = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         // save the parcel info to the database
-        axiosSecure.post("/tuition-posts", data).then((res) => {
+        axiosSecure.post("/tuition-post", data).then((res) => {
           console.log("after saving tuition post", res.data);
           if (res.data.insertedId) {
             navigate("/dashboard/my-tuitions");

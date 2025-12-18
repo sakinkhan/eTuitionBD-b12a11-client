@@ -30,6 +30,7 @@ import StudentRoute from "./StudentRoute";
 import TutorRoute from "./TutorRoute";
 import AdminRoute from "./AdminRoute";
 import TuitionPostManagement from "../pages/Dashboards/Admin Dashboard/TuitionPostManagement/TuitionPostManagement";
+import Tutors from "../pages/Tutors/Tutors";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,11 @@ export const router = createBrowserRouter([
             <TuitionDetails></TuitionDetails>
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/tutors",
+        element: <Tutors></Tutors>,
+        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
       },
       {
         path: "/about",

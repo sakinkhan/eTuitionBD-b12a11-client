@@ -28,8 +28,11 @@ const TuitionListCard = ({ t }) => {
           <p className="badge text-xs badge-info badge-xs rounded-full mb-2">
             {tuitionCode}
           </p>
-          {status === "approved" && (
-            <p>
+          {status === "admin-approved" && (
+            <p
+              className="tooltip tooltip-primary tooltip-left"
+              data-tip="Approved Post"
+            >
               {" "}
               <VscVerifiedFilled className="text-success size-8" />
             </p>
@@ -73,8 +76,11 @@ const TuitionListCard = ({ t }) => {
 
       {/* Right Panel: Budget & Button */}
       <div className="flex flex-col justify-center items-center md:items-end p-6 bg-base-200 border-t md:border-t-0 md:border-l border-secondary w-full md:w-56">
-        <div className="text-3xl font-extrabold text-primary text-center mx-auto mb-10">
-          ৳{budget}
+        <div className="mx-auto">
+          <label className="text-gray-500">Budget</label>
+          <div className="text-3xl font-extrabold text-primary text-center mx-auto mb-10">
+            ৳{budget}
+          </div>
         </div>
         <Link
           to={`/tuition/${_id}`}

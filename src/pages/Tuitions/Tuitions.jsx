@@ -8,7 +8,7 @@ const Tuitions = () => {
   const axiosPublic = useAxios();
   const [searchText, setSearchText] = useState("");
 
-  const { data: tuitions = [], isLoading } = useQuery({
+  const { data: tuitionsData = [], isLoading } = useQuery({
     queryKey: ["tuitions", searchText],
     queryFn: async () => {
       const res = await axiosPublic.get(`/tuition-posts?search=${searchText}`);
@@ -16,7 +16,12 @@ const Tuitions = () => {
     },
   });
 
-  const approvedTuitions = tuitions.filter((t) => t.status === "approved");
+  if (isLoading) return <LoadingLottie />;
+  const tuitions = tuitionsData?.posts || [];
+
+  const approvedTuitions = tuitions.filter(
+    (t) => t.status === "admin-approved"
+  );
 
   return (
     <div className="mx-auto px-5 md:px-20 py-10">
@@ -48,7 +53,7 @@ const Tuitions = () => {
           </svg>
           <input
             type="search"
-            placeholder="Search by subject, location, tuition code, class..."
+            placeholder="Start typing to search..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"

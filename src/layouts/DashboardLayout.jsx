@@ -21,6 +21,7 @@ import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import LoadingLottie from "../components/Lotties/LoadingLottie";
 
 const DashboardLayout = () => {
   const { role, isAdmin } = useRole();
@@ -28,7 +29,7 @@ const DashboardLayout = () => {
   const { user, logOut } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: dbUser } = useQuery({
+  const { data: dbUserData, isLoading } = useQuery({
     queryKey: ["dbUser", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -36,7 +37,8 @@ const DashboardLayout = () => {
       return res.data;
     },
   });
-  console.log(dbUser);
+  const loggedInUser = dbUserData?.user || [];
+  if (!user || isLoading) return <LoadingLottie />;
 
   const handleLogout = () => {
     logOut()
@@ -76,7 +78,7 @@ const DashboardLayout = () => {
               eTuitionBD <span className="text-base-content">Dashboard</span>
             </div>
           </div>
-          <div className="right flex items-center gap-2">
+          <div className="right flex items-center gap-2 px-5">
             {/* Theme toggle */}
             <div
               className="tooltip tooltip-bottom tooltip-primary"
@@ -96,14 +98,14 @@ const DashboardLayout = () => {
             {/* Profile photo */}
             <div
               className="w-10 h-10 rounded-full border-2 border-primary tooltip tooltip-primary tooltip-bottom"
-              data-tip={dbUser?.name}
+              data-tip={loggedInUser?.name}
             >
               <img
                 src={
-                  dbUser?.photoURL ||
+                  loggedInUser?.photoURL ||
                   "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
                 }
-                alt={dbUser?.name}
+                alt={loggedInUser?.name}
                 className="w-full h-full rounded-full overflow-hidden"
               />
             </div>

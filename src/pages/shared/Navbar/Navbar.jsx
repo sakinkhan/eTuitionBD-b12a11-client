@@ -8,13 +8,14 @@ import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 
 const Navbar = () => {
   const { user: firebaseUser, logOut } = useAuth();
   const { theme, toggleTheme } = useContext(ThemeContext);
   const axiosSecure = useAxiosSecure();
 
-  const { data: dbUser, isLoading } = useQuery({
+  const { data: dbUserData, isLoading } = useQuery({
     queryKey: ["dbUser", firebaseUser?.email],
     enabled: !!firebaseUser?.email,
     queryFn: async () => {
@@ -22,6 +23,7 @@ const Navbar = () => {
       return res.data;
     },
   });
+  const dbUser = dbUserData?.user || {};
 
   const handleLogout = () => {
     logOut()
@@ -34,8 +36,7 @@ const Navbar = () => {
       <MyLink to="/">Home</MyLink>
       <MyLink to="/tuitions">Tuitions</MyLink>
       <MyLink to="/tutors">Tutors</MyLink>
-      <MyLink to="/about">About</MyLink>
-      <MyLink to="/contact">Contact</MyLink>
+      <MyLink to="/about">About Us</MyLink>
     </>
   );
 
@@ -134,7 +135,7 @@ const Navbar = () => {
               <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48 max-w-[90vw]">
                 <li className="pointer-events-none justify-center">
                   <p className="font-semibold text-base-content text-sm text-center wrap-break-word">
-                    {firebaseUser?.displayName}
+                    {dbUser?.name || firebaseUser?.displayName}
                   </p>
                 </li>
                 <li className="pointer-events-none justify-center">

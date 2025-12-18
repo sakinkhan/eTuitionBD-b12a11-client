@@ -5,28 +5,41 @@ import Swal from "sweetalert2";
 import { FaEdit, FaUserShield } from "react-icons/fa";
 import { FiShieldOff } from "react-icons/fi";
 import { BsTrash, BsXCircleFill } from "react-icons/bs";
-import EditUserModal from "../../../../components/EditUserModal/EditUserModal";
 import { MdVerified } from "react-icons/md";
+import EditUserModal from "../../../../components/EditUserModal/EditUserModal";
 import useAuth from "../../../../hooks/useAuth";
-import { LiaUserCheckSolid } from "react-icons/lia";
-import { LuUserRoundX } from "react-icons/lu";
+import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
+import Pagination from "../../../../components/Pagination/Pagination";
+import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
+import SearchBar from "../../../../components/SearchBar/SearchBar";
 
 const UserManagement = () => {
   const { user: currentUser } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(20);
   const [editingUser, setEditingUser] = useState(null);
 
-  // Fetch users
-  const { refetch, data: users = [] } = useQuery({
-    queryKey: ["users", searchText],
+  // Fetch users with pagination
+  const {
+    refetch,
+    data = { users: [], total: 0, page: 1, limit: 20 },
+    isLoading,
+  } = useQuery({
+    queryKey: ["users", searchText, page, limit],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users?searchText=${searchText}`);
+      const res = await axiosSecure.get(
+        `/users?searchText=${searchText}&page=${page}&limit=${limit}`
+      );
       return res.data;
     },
   });
 
-  console.log(users);
+  const users = data.users || [];
+  const totalUsers = data.total || 0;
+  const currentPage = data.page || 1;
+  const pageSize = data.limit || 20;
 
   const capitalize = (str) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
@@ -146,37 +159,44 @@ const UserManagement = () => {
   return (
     <div className="p-5">
       <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
-        Manage <span className="text-primary">Users</span> ({users.length})
+        Manage <span className="text-primary">Users</span> ({totalUsers})
       </h2>
 
       {/* Search */}
-      <div className="mb-5 flex justify-center">
-        <label className="flex items-center w-[250px] md:w-[300px] bg-accent/70 rounded-full px-3 py-2 shadow-sm">
-          <svg
-            className="h-4 w-4 text-base-content mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.3-4.3" />
-          </svg>
-          <input
-            type="search"
-            placeholder="Search users"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"
-          />
-        </label>
+      <div className="mb-5 flex justify-center items-center gap-2">
+        <SearchBar
+          value={searchText}
+          onChange={setSearchText}
+          placeholder="Start typing to search..."
+          className="mr-2"
+        />
+        {/* Page Size selection drop down */}
+        <select
+          value={limit}
+          onChange={(e) => {
+            setLimit(Number(e.target.value));
+            setPage(1);
+          }}
+          className="ml-2 p-1 h-9 text-primary rounded-full focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300 "
+        >
+          <option className="bg-accent" value={5}>
+            5
+          </option>
+          <option className="bg-accent" value={10}>
+            10
+          </option>
+          <option className="bg-accent" value={20}>
+            20
+          </option>
+          <option className="bg-accent" value={50}>
+            50
+          </option>
+        </select>
       </div>
 
       {/* Users Table */}
       <div className="overflow-x-auto">
+        {isLoading && <LoadingLottie />}
         <table className="table w-full table-zebra">
           <thead>
             <tr>
@@ -190,76 +210,74 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => {
-              return (
-                <tr key={user._id}>
-                  <td>{index + 1}</td>
-                  <td className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-circle h-10 w-10">
-                        <img
-                          src={user.photoURL}
-                          alt={user.name}
-                          className="object-cover"
-                        />
-                      </div>
+            {users.map((user, index) => (
+              <tr key={user._id}>
+                <td>{index + 1 + (currentPage - 1) * pageSize}</td>
+                <td className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="mask mask-circle h-10 w-10">
+                      <img
+                        src={user.photoURL}
+                        alt={user.name}
+                        className="object-cover"
+                      />
                     </div>
-                    <div className="font-bold">{user.name}</div>
-                  </td>
-                  <td>
-                    {user.verified ? (
-                      <MdVerified className="text-green-500 text-2xl" />
-                    ) : (
-                      <BsXCircleFill className="text-red-500 text-[21px]" />
-                    )}
-                  </td>
-                  <td>{user.email}</td>
-                  <td>{renderRole(user)}</td>
-                  <td>
-                    <div className="flex items-center justify-center">
-                      {user.isAdmin ? (
-                        <button
-                          onClick={() => handleRemoveAdmin(user)}
-                          className="btn btn-sm btn-error rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
-                          data-tip="Remove Admin"
-                          disabled={isCurrentUser(user)}
-                        >
-                          <FiShieldOff className="w-4 h-4" />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleAssignAdmin(user)}
-                          className="btn btn-sm btn-success rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
-                          data-tip="Make Admin"
-                          disabled={isCurrentUser(user)}
-                        >
-                          <FaUserShield className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    <div>
+                  </div>
+                  <div className="font-bold">{user.name}</div>
+                </td>
+                <td>
+                  {user.verified ? (
+                    <MdVerified className="text-green-500 text-2xl" />
+                  ) : (
+                    <BsXCircleFill className="text-red-500 text-[21px]" />
+                  )}
+                </td>
+                <td>{user.email}</td>
+                <td>{renderRole(user)}</td>
+                <td>
+                  <div className="flex items-center justify-center">
+                    {user.isAdmin ? (
                       <button
-                        className="btn btn-sm btn-info rounded-full mx-1 tooltip tooltip-primary p-0.5 w-8 h-8"
-                        data-tip="Edit User"
-                        onClick={() => setEditingUser(user)}
-                      >
-                        <FaEdit className="w-4 h-4" />
-                      </button>
-                      <button
-                        className="btn btn-sm btn-error rounded-full mx-1 tooltip tooltip-primary p-0.5 w-8 h-8"
-                        data-tip="Delete User"
-                        onClick={() => handleDeleteUser(user)}
+                        onClick={() => handleRemoveAdmin(user)}
+                        className="btn btn-sm btn-error rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
+                        data-tip="Remove Admin"
                         disabled={isCurrentUser(user)}
                       >
-                        <BsTrash className="w-4 h-4" />
+                        <FiShieldOff className="w-4 h-4" />
                       </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    ) : (
+                      <button
+                        onClick={() => handleAssignAdmin(user)}
+                        className="btn btn-sm btn-success rounded-full tooltip tooltip-primary p-0.5 w-8 h-8"
+                        data-tip="Make Admin"
+                        disabled={isCurrentUser(user)}
+                      >
+                        <FaUserShield className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <button
+                      className="btn btn-sm btn-info rounded-full mx-1 tooltip tooltip-primary p-0.5 w-8 h-8"
+                      data-tip="Edit User"
+                      onClick={() => setEditingUser(user)}
+                    >
+                      <FaEdit className="w-4 h-4" />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-error rounded-full mx-1 tooltip tooltip-primary p-0.5 w-8 h-8"
+                      data-tip="Delete User"
+                      onClick={() => handleDeleteUser(user)}
+                      disabled={isCurrentUser(user)}
+                    >
+                      <BsTrash className="w-4 h-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
@@ -268,6 +286,14 @@ const UserManagement = () => {
         )}
       </div>
 
+      {/* Pagination controls */}
+      <Pagination
+        currentPage={page}
+        totalItems={totalUsers}
+        pageSize={pageSize}
+        onPageChange={setPage}
+      />
+      {/* Edit User Modal */}
       <EditUserModal
         user={editingUser}
         isOpen={!!editingUser}

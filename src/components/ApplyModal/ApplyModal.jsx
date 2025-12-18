@@ -19,10 +19,9 @@ const ApplyModal = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  // Pre-fill form (edit or create)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -37,80 +36,89 @@ const ApplyModal = ({
 
   if (!isOpen) return null;
 
-  // Handle submit
   const onSubmit = async (data) => {
+    const payload = {
+      qualifications: data.qualifications,
+      experience: data.experience,
+      expectedSalary: Number(data.expectedSalary),
+    };
+
     try {
-      const payload = {
-        qualifications: data.qualifications,
-        experience: data.experience,
-        expectedSalary: Number(data.expectedSalary),
-      };
-
-      // CREATE NEW
+      // CREATE
       if (!application) {
-        await axiosSecure
-          .post("/applications", {
-            ...payload,
-            tuitionPostId,
-          })
-          .then((res) => {
-            console.log(res.data);
-            if (res.data.applicationId) {
-              Swal.fire({
-                title: "Application Submitted!",
-                text: "Your tuition application has been submitted successfully.",
-                icon: "success",
-                customClass: {
-                  confirmButton:
-                    "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
-                },
-                buttonsStyling: false,
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        await axiosSecure.post("/applications", {
+          ...payload,
+          tuitionPostId,
+        });
+
+        Swal.fire({
+          title: "Application Submitted!",
+          text: "Your tuition application has been submitted successfully.",
+          icon: "success",
+          customClass: {
+            confirmButton:
+              "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
+          },
+          buttonsStyling: false,
+        });
       }
 
-      // EDIT EXISTING
+      // EDIT
       else {
-        await axiosSecure
-          .patch(`/applications/tutor-update/${application._id}`, payload)
-          .then((res) => {
-            if (res.data.modifiedCount > 0) {
-              Swal.fire({
-                title: "Application Updated!",
-                text: "Your tuition Application has been updated successfully.",
-                icon: "success",
-                customClass: {
-                  confirmButton:
-                    "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
-                },
-                buttonsStyling: false,
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
+        const res = await axiosSecure.patch(
+          `/applications/tutor-update/${application._id}`,
+          payload
+        );
+
+        if (res.data.modifiedCount > 0) {
+          Swal.fire({
+            title: "Application Updated!",
+            text: "Your tuition application has been updated successfully.",
+            icon: "success",
+            customClass: {
+              confirmButton:
+                "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
+            },
+            buttonsStyling: false,
           });
+        }
       }
 
-      if (onApplicationSuccess) onApplicationSuccess();
+      onApplicationSuccess?.();
       onClose();
     } catch (err) {
-      console.log(err);
-      alert(err.response?.data?.error || "Something went wrong");
+      const message = err.response?.data?.error;
+
+      if (message === "Already applied to this tuition") {
+        Swal.fire({
+          title: "Already Applied",
+          text: "You have already applied for this tuition.",
+          icon: "info",
+          customClass: {
+            confirmButton:
+              "btn btn-primary text-white font-semibold rounded-full px-6 py-2 mb-2",
+          },
+          buttonsStyling: false,
+        });
+
+        // sync UI with backend truth
+        onApplicationSuccess?.();
+        onClose();
+        return;
+      }
+
       Swal.fire({
+        title: "Something went wrong",
+        text: "Please try again later.",
         icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
         customClass: {
           confirmButton:
             "btn btn-primary text-white font-semibold rounded-full px-6 py-2 mb-2",
         },
         buttonsStyling: false,
       });
+
+      console.error(err);
     }
   };
 
@@ -129,21 +137,19 @@ const ApplyModal = ({
         </h3>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          {/* Read-only name */}
+          {/* Name */}
           <label className="label text-sm">Name</label>
           <input
-            type="text"
-            {...register("name")}
             readOnly
+            {...register("name")}
             className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
           />
 
-          {/* Read-only email */}
+          {/* Email */}
           <label className="label text-sm">Email</label>
           <input
-            type="email"
-            {...register("email")}
             readOnly
+            {...register("email")}
             className="input input-bordered w-full rounded-full bg-base-300 cursor-not-allowed"
           />
 
@@ -163,7 +169,6 @@ const ApplyModal = ({
           {/* Experience */}
           <label className="label text-sm">Experience</label>
           <input
-            type="text"
             {...register("experience", { required: "Required" })}
             className="input input-bordered w-full rounded-full"
           />
@@ -177,9 +182,10 @@ const ApplyModal = ({
           />
 
           <button
+            disabled={isSubmitting}
             type="submit"
             className="btn bg-secondary text-gray-800 border border-primary hover:bg-primary 
-              hover:text-white transition-all w-full rounded-full mt-3"
+              hover:text-white w-full rounded-full mt-3"
           >
             {application ? "Save Changes" : "Submit"} <GrSend />
           </button>

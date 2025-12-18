@@ -12,7 +12,7 @@ const UserProfile = () => {
   const [editingUser, setEditingUser] = useState(null);
 
   const {
-    data: dbUser,
+    data: dbUserData,
     isLoading,
     refetch,
   } = useQuery({
@@ -23,10 +23,10 @@ const UserProfile = () => {
       return res.data;
     },
   });
+  const loggedInUser = dbUserData?.user || {};
+  console.log(loggedInUser);
 
-  if (isLoading) {
-    return <LoadingLottie></LoadingLottie>;
-  }
+  if (!user || isLoading) return <LoadingLottie />;
 
   const handleSaveEdit = async (updatedData) => {
     const { name, phone, photoURL } = updatedData;
@@ -42,7 +42,6 @@ const UserProfile = () => {
     });
   };
 
-  console.log(dbUser);
   return (
     <div className="max-w-4xl mx-auto my-10 p-10 bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 border-2 border-primary rounded-3xl shadow-lg mt-10 h-full">
       <div className="flex flex-col items-center gap-6">
@@ -50,11 +49,11 @@ const UserProfile = () => {
         <div className="shrink-0">
           <img
             src={
-              dbUser?.photoURL ||
+              loggedInUser?.photoURL ||
               user.photoURL ||
               "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
             }
-            alt={dbUser?.name || user.displayName}
+            alt={loggedInUser?.name || user.displayName}
             className="w-40 h-40 rounded-full object-cover border-4 border-secondary"
           />
         </div>
@@ -62,24 +61,24 @@ const UserProfile = () => {
         {/* User Details */}
         <div className="flex-1 w-full">
           <h2 className="text-2xl md:text-3xl font-bold text-base-content">
-            {dbUser?.name || user.displayName}
+            {loggedInUser?.name || user.displayName}
           </h2>
           <p className="text-base-content mt-1">
-            {dbUser?.isAdmin ? "Admin" : dbUser?.role || "Student"}
+            {loggedInUser?.isAdmin ? "Admin" : loggedInUser?.role || "Student"}
           </p>
 
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-base-content">
             <div>
               <p className="font-semibold">Email:</p>
-              <p>{dbUser?.email || user.email}</p>
+              <p>{loggedInUser?.email || user.email}</p>
             </div>
             <div>
               <p className="font-semibold">Phone:</p>
-              <p>{dbUser?.phone || "Not Provided"}</p>
+              <p>{loggedInUser?.phone || "Not Provided"}</p>
             </div>
             <div>
               <p className="font-semibold">Verification Status:</p>
-              <p>{dbUser?.verified ? "Verified" : "Not Verified"}</p>
+              <p>{loggedInUser?.verified ? "Verified" : "Not Verified"}</p>
             </div>
             <div>
               <p className="font-semibold">Joined:</p>
@@ -90,7 +89,7 @@ const UserProfile = () => {
           {/* Action Buttons */}
           <div className="mt-6 flex flex-wrap gap-4">
             <button
-              onClick={() => setEditingUser(dbUser)}
+              onClick={() => setEditingUser(loggedInUser)}
               className="btn btn-primary px-6 py-2 rounded-full hover:btn-secondary hover:text-base-content hover:scale-105 transition"
             >
               Edit Profile
