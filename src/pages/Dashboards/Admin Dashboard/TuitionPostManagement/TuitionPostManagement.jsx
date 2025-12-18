@@ -12,7 +12,6 @@ import Pagination from "../../../../components/Pagination/Pagination";
 const TuitionPostManagement = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);

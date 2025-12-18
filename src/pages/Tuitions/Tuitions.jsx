@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
 import LoadingLottie from "../../components/Lotties/LoadingLottie";
 import TuitionListCard from "./TuitionListCard";
+import SearchBar from "../../components/SearchBar/SearchBar";
 
 const Tuitions = () => {
   const axiosPublic = useAxios();
@@ -15,8 +16,6 @@ const Tuitions = () => {
       return res.data;
     },
   });
-
-  if (isLoading) return <LoadingLottie />;
   const tuitions = tuitionsData?.posts || [];
 
   const approvedTuitions = tuitions.filter(
@@ -36,29 +35,13 @@ const Tuitions = () => {
       </p>
 
       {/* Search Bar */}
-      <div className="mb-10 flex justify-center">
-        <label className="flex items-center w-10/12 md:w-120 bg-accent/70 rounded-full px-3 py-2 shadow-sm">
-          <svg
-            className="h-4 w-4 text-primary mr-2"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.3-4.3" />
-          </svg>
-          <input
-            type="search"
-            placeholder="Start typing to search..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="grow bg-transparent outline-none text-base-content placeholder-base-content/60 text-sm"
-          />
-        </label>
+      <div className="mb-10 flex items-center justify-center">
+        <SearchBar
+          value={searchText}
+          onChange={setSearchText}
+          placeholder="Start typing to search..."
+          className="mr-2"
+        />
       </div>
 
       {/* Tuition Cards / Loading */}
