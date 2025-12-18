@@ -31,6 +31,7 @@ import TutorRoute from "./TutorRoute";
 import AdminRoute from "./AdminRoute";
 import TuitionPostManagement from "../pages/Dashboards/Admin Dashboard/TuitionPostManagement/TuitionPostManagement";
 import Tutors from "../pages/Tutors/Tutors";
+import TutorProfileSetup from "../pages/Tutors/TutorProfileSetup";
 
 export const router = createBrowserRouter([
   {
@@ -159,6 +160,14 @@ export const router = createBrowserRouter([
           <StudentRoute>
             <PaymentCancelled />
           </StudentRoute>
+        ),
+      },
+      {
+        path: "tutor-profile-setup",
+        element: (
+          <TutorRoute>
+            <TutorProfileSetup />
+          </TutorRoute>
         ),
       },
       {

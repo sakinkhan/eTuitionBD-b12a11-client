@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingLottie from "../../components/Lotties/LoadingLottie";
 import Pagination from "../../components/Pagination/Pagination";
 import TutorCard from "./TutorCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import useAxios from "../../hooks/useAxios";
 
 const Tutors = () => {
-  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxios();
 
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -16,7 +16,7 @@ const Tutors = () => {
   const { data: tutorData, isLoading } = useQuery({
     queryKey: ["tutors", page, limit, searchText],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users", {
+      const res = await axiosPublic.get("/public-users", {
         params: {
           searchText,
           page,
@@ -31,7 +31,6 @@ const Tutors = () => {
     tutorData?.users?.filter((user) => user.role === "tutor") || [];
 
   const totalItems = tutorData?.total || 0;
-
   return (
     <div className="px-5 lg:px-20 py-10">
       {/* Title */}
@@ -69,7 +68,7 @@ const Tutors = () => {
       </div>
 
       {/* Cards */}
-      <div className="mt-10">
+      <div className="mt-10 px-15 md:px-0">
         {isLoading ? (
           <LoadingLottie />
         ) : tutors.length === 0 ? (

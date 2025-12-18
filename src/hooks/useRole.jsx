@@ -8,15 +8,24 @@ const useRole = () => {
 
   const {
     isLoading: roleLoading,
-    data: userData = { role: "student", isAdmin: false },
+    data: userData = {
+      role: "student",
+      isAdmin: false,
+      profileCompleted: true,
+    },
   } = useQuery({
     queryKey: ["user-role", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user.email}/role`);
+
       return {
         role: res.data?.role || "student",
         isAdmin: res.data?.isAdmin || false,
+        profileCompleted:
+          res.data?.profileCompleted !== undefined
+            ? res.data.profileCompleted
+            : true,
       };
     },
   });
@@ -24,6 +33,7 @@ const useRole = () => {
   return {
     role: userData.role,
     isAdmin: userData.isAdmin,
+    profileCompleted: userData.profileCompleted,
     roleLoading,
   };
 };

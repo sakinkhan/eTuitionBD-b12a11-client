@@ -1,9 +1,10 @@
 import React from "react";
-import { AiTwotoneMail } from "react-icons/ai";
+import { AiFillCloseCircle, AiTwotoneMail } from "react-icons/ai";
 import { FaLocationDot } from "react-icons/fa6";
-import { PiStudentBold } from "react-icons/pi";
+import { PiSealWarningFill, PiStudentBold } from "react-icons/pi";
 import { Link, useNavigate } from "react-router";
 import { RiCalendarScheduleLine } from "react-icons/ri";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 const LatestTuitionCard = ({ post }) => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const LatestTuitionCard = ({ post }) => {
     subject,
     location,
     schedule,
+    status,
   } = post;
 
   return (
@@ -25,6 +27,13 @@ const LatestTuitionCard = ({ post }) => {
             <FaLocationDot />
             {location}
           </span>
+          {/* Status Icon */}
+          {status === "admin-approved" && (
+            <VscVerifiedFilled
+              className="absolute top-5 right-5 text-success size-7 tooltip tooltip-primary"
+              data-tip="Approved Post"
+            />
+          )}
           <div className="mt-2">
             <h2 className="text-3xl font-bold">{subject}</h2>
             <span className="text-xl">৳{budget}/mo</span>

@@ -6,6 +6,7 @@ import logoImg from "../assets/logo-icon.png";
 import { VscSettingsGear } from "react-icons/vsc";
 import { IoDocumentAttachOutline, IoDocumentsSharp } from "react-icons/io5";
 import { FaMoneyBillTrendUp, FaUsers, FaUsersGear } from "react-icons/fa6";
+import { ImProfile } from "react-icons/im";
 import { GiTeacher } from "react-icons/gi";
 import {
   BsFillCreditCardFill,
@@ -149,7 +150,7 @@ const DashboardLayout = () => {
                 data-tip="Dashboard Home"
               >
                 {/* Home icon */}
-                <FaHome size={25} />
+                <FaHome size={20} />
                 <span className="is-drawer-close:hidden">Homepage</span>
               </Link>
             </li>
@@ -163,7 +164,7 @@ const DashboardLayout = () => {
                     data-tip="My Tuitions"
                     to="/dashboard/my-tuitions"
                   >
-                    <FaChalkboardTeacher size={25} />
+                    <FaChalkboardTeacher size={20} />
                     <span className="is-drawer-close:hidden">My Tuitions</span>
                   </NavLink>
                 </li>
@@ -173,7 +174,7 @@ const DashboardLayout = () => {
                     data-tip="Post New Tuition"
                     to="/dashboard/post-tuitions"
                   >
-                    <LuNotebookPen size={25} />
+                    <LuNotebookPen size={20} />
                     <span className="is-drawer-close:hidden">
                       Post New Tuition
                     </span>
@@ -185,7 +186,7 @@ const DashboardLayout = () => {
                     data-tip="Applied Tutors"
                     to="/dashboard/applied-tutors"
                   >
-                    <FaUsers size={25} />
+                    <FaUsers size={20} />
                     <span className="is-drawer-close:hidden">
                       Applied Tutors
                     </span>
@@ -197,7 +198,7 @@ const DashboardLayout = () => {
                     data-tip="Payment History"
                     to="/dashboard/payment-history"
                   >
-                    <BsFillCreditCardFill size={25} />
+                    <BsFillCreditCardFill size={20} />
                     <span className="is-drawer-close:hidden">
                       Payment History
                     </span>
@@ -212,10 +213,22 @@ const DashboardLayout = () => {
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    data-tip="My Tutor Profile"
+                    to="/dashboard/tutor-profile-setup"
+                  >
+                    <ImProfile size={20} />
+                    <span className="is-drawer-close:hidden">
+                      My Tutor Profile
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="My Applications"
                     to="/dashboard/my-applications"
                   >
-                    <IoDocumentAttachOutline size={25} />
+                    <IoDocumentAttachOutline size={20} />
                     <span className="is-drawer-close:hidden">
                       My Applications
                     </span>
@@ -227,7 +240,7 @@ const DashboardLayout = () => {
                     data-tip="Ongoing Tuitions"
                     to="/dashboard/ongoing-tuitions"
                   >
-                    <PiFlowArrowBold size={25} />
+                    <PiFlowArrowBold size={20} />
                     <span className="is-drawer-close:hidden">
                       Ongoing Tuitions
                     </span>
@@ -239,7 +252,7 @@ const DashboardLayout = () => {
                     data-tip="Revenue History"
                     to="/dashboard/revenue-history"
                   >
-                    <FaMoneyBillTrendUp size={25} />
+                    <FaMoneyBillTrendUp size={20} />
                     <span className="is-drawer-close:hidden">
                       Revenue History
                     </span>
@@ -257,7 +270,7 @@ const DashboardLayout = () => {
                     data-tip="User Management"
                     to="/dashboard/user-management"
                   >
-                    <FaUsersGear size={25} />
+                    <FaUsersGear size={20} />
                     <span className="is-drawer-close:hidden">
                       User Management
                     </span>
@@ -269,7 +282,7 @@ const DashboardLayout = () => {
                     data-tip="Tuition Post Management"
                     to="/dashboard/tuition-post-management"
                   >
-                    <GiTeacher size={25} />
+                    <GiTeacher size={20} />
                     <span className="is-drawer-close:hidden">
                       Tuition Post Management
                     </span>
@@ -281,7 +294,7 @@ const DashboardLayout = () => {
                     data-tip="Reports & Analytics"
                     to="/dashboard/reports-analytics"
                   >
-                    <TbDeviceDesktopAnalytics size={26} />
+                    <TbDeviceDesktopAnalytics size={22} />
                     <span className="is-drawer-close:hidden">
                       Reports & Analytics
                     </span>
@@ -298,7 +311,7 @@ const DashboardLayout = () => {
                 data-tip="Profile Settings"
               >
                 {/* Settings icon */}
-                <VscSettingsGear size={23} />
+                <VscSettingsGear size={20} />
                 <span className="is-drawer-close:hidden">Profile Settings</span>
               </Link>
             </li>
@@ -309,7 +322,7 @@ const DashboardLayout = () => {
                 data-tip="Logout"
               >
                 {/* Settings icon */}
-                <IoMdLogOut size={27} />
+                <IoMdLogOut size={25} />
                 <span className="is-drawer-close:hidden">Logout</span>
               </button>
             </li>

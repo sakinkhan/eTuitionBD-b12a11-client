@@ -1,10 +1,15 @@
 import React from "react";
 import { FaUserGraduate } from "react-icons/fa6";
+import { VscVerifiedFilled } from "react-icons/vsc";
 
 const TutorCard = ({ tutor }) => {
-  console.log(tutor);
   return (
-    <div className="bg-accent rounded-xl border border-primary hover:shadow-lg transition p-6 flex flex-col items-center text-center">
+    <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 rounded-xl border border-primary hover:shadow-lg p-6 flex flex-col items-center text-center relative hover:scale-105 transition-transform duration-300">
+      {tutor.verified && (
+        <div className="absolute top-3 right-3">
+          <VscVerifiedFilled className="size-5 text-success" />
+        </div>
+      )}
       <img
         src={
           tutor?.photoURL ||
@@ -22,6 +27,9 @@ const TutorCard = ({ tutor }) => {
         <FaUserGraduate />
         Tutor
       </div>
+      <button className="btn btn-sm btn-primary rounded-full mt-3 hover:bg-secondary hover:text-gray-700">
+        View Details
+      </button>
     </div>
   );
 };

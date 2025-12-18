@@ -21,7 +21,6 @@ const TuitionDetails = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  /* ---------------- Tuition Details ---------------- */
   const {
     data: tuition,
     isLoading,
@@ -34,7 +33,6 @@ const TuitionDetails = () => {
     },
   });
 
-  /* ---------------- Logged-in DB User ---------------- */
   const { data: dbUser } = useQuery({
     queryKey: ["db-user", user?.email],
     enabled: !!user?.email,
@@ -44,7 +42,6 @@ const TuitionDetails = () => {
     },
   });
 
-  /* ---------------- My Applications ---------------- */
   const {
     data: myApplications = [],
     isLoading: appsLoading,
@@ -64,7 +61,6 @@ const TuitionDetails = () => {
     (app) => String(app.tuitionPostId) === String(tuition?._id)
   );
 
-  /* ---------------- Loading / Error ---------------- */
   if (isLoading || appsLoading) return <LoadingLottie />;
 
   if (isError || !tuition) {
@@ -77,7 +73,6 @@ const TuitionDetails = () => {
     );
   }
 
-  /* ---------------- Helpers ---------------- */
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleString("en-US", {
       year: "numeric",
@@ -93,7 +88,6 @@ const TuitionDetails = () => {
     setIsModalOpen(true);
   };
 
-  /* ---------------- UI ---------------- */
   return (
     <div className="max-w-4xl mx-auto py-10 px-5">
       {/* Header Buttons */}
@@ -206,7 +200,6 @@ const TuitionDetails = () => {
   );
 };
 
-/* ---------------- Helper ---------------- */
 const Info = ({ label, value }) => (
   <div>
     <p className="text-sm text-gray-500">{label}</p>

@@ -51,7 +51,9 @@ const PostTuitions = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-accent/60 rounded-xl shadow-lg my-5">
-      <h2 className="text-2xl font-semibold mb-4">Post a Tuition</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        Post a <span className="text-primary">Tuition</span>
+      </h2>
       <form onSubmit={handleSubmit(handlePostTuition)} className="space-y-4">
         {/* Subject */}
         <div>
