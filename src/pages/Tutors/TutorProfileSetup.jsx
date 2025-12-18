@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
