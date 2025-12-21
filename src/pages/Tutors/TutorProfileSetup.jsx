@@ -13,8 +13,8 @@ const TutorProfileSetup = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { user } = useAuth();
-
-  const isFirstTime = profileCompleted === false;
+  const queryClient = useQueryClient();
+  const isFirstTime = profileCompleted !== true;
   const [submitting, setSubmitting] = useState(false);
 
   const {
@@ -26,8 +26,8 @@ const TutorProfileSetup = () => {
 
   // fetch tutor profile
   const { data: tutorProfile, isLoading } = useQuery({
-    queryKey: ["tutor-profile", profileCompleted],
-    enabled: !isFirstTime,
+    queryKey: ["tutor-profile"],
+    enabled: profileCompleted === true,
     queryFn: async () => {
       const res = await axiosSecure.get("/tutors/me");
       return res.data.tutor;
@@ -40,8 +40,6 @@ const TutorProfileSetup = () => {
     }
   }, [tutorProfile, reset]);
 
-  const queryClient = useQueryClient();
-
   const handleCreateTutorProfile = async (data) => {
     try {
       setSubmitting(true);
@@ -51,12 +49,12 @@ const TutorProfileSetup = () => {
       } else {
         await axiosSecure.patch("/tutors/me", data);
       }
-      queryClient.invalidateQueries({
+      await queryClient.invalidateQueries({
         queryKey: ["current-user", user?.email],
       });
       queryClient.invalidateQueries({ queryKey: ["tutor-profile"] });
 
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
       Swal.fire({
         title: isFirstTime
           ? "Tutor Profile Created!"

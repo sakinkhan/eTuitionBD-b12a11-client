@@ -8,6 +8,17 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { IoChevronBack } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
+import { AiTwotoneMail } from "react-icons/ai";
+import { GrPhone } from "react-icons/gr";
+import { IoMdCheckboxOutline } from "react-icons/io";
+import {
+  MdDateRange,
+  MdOutlineDescription,
+  MdSubject,
+  MdWorkHistory,
+} from "react-icons/md";
+import { FaUserGraduate } from "react-icons/fa";
+import { PiMoney } from "react-icons/pi";
 
 const UserProfile = () => {
   const { user } = useAuth();
@@ -91,7 +102,7 @@ const UserProfile = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-base-content">
               {loggedInUser?.name || user.displayName}
             </h2>
-            <p className="text-primary mt-1">
+            <p className="text-primary font-semibold mt-1">
               {loggedInUser?.isAdmin
                 ? "Admin"
                 : (loggedInUser?.role || "Student").charAt(0).toUpperCase() +
@@ -100,19 +111,40 @@ const UserProfile = () => {
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-base-content">
               <div>
-                <p className="font-semibold">Email:</p>
+                <p className="font-bold flex items-center gap-1">
+                  {" "}
+                  <span className="text-primary text-lg">
+                    <AiTwotoneMail />
+                  </span>{" "}
+                  Email:
+                </p>
                 <p>{loggedInUser?.email || user.email}</p>
               </div>
               <div>
-                <p className="font-semibold">Phone:</p>
+                <p className="font-bold flex items-center gap-1">
+                  <span className="text-primary text-lg">
+                    <GrPhone />
+                  </span>
+                  Phone:
+                </p>
                 <p>{loggedInUser?.phone || "Not Provided"}</p>
               </div>
               <div>
-                <p className="font-semibold">Verification Status:</p>
+                <p className="font-bold flex items-center gap-1">
+                  <span className="text-primary text-lg">
+                    <IoMdCheckboxOutline />
+                  </span>
+                  Verification Status:
+                </p>
                 <p>{loggedInUser?.isVerified ? "Verified" : "Not Verified"}</p>
               </div>
               <div>
-                <p className="font-semibold">Joined:</p>
+                <p className="font-bold flex items-center gap-1">
+                  <span className="text-primary text-lg">
+                    <MdDateRange />
+                  </span>
+                  Joined:
+                </p>
                 <p>{new Date(user.metadata.creationTime).toLocaleString()}</p>
               </div>
             </div>
@@ -128,7 +160,7 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {/* Tutor only */}
+          {/* ---------------- Tutor Profile section ---------------------- */}
           {loggedInUser?.role === "tutor" && tutorData && (
             <>
               <div className="divider divider-primary my-8 text-primary font-bold text-xl">
@@ -137,17 +169,32 @@ const UserProfile = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base-content">
                 <div>
-                  <p className="font-semibold">Qualifications:</p>
+                  <p className="font-bold flex items-center gap-1">
+                    <span className="text-primary text-sm">
+                      <FaUserGraduate />
+                    </span>
+                    Qualifications:
+                  </p>
                   <p>{tutorData.qualifications || "—"}</p>
                 </div>
 
                 <div>
-                  <p className="font-semibold">Experience:</p>
+                  <p className="font-bold flex items-center gap-1">
+                    <span className="text-primary">
+                      <MdWorkHistory />
+                    </span>
+                    Experience:
+                  </p>
                   <p>{tutorData.experience || "—"}</p>
                 </div>
 
                 <div>
-                  <p className="font-semibold">Subjects:</p>
+                  <p className="font-bold flex items-center gap-1">
+                    <span className="text-primary text-lg">
+                      <MdSubject />
+                    </span>
+                    Subjects:
+                  </p>
                   {tutorData.subjects?.length ? (
                     <div className="flex flex-wrap gap-2 mt-1">
                       {tutorData.subjects.map((s, idx) => (
@@ -165,21 +212,31 @@ const UserProfile = () => {
                 </div>
 
                 <div>
-                  <p className="font-semibold">Expected Salary:</p>
+                  <p className="font-bold flex items-center gap-1">
+                    <span className="text-primary text-lg">
+                      <PiMoney />
+                    </span>
+                    Expected Salary:
+                  </p>
                   <p className="font-bold">
                     ৳ {tutorData.expectedSalary?.toLocaleString() || "—"}
                   </p>
                 </div>
 
                 <div className="md:col-span-2">
-                  <p className="font-semibold">About:</p>
+                  <p className="font-bold flex items-center gap-1">
+                    <span className="text-primary">
+                      <MdOutlineDescription size={16} />
+                    </span>
+                    About:
+                  </p>
                   <p className="leading-relaxed">
                     {tutorData.bio || "No bio provided."}
                   </p>
                 </div>
 
                 <div>
-                  <p className="font-semibold">Tutor Status:</p>
+                  <p className="font-bold">Tutor Status:</p>
                   <span
                     className={`badge rounded-full ${
                       tutorData.tutorStatus === "approved"
@@ -189,8 +246,10 @@ const UserProfile = () => {
                         : "badge-warning"
                     }`}
                   >
-                    {tutorData.tutorStatus.charAt(0).toUpperCase() +
-                      tutorData.tutorStatus.slice(1)}
+                    {tutorData.tutorStatus
+                      ? tutorData.tutorStatus.charAt(0).toUpperCase() +
+                        tutorData.tutorStatus.slice(1)
+                      : "Pending"}
                   </span>
                 </div>
               </div>

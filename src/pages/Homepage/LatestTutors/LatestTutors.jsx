@@ -11,6 +11,7 @@ import useAxios from "../../../hooks/useAxios";
 import TutorProfileModal from "../../../components/TutorProfileModal/TutorProfileModal";
 import useAuth from "../../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const LatestTutors = () => {
   const axiosPublic = useAxios();

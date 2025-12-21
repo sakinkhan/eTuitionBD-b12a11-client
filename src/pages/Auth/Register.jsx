@@ -7,6 +7,7 @@ import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import SocialLogin from "./SocialLogin";
 import axios from "axios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Register = () => {
   const [preview, setPreview] = useState(null);
@@ -15,13 +16,14 @@ const Register = () => {
   const location = useLocation();
   const { registerUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const axiosSecure = useAxiosSecure();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -72,13 +74,24 @@ const Register = () => {
 
       // 5. Save user to backend DB
       await axiosSecure.post("/users", userToSave);
+
+      // 5. refetch /users/me
+      await queryClient.invalidateQueries({
+        queryKey: ["current-user"],
+      });
+
       toast.success(
         data.role === "tutor"
           ? "Account created. Please complete your tutor profile."
           : "Account created successfully!"
       );
 
-      navigate(location.state?.from || "/", { replace: true });
+      // role based navigation
+      if (userToSave.role === "tutor") {
+        navigate("/dashboard/tutor-profile-setup", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch (err) {
       console.log(err);
       toast.error(err?.message || "Registration failed");

@@ -216,7 +216,7 @@ const UserManagement = () => {
                   <div className="font-bold">{user.name}</div>
                 </td>
                 <td>
-                  {user.verified ? (
+                  {user.isVerified ? (
                     <MdVerified className="text-green-500 text-2xl" />
                   ) : (
                     <BsXCircleFill className="text-red-500 text-[21px]" />

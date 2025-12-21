@@ -29,7 +29,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         email: user.email,
         phone: user.phone || "",
         role: user.role,
-        verified: user.verified,
+        isVerified: user.isVerified,
         isAdmin: user.isAdmin,
       });
       setImageLoaded(false);
@@ -71,7 +71,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         photoURL,
         // Only admins can update these fields
         ...(currentUserIsAdmin && {
-          verified: data.verified,
+          isVerified: data.isVerified,
           isAdmin: data.isAdmin,
         }),
       };
