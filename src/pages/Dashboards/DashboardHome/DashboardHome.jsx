@@ -7,11 +7,13 @@ import AdminDashboardHome from "./AdminDashboardHome";
 
 const DashboardHome = () => {
   const { role, isAdmin, roleLoading } = useCurrentUser();
+
+  console.log(role);
   if (roleLoading) {
     return <LoadingLottie></LoadingLottie>;
   }
 
-  if (isAdmin) {
+  if (role === "admin") {
     return <AdminDashboardHome></AdminDashboardHome>;
   } else if (role === "student") {
     return <StudentDashboardHome></StudentDashboardHome>;

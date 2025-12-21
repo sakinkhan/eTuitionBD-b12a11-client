@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  GrCaretPrevious,
-  GrCaretNext,
-  GrLinkPrevious,
-  GrLinkNext,
-} from "react-icons/gr";
+import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
 
 const Pagination = ({ currentPage, totalItems, pageSize, onPageChange }) => {
   const totalPages = Math.ceil(totalItems / pageSize) || 1;

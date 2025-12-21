@@ -45,6 +45,8 @@ const UserManagement = () => {
   const currentPage = data.page || 1;
   const pageSize = data.limit || 20;
 
+  console.log(users);
+
   const capitalize = (str) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
   const renderRole = (user) => (user.isAdmin ? "Admin" : capitalize(user.role));

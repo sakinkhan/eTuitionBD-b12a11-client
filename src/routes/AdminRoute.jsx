@@ -4,11 +4,11 @@ import useCurrentUser from "../hooks/useCurrentUser";
 import LoadingLottie from "../components/Lotties/LoadingLottie";
 
 const AdminRoute = ({ children }) => {
-  const { isAdmin, roleLoading } = useCurrentUser();
+  const { role, roleLoading } = useCurrentUser();
 
   if (roleLoading) return <LoadingLottie />;
 
-  if (!isAdmin) {
+  if (role !== "admin") {
     return <Navigate to="/" replace />;
   }
 

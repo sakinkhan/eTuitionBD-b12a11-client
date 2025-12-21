@@ -5,7 +5,7 @@ import useCurrentUser from "../../hooks/useCurrentUser";
 import useAuth from "../../hooks/useAuth";
 
 const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
-  const { isAdmin: currentUserIsAdmin, roleLoading } = useCurrentUser();
+  const { role, roleLoading } = useCurrentUser();
   const { user: loggedInUser } = useAuth();
   const [preview, setPreview] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -70,7 +70,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
         role: data.role,
         photoURL,
         // Only admins can update these fields
-        ...(currentUserIsAdmin && {
+        ...(role === "admin" && {
           isVerified: data.isVerified,
           isAdmin: data.isAdmin,
         }),
@@ -180,7 +180,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
           <select
             {...register("role", { required: true })}
             className="select select-bordered w-full rounded-full"
-            disabled={!currentUserIsAdmin} // optional: allow role editing only for admin
+            disabled={role !== "admin"} // optional: allow role editing only for admin
           >
             <option value="student">Student</option>
             <option value="tutor">Tutor</option>
@@ -188,18 +188,19 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
           </select>
 
           {/* Verified & isAdmin (admin only) */}
-          {currentUserIsAdmin && (
+          {role === "admin" && (
             <>
               <label className="flex items-center gap-2 my-2">
                 <input
                   type="checkbox"
-                  {...register("verified")}
+                  {...register("isVerified")}
                   className="checkbox text-primary"
+                  disabled={isEditingSelf}
                 />
                 <span className="font-semibold text-sm">Verified</span>
               </label>
 
-              <label className="flex items-center gap-2 my-2">
+              {/* <label className="flex items-center gap-2 my-2">
                 <input
                   type="checkbox"
                   {...register("isAdmin")}
@@ -207,7 +208,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
                   className="checkbox text-primary"
                 />
                 <span className="font-semibold text-sm">Admin</span>
-              </label>
+              </label> */}
             </>
           )}
 

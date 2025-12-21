@@ -54,6 +54,7 @@ const Tutors = () => {
   const tutors = data?.tutors || [];
   const totalItems = data?.total || 0;
 
+  console.log(totalItems);
   return (
     <div className="px-5 lg:px-20 py-10">
       {/* Title */}
@@ -69,6 +70,7 @@ const Tutors = () => {
         <SearchBar
           value={searchText}
           onChange={(value) => {
+            if (value === searchText) return;
             setSearchText(value);
             setPage(1);
           }}
@@ -116,7 +118,7 @@ const Tutors = () => {
           <Pagination
             currentPage={page}
             totalItems={totalItems}
-            itemsPerPage={limit}
+            pageSize={limit}
             onPageChange={setPage}
           />
         </div>

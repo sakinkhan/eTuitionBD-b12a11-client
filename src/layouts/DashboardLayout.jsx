@@ -316,7 +316,7 @@ const DashboardLayout = () => {
             )}
 
             {/* ADMIN DASH */}
-            {isAdmin && (
+            {(isAdmin || role === "admin") && (
               <>
                 <li>
                   <NavLink
