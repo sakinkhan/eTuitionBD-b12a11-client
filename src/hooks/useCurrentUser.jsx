@@ -14,10 +14,17 @@ const useCurrentUser = () => {
     queryKey: ["current-user", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get("/users/me");
-      return res.data;
+      try {
+        const res = await axiosSecure.get("/users/me");
+        return res.data;
+      } catch (err) {
+        if (err.response?.status === 404) {
+          return null; // user not bootstrapped yet
+        }
+        throw err;
+      }
     },
-    retry: 1,
+    retry: false,
     staleTime: 1000 * 60 * 5,
   });
 

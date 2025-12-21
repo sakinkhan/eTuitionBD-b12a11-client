@@ -9,10 +9,29 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 import useAxios from "../../../hooks/useAxios";
 import TutorProfileModal from "../../../components/TutorProfileModal/TutorProfileModal";
+import useAuth from "../../../hooks/useAuth";
+import { useLocation, useNavigate } from "react-router";
 
 const LatestTutors = () => {
   const axiosPublic = useAxios();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [selectedTutorId, setSelectedTutorId] = useState(null);
+
+  const handleViewProfile = (tutorId) => {
+    if (!user) {
+      toast.info("Please log in to view tutor profiles");
+      navigate("/auth/login", {
+        state: { from: location.pathname },
+        replace: true,
+      });
+
+      return;
+    }
+
+    setSelectedTutorId(tutorId);
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["latest-tutors"],
@@ -59,6 +78,8 @@ const LatestTutors = () => {
         spaceBetween={20}
         centeredSlides={true}
         slidesPerView={3}
+        preventClicks={false}
+        preventClicksPropagation={false}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,
@@ -67,7 +88,11 @@ const LatestTutors = () => {
           slideShadows: false,
         }}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 2500, disableOnInteraction: false }}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
+        }}
         modules={[EffectCoverflow, Pagination, Autoplay]}
         style={{
           "--swiper-pagination-color": "#ff7100",
@@ -80,7 +105,7 @@ const LatestTutors = () => {
             <TutorCard
               key={tutor._id}
               tutor={tutor}
-              onViewProfile={() => setSelectedTutorId(tutor._id)}
+              onViewProfile={() => handleViewProfile(tutor.tutorId)}
             />
           </SwiperSlide>
         ))}

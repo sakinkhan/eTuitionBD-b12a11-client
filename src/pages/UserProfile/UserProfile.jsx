@@ -7,6 +7,7 @@ import EditUserModal from "../../components/EditUserModal/EditUserModal";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
 import { IoChevronBack } from "react-icons/io5";
+import { FiEdit } from "react-icons/fi";
 
 const UserProfile = () => {
   const { user } = useAuth();
@@ -28,7 +29,19 @@ const UserProfile = () => {
   });
   const loggedInUser = dbUserData?.user || {};
 
-  if (!user || isLoading) return <LoadingLottie />;
+  // Tutor Only
+  const { data: tutorData, isLoading: tutorLoading } = useQuery({
+    queryKey: ["my-tutor-profile"],
+    enabled: loggedInUser?.role === "tutor",
+    queryFn: async () => {
+      const res = await axiosSecure.get("/tutors/me");
+      return res.data.tutor;
+    },
+  });
+
+  if (!user || isLoading || (loggedInUser?.role === "tutor" && tutorLoading)) {
+    return <LoadingLottie />;
+  }
 
   const handleSaveEdit = async (updatedData) => {
     const { name, phone, photoURL } = updatedData;
@@ -96,7 +109,7 @@ const UserProfile = () => {
               </div>
               <div>
                 <p className="font-semibold">Verification Status:</p>
-                <p>{loggedInUser?.verified ? "Verified" : "Not Verified"}</p>
+                <p>{loggedInUser?.isVerified ? "Verified" : "Not Verified"}</p>
               </div>
               <div>
                 <p className="font-semibold">Joined:</p>
@@ -110,10 +123,88 @@ const UserProfile = () => {
                 onClick={() => setEditingUser(loggedInUser)}
                 className="btn btn-primary text-white px-6 py-2 rounded-full hover:bg-secondary hover:text-gray-800 hover:scale-105 transition"
               >
-                Edit Profile
+                Edit Account Profile
               </button>
             </div>
           </div>
+
+          {/* Tutor only */}
+          {loggedInUser?.role === "tutor" && tutorData && (
+            <>
+              <div className="divider divider-primary my-8 text-primary font-bold text-xl">
+                Tutor Profile
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base-content">
+                <div>
+                  <p className="font-semibold">Qualifications:</p>
+                  <p>{tutorData.qualifications || "—"}</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold">Experience:</p>
+                  <p>{tutorData.experience || "—"}</p>
+                </div>
+
+                <div>
+                  <p className="font-semibold">Subjects:</p>
+                  {tutorData.subjects?.length ? (
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {tutorData.subjects.map((s, idx) => (
+                        <span
+                          key={idx}
+                          className="badge badge-secondary text-gray-800 badge-sm rounded-full"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>—</p>
+                  )}
+                </div>
+
+                <div>
+                  <p className="font-semibold">Expected Salary:</p>
+                  <p className="font-bold">
+                    ৳ {tutorData.expectedSalary?.toLocaleString() || "—"}
+                  </p>
+                </div>
+
+                <div className="md:col-span-2">
+                  <p className="font-semibold">About:</p>
+                  <p className="leading-relaxed">
+                    {tutorData.bio || "No bio provided."}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="font-semibold">Tutor Status:</p>
+                  <span
+                    className={`badge rounded-full ${
+                      tutorData.tutorStatus === "approved"
+                        ? "badge-success"
+                        : tutorData.tutorStatus === "rejected"
+                        ? "badge-error"
+                        : "badge-warning"
+                    }`}
+                  >
+                    {tutorData.tutorStatus.charAt(0).toUpperCase() +
+                      tutorData.tutorStatus.slice(1)}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-8 flex justify-end">
+                <button
+                  onClick={() => navigate("/dashboard/tutor-profile-setup")}
+                  className="btn btn-outline btn-primary rounded-full flex items-center gap-2 hover:bg-primary hover:text-white transition"
+                >
+                  <FiEdit size={16} />
+                  {tutorData ? "Edit Tutor Profile" : "Complete Tutor Profile"}
+                </button>
+              </div>
+            </>
+          )}
         </div>
         <EditUserModal
           user={editingUser}

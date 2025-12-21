@@ -7,14 +7,34 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import useAxios from "../../hooks/useAxios";
 import TutorProfileModal from "../../components/TutorProfileModal/TutorProfileModal";
 import PageSizeSelect from "../../components/PageSizeSelect/PageSizeSelect";
+import useAuth from "../../hooks/useAuth";
+import { useLocation, useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const Tutors = () => {
   const axiosPublic = useAxios();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [selectedTutorId, setSelectedTutorId] = useState(null);
+
+  const handleViewProfile = (tutorId) => {
+    if (!user) {
+      toast.info("Please log in to view tutor profiles");
+      navigate("/auth/login", {
+        state: { from: location.pathname },
+        replace: true,
+      });
+
+      return;
+    }
+
+    setSelectedTutorId(tutorId);
+  };
 
   const { data, isLoading } = useQuery({
     queryKey: ["public-tutors", searchText, page, limit],
@@ -77,7 +97,7 @@ const Tutors = () => {
               <TutorCard
                 key={tutor.tutorId}
                 tutor={tutor}
-                onViewProfile={() => setSelectedTutorId(tutor._id)}
+                onViewProfile={() => handleViewProfile(tutor.tutorId)}
               />
             ))}
           </div>

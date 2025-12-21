@@ -16,7 +16,6 @@ import { GrPhone } from "react-icons/gr";
 
 const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
   const axiosSecure = useAxiosSecure();
-  console.log("Tutor passed to modal:", tutorId);
 
   const {
     data: tutor,
@@ -30,8 +29,6 @@ const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
       return res.data.tutor;
     },
   });
-
-  console.log("Tutor Data:", tutor);
 
   if (!isOpen) return null;
 

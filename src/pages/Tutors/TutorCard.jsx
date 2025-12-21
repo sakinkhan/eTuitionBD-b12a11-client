@@ -3,6 +3,10 @@ import { FaUserGraduate } from "react-icons/fa6";
 import { VscVerifiedFilled } from "react-icons/vsc";
 
 const TutorCard = ({ tutor, onViewProfile }) => {
+  const handleClick = (e) => {
+    e.stopPropagation();
+    onViewProfile();
+  };
   return (
     <div
       className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90
@@ -34,8 +38,8 @@ const TutorCard = ({ tutor, onViewProfile }) => {
         Tutor
       </div>
       <button
-        onClick={onViewProfile}
-        className="btn btn-sm btn-primary text-white rounded-full mt-3 hover:bg-secondary hover:text-gray-700"
+        onClick={handleClick}
+        className="relative z-10 pointer-events-auto btn btn-sm btn-primary text-white rounded-full mt-3 hover:bg-secondary hover:text-gray-700"
       >
         View Details
       </button>
