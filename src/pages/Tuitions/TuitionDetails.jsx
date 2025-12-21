@@ -21,18 +21,25 @@ const TuitionDetails = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  /* ----------------------------------
+     Fetch tuition details
+  ---------------------------------- */
   const {
     data: tuition,
-    isLoading,
+    isLoading: tuitionLoading,
     isError,
   } = useQuery({
     queryKey: ["tuition-details", id],
+    enabled: !!id,
     queryFn: async () => {
       const res = await axiosSecure.get(`/tuition-posts/${id}`);
       return res.data;
     },
   });
 
+  /* ----------------------------------
+     Fetch logged-in user (DB)
+  ---------------------------------- */
   const { data: dbUser } = useQuery({
     queryKey: ["db-user", user?.email],
     enabled: !!user?.email,
@@ -42,13 +49,16 @@ const TuitionDetails = () => {
     },
   });
 
+  /* ----------------------------------
+     Fetch tutor applications (only if tutor)
+  ---------------------------------- */
   const {
     data: myApplications = [],
     isLoading: appsLoading,
     refetch: refetchApplications,
   } = useQuery({
     queryKey: ["my-applications", user?.email],
-    enabled: !!user?.email,
+    enabled: dbUser?.role === "tutor",
     queryFn: async () => {
       const res = await axiosSecure.get("/applications/my-applications", {
         params: { page: 1, limit: 1000 },
@@ -57,11 +67,20 @@ const TuitionDetails = () => {
     },
   });
 
-  const hasApplied = myApplications.some(
-    (app) => String(app.tuitionPostId) === String(tuition?._id)
-  );
+  const hasApplied =
+    !!tuition &&
+    myApplications.some(
+      (app) => String(app.tuitionPostId) === String(tuition._id)
+    );
 
-  if (isLoading || appsLoading) return <LoadingLottie />;
+  const canApply =
+    dbUser?.role === "tutor" &&
+    dbUser?.tutorStatus === "approved" &&
+    !hasApplied;
+
+  if (tuitionLoading || (dbUser?.role === "tutor" && appsLoading)) {
+    return <LoadingLottie />;
+  }
 
   if (isError || !tuition) {
     return (
@@ -84,13 +103,13 @@ const TuitionDetails = () => {
     });
 
   const handleApplyClick = () => {
-    if (hasApplied) return;
+    if (!canApply) return;
     setIsModalOpen(true);
   };
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-5">
-      {/* Header Buttons */}
+      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => navigate(-1)}
@@ -105,15 +124,19 @@ const TuitionDetails = () => {
         {dbUser?.role === "tutor" && (
           <button
             onClick={handleApplyClick}
-            disabled={hasApplied}
+            disabled={!canApply}
             className={`btn px-6 py-3 rounded-full shadow-md transition-all flex items-center gap-2
               ${
-                hasApplied
+                !canApply
                   ? "bg-gray-400 border-gray-400 text-gray-700 cursor-not-allowed shadow-none"
                   : "bg-secondary border border-primary text-gray-800 hover:bg-primary hover:text-white"
               }`}
           >
-            {hasApplied ? "Already Applied" : "Apply"}
+            {hasApplied
+              ? "Already Applied"
+              : dbUser?.tutorStatus !== "approved"
+              ? "Approval Pending"
+              : "Apply"}
             <GrSend />
           </button>
         )}
@@ -131,7 +154,7 @@ const TuitionDetails = () => {
         }}
       />
 
-      {/* Main Card */}
+      {/* Tuition Card */}
       <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 p-8 rounded-2xl shadow-lg border border-primary">
         {/* Header */}
         <div className="relative border-b-2 border-primary pb-6 mb-6 pt-8">
@@ -152,7 +175,7 @@ const TuitionDetails = () => {
               data-tip="Pending Approval"
             />
           )}
-          {tuition.status === "rejected" && (
+          {tuition.status === "admin-rejected" && (
             <AiFillCloseCircle
               className="absolute top-0 right-0 text-error size-7 tooltip tooltip-primary"
               data-tip="Rejected Post"

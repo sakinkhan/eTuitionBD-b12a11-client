@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import useRole from "../../hooks/useRole";
+import useCurrentUser from "../../hooks/useCurrentUser";
 import useAuth from "../../hooks/useAuth";
 
 const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
-  const { isAdmin: currentUserIsAdmin, roleLoading } = useRole();
+  const { isAdmin: currentUserIsAdmin, roleLoading } = useCurrentUser();
   const { user: loggedInUser } = useAuth();
   const [preview, setPreview] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -216,7 +216,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
             <button
               disabled={loading}
               type="submit"
-              className="btn btn-primary rounded-full"
+              className="btn btn-primary text-white rounded-full"
             >
               {loading ? "Saving Changes..." : "Save Changes"}
             </button>

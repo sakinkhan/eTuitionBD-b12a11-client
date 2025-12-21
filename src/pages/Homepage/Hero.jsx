@@ -2,8 +2,10 @@ import React from "react";
 import { PiPlugsConnectedBold } from "react-icons/pi";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import HeroImage from "../../components/ImageAnimations/HeroImage";
+import useAuth from "../../hooks/useAuth";
 
 const Hero = () => {
+  const { user } = useAuth();
   return (
     <div className="flex flex-col md:flex-row items-center gap-10 justify-between px-20 py-10 bg-linear-to-bl from-primary/20 via-secondary/10 to-primary/20">
       <div className="left text-center md:text-left md:pr-20">
@@ -23,7 +25,11 @@ const Hero = () => {
           a click away!
         </p>
         <div className="button mt-8">
-          <PrimaryButton to="/register" label="Get Started" />
+          {!user ? (
+            <PrimaryButton to="/auth/register" label="Get Started" />
+          ) : (
+            <PrimaryButton to="/dashboard" label="Go to Dashboard" />
+          )}
         </div>
       </div>
       <div className="right mx-10">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -33,7 +33,8 @@ const Login = () => {
       const result = await logInUser(data.email, data.password);
       console.log(result);
       toast.success("You have logged in Successfully");
-      navigate(location?.state || "/");
+      console.log("Redirecting to:", location.state?.from);
+      navigate(location.state?.from || "/", { replace: true });
     } catch (err) {
       toast.error(err.message || "Login failed");
     } finally {
@@ -41,15 +42,12 @@ const Login = () => {
     }
   };
   // If already logged in
-  if (user) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh] text-center">
-        <p className="text-4xl md:text-5xl font-bold text-primary">
-          You are already logged in.
-        </p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (user) {
+      navigate(location.state?.from || "/", { replace: true });
+    }
+  }, [user, navigate, location.state]);
+
   return (
     <div className="flex items-center justify-center md:w-120">
       <title>eTuitionBD - Login</title>
@@ -160,9 +158,9 @@ const Login = () => {
             <p className="py-3 text-center font-semibold text-[16px]">
               Don't have an account? Please{" "}
               <Link
-                state={location.state}
-                to="/register"
-                className="text-primary :text-blue-400 hover:underline"
+                to="/auth/register"
+                state={{ from: location.state?.from }}
+                className="text-primary hover:underline"
               >
                 Register
               </Link>

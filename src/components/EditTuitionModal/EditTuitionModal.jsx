@@ -196,7 +196,7 @@ const EditTuitionModal = ({
 
           <button
             type="submit"
-            className="btn btn-primary rounded-full mt-2 hover:bg-secondary hover:text-gray-800"
+            className="btn btn-primary text-white rounded-full mt-2 hover:bg-secondary hover:text-gray-800"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Saving Changes..." : "Save Changes"}

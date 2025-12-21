@@ -13,8 +13,9 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const { registerUser, user, updateUserProfile } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -64,19 +65,20 @@ const Register = () => {
       const userToSave = {
         name: data.name,
         email: data.email,
-        phone: data.phone?.trim() || "",
+        phone: data.phone?.trim() || null,
         role: data.role === "tutor" ? "tutor" : "student",
-        isAdmin: false,
-        verified: false,
         photoURL,
-        createdAt: new Date(),
       };
 
       // 5. Save user to backend DB
       await axiosSecure.post("/users", userToSave);
+      toast.success(
+        data.role === "tutor"
+          ? "Account created. Please complete your tutor profile."
+          : "Account created successfully!"
+      );
 
-      toast.success("Account created successfully!");
-      navigate(location.state || "/");
+      navigate(location.state?.from || "/", { replace: true });
     } catch (err) {
       console.log(err);
       toast.error(err?.message || "Registration failed");
@@ -84,17 +86,6 @@ const Register = () => {
       setLoading(false);
     }
   };
-
-  // If already logged in
-  if (user) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh] text-center">
-        <p className="text-4xl md:text-5xl font-bold text-primary">
-          You are already logged in.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className="flex items-center justify-center md:w-120">
@@ -329,8 +320,8 @@ const Register = () => {
           <p className="py-3 text-center font-semibold text-[16px]">
             Already have an account?{" "}
             <Link
-              to="/login"
-              state={location.state}
+              to="/auth/login"
+              state={{ from: location.state?.from }}
               className="text-primary hover:underline"
             >
               Login

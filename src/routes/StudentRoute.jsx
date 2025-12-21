@@ -1,16 +1,15 @@
 import React from "react";
-import { Navigate, useLocation } from "react-router";
-import useRole from "../hooks/useRole";
+import { Navigate } from "react-router";
+import useCurrentUser from "../hooks/useCurrentUser";
+import LoadingLottie from "../components/Lotties/LoadingLottie";
 
 const StudentRoute = ({ children }) => {
-  const { role, roleLoading } = useRole();
-  const location = useLocation();
-  if (roleLoading) return null;
+  const { role, roleLoading } = useCurrentUser();
+
+  if (roleLoading) return <LoadingLottie />;
 
   if (role !== "student") {
-    return (
-      <Navigate to="/dashboard" replace state={{ from: location }}></Navigate>
-    );
+    return <Navigate to="/" replace />;
   }
 
   return children;

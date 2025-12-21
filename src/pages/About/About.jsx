@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router";
 import AboutLottie from "../../components/Lotties/AboutLottie";
 import PrimaryButton from "../../components/Buttons/PrimaryButton";
+import useAuth from "../../hooks/useAuth";
 
 const AboutUs = () => {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-base-200 text-base-content pb-24 pt-10 transition-colors duration-300">
       <title>eTuitionBD - About Us</title>
@@ -55,7 +57,11 @@ const AboutUs = () => {
         <p className="max-w-xl mx-auto text-lg text-base-content/80 mb-10">
           Whether you're here to learn or teach, this is your space.
         </p>
-        <PrimaryButton to="/register" label="Get Started" />
+        {!user ? (
+          <PrimaryButton to="/auth/register" label="Get Started" />
+        ) : (
+          <PrimaryButton to="/dashboard" label="Go to Dashboard" />
+        )}
       </section>
     </div>
   );

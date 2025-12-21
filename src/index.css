@@ -92,3 +92,20 @@ body {
 .delay-2000 {
     animation-delay: 2s;
 }
+
+
+.swiper-slide {
+    transition: transform 0s !important;
+}
+
+.swiper-slide:hover {
+    transform: none !important;
+}
+
+.swiper {
+    overflow: visible;
+}
+
+.swiper-slide:hover {
+    transform: none !important;
+}

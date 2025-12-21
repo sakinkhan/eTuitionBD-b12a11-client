@@ -6,6 +6,7 @@ import { AiTwotoneMail } from "react-icons/ai";
 import { GrPhone } from "react-icons/gr";
 import Pagination from "../../../../components/Pagination/Pagination";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
+import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
 
 const OngoingTuitions = () => {
   const axiosSecure = useAxiosSecure();
@@ -31,7 +32,7 @@ const OngoingTuitions = () => {
   const totalItems = data?.total || 0;
   const currentPage = page;
   const pageSize = limit;
-  
+
   console.log("ongoing tuitions", tuitions);
 
   return (
@@ -48,27 +49,13 @@ const OngoingTuitions = () => {
           placeholder="Start typing to search..."
           className="mr-2"
         />
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
-            setPage(1); // reset to first page on limit change
+          onChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300 "
-        >
-          <option className="bg-accent" value={5}>
-            5
-          </option>
-          <option className="bg-accent" value={10}>
-            10
-          </option>
-          <option className="bg-accent" value={20}>
-            20
-          </option>
-          <option className="bg-accent" value={50}>
-            50
-          </option>
-        </select>
+        />
       </div>
 
       {totalItems === 0 ? (

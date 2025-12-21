@@ -5,6 +5,8 @@ import Pagination from "../../components/Pagination/Pagination";
 import TutorCard from "./TutorCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import useAxios from "../../hooks/useAxios";
+import TutorProfileModal from "../../components/TutorProfileModal/TutorProfileModal";
+import PageSizeSelect from "../../components/PageSizeSelect/PageSizeSelect";
 
 const Tutors = () => {
   const axiosPublic = useAxios();
@@ -12,13 +14,14 @@ const Tutors = () => {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [selectedTutorId, setSelectedTutorId] = useState(null);
 
-  const { data: tutorData, isLoading } = useQuery({
-    queryKey: ["tutors", page, limit, searchText],
+  const { data, isLoading } = useQuery({
+    queryKey: ["public-tutors", searchText, page, limit],
     queryFn: async () => {
-      const res = await axiosPublic.get("/public-users", {
+      const res = await axiosPublic.get("/tutors/public", {
         params: {
-          searchText,
+          search: searchText,
           page,
           limit,
         },
@@ -27,10 +30,10 @@ const Tutors = () => {
     },
     keepPreviousData: true,
   });
-  const tutors =
-    tutorData?.users?.filter((user) => user.role === "tutor") || [];
 
-  const totalItems = tutorData?.total || 0;
+  const tutors = data?.tutors || [];
+  const totalItems = data?.total || 0;
+
   return (
     <div className="px-5 lg:px-20 py-10">
       {/* Title */}
@@ -42,7 +45,7 @@ const Tutors = () => {
       </p>
 
       {/* Search */}
-      <div className="mb-5 flex items-center justify-center">
+      <div className="mb-5 flex items-center justify-center gap-2">
         <SearchBar
           value={searchText}
           onChange={(value) => {
@@ -51,36 +54,41 @@ const Tutors = () => {
           }}
           placeholder="Start typing to search..."
         />
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
+          onChange={(newLimit) => {
+            setLimit(newLimit);
             setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300"
-        >
-          {[5, 10, 20, 50].map((n) => (
-            <option key={n} value={n} className="bg-accent">
-              {n}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       {/* Cards */}
-      <div className="mt-10 px-15 md:px-0">
+      <div className="mt-10">
         {isLoading ? (
-          <LoadingLottie />
+          <div className="py-20 flex justify-center">
+            <LoadingLottie />
+          </div>
         ) : tutors.length === 0 ? (
           <div className="text-center py-20 text-gray-500">No tutors found</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {tutors.map((tutor) => (
-              <TutorCard key={tutor._id} tutor={tutor} />
+              <TutorCard
+                key={tutor.tutorId}
+                tutor={tutor}
+                onViewProfile={() => setSelectedTutorId(tutor._id)}
+              />
             ))}
           </div>
         )}
       </div>
+
+      <TutorProfileModal
+        tutorId={selectedTutorId}
+        isOpen={!!selectedTutorId}
+        onClose={() => setSelectedTutorId(null)}
+      />
 
       {/* Pagination */}
       {totalItems > limit && (

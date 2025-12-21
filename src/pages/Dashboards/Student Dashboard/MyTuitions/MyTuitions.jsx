@@ -9,6 +9,7 @@ import EditTuitionModal from "../../../../components/EditTuitionModal/EditTuitio
 import { useNavigate } from "react-router";
 import Pagination from "../../../../components/Pagination/Pagination";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
+import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
 
 const MyTuitions = () => {
   const { user } = useAuth();
@@ -57,7 +58,7 @@ const MyTuitions = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     }).then((result) => {
@@ -114,27 +115,13 @@ const MyTuitions = () => {
           />
         </label>
         {/* Page Size selection drop down */}
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
+          onChange={(newLimit) => {
+            setLimit(newLimit);
             setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300 "
-        >
-          <option className="bg-accent" value={5}>
-            5
-          </option>
-          <option className="bg-accent" value={10}>
-            10
-          </option>
-          <option className="bg-accent" value={20}>
-            20
-          </option>
-          <option className="bg-accent" value={50}>
-            50
-          </option>
-        </select>
+        />
       </div>
 
       {tuitions.length === 0 ? (

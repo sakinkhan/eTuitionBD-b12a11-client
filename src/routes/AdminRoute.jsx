@@ -1,17 +1,17 @@
 import React from "react";
-import useRole from "../hooks/useRole";
-import { Navigate, useLocation } from "react-router";
+import { Navigate } from "react-router";
+import useCurrentUser from "../hooks/useCurrentUser";
+import LoadingLottie from "../components/Lotties/LoadingLottie";
 
 const AdminRoute = ({ children }) => {
-  const { isAdmin, roleLoading } = useRole();
-  const location = useLocation();
-  if (roleLoading) return null;
+  const { isAdmin, roleLoading } = useCurrentUser();
+
+  if (roleLoading) return <LoadingLottie />;
 
   if (!isAdmin) {
-    return (
-      <Navigate to="/dashboard" replace state={{ from: location }}></Navigate>
-    );
+    return <Navigate to="/" replace />;
   }
+
   return children;
 };
 

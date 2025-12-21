@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
-import useRole from "../../hooks/useRole";
-import { useQuery } from "@tanstack/react-query";
+import useCurrentUser from "../../hooks/useCurrentUser";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingLottie from "../../components/Lotties/LoadingLottie";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
 
 const TutorProfileSetup = () => {
-  const { profileCompleted } = useRole();
+  const { profileCompleted } = useCurrentUser();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const isFirstTime = profileCompleted === false;
   const [submitting, setSubmitting] = useState(false);
@@ -37,6 +40,8 @@ const TutorProfileSetup = () => {
     }
   }, [tutorProfile, reset]);
 
+  const queryClient = useQueryClient();
+
   const handleCreateTutorProfile = async (data) => {
     try {
       setSubmitting(true);
@@ -46,8 +51,26 @@ const TutorProfileSetup = () => {
       } else {
         await axiosSecure.patch("/tutors/me", data);
       }
+      queryClient.invalidateQueries({
+        queryKey: ["current-user", user?.email],
+      });
+      queryClient.invalidateQueries({ queryKey: ["tutor-profile"] });
 
-      navigate("/dashboard/my-applications");
+      navigate("/dashboard");
+      Swal.fire({
+        title: isFirstTime
+          ? "Tutor Profile Created!"
+          : "Tutor Profile Updated!",
+        text: isFirstTime
+          ? "Your tutor profile has been created successfully."
+          : "Your tutor profile has been updated successfully.",
+        icon: "success",
+        customClass: {
+          confirmButton:
+            "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2",
+        },
+        buttonsStyling: false,
+      });
     } catch (err) {
       console.error("Tutor profile save failed", err);
       // optionally show toast here
@@ -168,7 +191,7 @@ const TutorProfileSetup = () => {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            className="btn btn-primary rounded-full"
+            className="btn rounded-full btn-primary text-white hover:bg-secondary hover:text-gray-800"
             disabled={submitting}
           >
             {submitting
@@ -179,7 +202,7 @@ const TutorProfileSetup = () => {
           </button>
           <button
             type="button"
-            className="btn btn-outline btn-primary rounded-full"
+            className="btn btn-outline btn-primary hover:text-white rounded-full"
             onClick={() => reset()}
             disabled={!isFirstTime}
           >

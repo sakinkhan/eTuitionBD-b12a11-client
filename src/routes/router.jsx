@@ -19,7 +19,6 @@ import MyApplications from "../pages/Dashboards/Tutor Dashboard/MyApplications/M
 import OngoingTuitions from "../pages/Dashboards/Tutor Dashboard/OngoingTuitions/OngoingTuitions";
 import RevenueHistory from "../pages/Dashboards/Tutor Dashboard/RevenueHistory/RevenueHistory";
 import UserManagement from "../pages/Dashboards/Admin Dashboard/UserManagement/UserManagement";
-import TutorManagement from "../pages/Dashboards/Admin Dashboard/TutorManagement/TutorManagement";
 import ReportsAnalytics from "../pages/Dashboards/Admin Dashboard/ReportsAnalytics/ReportsAnalytics";
 import UserProfile from "../pages/UserProfile/UserProfile";
 import PaymentHistory from "../pages/Dashboards/Student Dashboard/Payments/PaymentHistory";
@@ -32,8 +31,12 @@ import AdminRoute from "./AdminRoute";
 import TuitionPostManagement from "../pages/Dashboards/Admin Dashboard/TuitionPostManagement/TuitionPostManagement";
 import Tutors from "../pages/Tutors/Tutors";
 import TutorProfileSetup from "../pages/Tutors/TutorProfileSetup";
+import TutorManagement from "../pages/Dashboards/Admin Dashboard/TutorManagement/TutorManagement";
+import TutorProfileGuard from "./TutorProfileGuard";
+import PublicRoute from "./PublicRoute";
 
 export const router = createBrowserRouter([
+  // Root Layout
   {
     path: "/",
     element: <RootLayout></RootLayout>,
@@ -41,31 +44,31 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Home,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+        element: <Home />,
+        hydrateFallbackElement: <LoadingLottie />,
       },
       {
         path: "/tuitions",
         element: <Tuitions></Tuitions>,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+        hydrateFallbackElement: <LoadingLottie />,
       },
       {
         path: "/tuition/:id",
         element: (
           <PrivateRoute>
-            <TuitionDetails></TuitionDetails>
+            <TuitionDetails />
           </PrivateRoute>
         ),
       },
       {
         path: "/tutors",
         element: <Tutors></Tutors>,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+        hydrateFallbackElement: <LoadingLottie />,
       },
       {
         path: "/about",
         element: <About></About>,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+        hydrateFallbackElement: <LoadingLottie />,
       },
       {
         path: "/userProfile",
@@ -77,28 +80,40 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  // AuthLayout
   {
-    path: "/",
-    Component: AuthLayout,
+    path: "/auth",
+    element: <AuthLayout />,
     errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "login",
-        element: <Login></Login>,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
+        hydrateFallbackElement: <LoadingLottie />,
       },
       {
         path: "register",
-        element: <Register></Register>,
-        hydrateFallbackElement: <LoadingLottie></LoadingLottie>,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
+        hydrateFallbackElement: <LoadingLottie />,
       },
     ],
   },
+  // DashboardLayout
   {
     path: "dashboard",
     element: (
       <PrivateRoute>
-        <DashboardLayout></DashboardLayout>
+        <TutorProfileGuard>
+          <DashboardLayout />
+        </TutorProfileGuard>
       </PrivateRoute>
     ),
     children: [
@@ -207,6 +222,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <TuitionPostManagement></TuitionPostManagement>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "tutor-management",
+        element: (
+          <AdminRoute>
+            <TutorManagement></TutorManagement>
           </AdminRoute>
         ),
       },

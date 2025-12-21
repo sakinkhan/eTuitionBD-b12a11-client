@@ -28,7 +28,6 @@ const LatestTuitions = () => {
     refetchOnWindowFocus: false,
   });
   const tuitionPosts = tuitionPostsData?.posts || [];
-  console.log(tuitionPosts);
 
   if (isLoading) return <LoadingLottie />;
 

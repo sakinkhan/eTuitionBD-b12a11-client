@@ -53,7 +53,7 @@ const TutorModal = ({ isOpen, onClose, application }) => {
 
         <div className="modal-action">
           <button
-            className="btn btn-primary rounded-full hover:bg-secondary hover:text-gray-800"
+            className="btn btn-primary text-white rounded-full hover:bg-secondary hover:text-gray-800"
             onClick={onClose}
           >
             Close

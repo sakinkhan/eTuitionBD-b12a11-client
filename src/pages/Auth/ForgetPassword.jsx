@@ -64,7 +64,7 @@ const ForgotPassword = ({ isOpen, onClose, defaultEmail = "" }) => {
           <div className="flex justify-center gap-2">
             <button
               type="submit"
-              className="btn btn-primary rounded-full"
+              className="btn btn-primary text-white rounded-full"
               disabled={loading}
             >
               {loading ? "Sending..." : "Send Reset Email"}

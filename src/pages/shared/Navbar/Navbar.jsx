@@ -1,34 +1,26 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { toast } from "react-toastify";
 import Logo from "../../../components/Logo/Logo";
 import { BsMoonStarsFill, BsSunFill } from "react-icons/bs";
 import MyLink from "../../../components/MyLink/MyLink";
 import { ThemeContext } from "../../../contexts/ThemeContext/ThemeContext";
 import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
-import LoadingLottie from "../../../components/Lotties/LoadingLottie";
+import useCurrentUser from "../../../hooks/useCurrentUser";
 
 const Navbar = () => {
   const { user: firebaseUser, logOut } = useAuth();
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const axiosSecure = useAxiosSecure();
+  const { name, photoURL, roleLoading } = useCurrentUser() || {};
+  const location = useLocation();
 
-  const { data: dbUserData, isLoading } = useQuery({
-    queryKey: ["dbUser", firebaseUser?.email],
-    enabled: !!firebaseUser?.email,
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/users/${firebaseUser.email}`);
-      return res.data;
-    },
-  });
-  const dbUser = dbUserData?.user || {};
-
-  const handleLogout = () => {
-    logOut()
-      .then(() => toast.error("You have been logged out"))
-      .catch((err) => console.log(err));
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.info("You have been logged out");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const publicLinks = (
@@ -40,15 +32,9 @@ const Navbar = () => {
     </>
   );
 
-  // const protectedLinks = user && (
-  //   <>
-  //     <MyLink to="/dashboard">Protected LINK</MyLink>
-  //   </>
-  // );
-
   return (
-    <div className="navbar bg-base-100 shadow-md py-4 px-6 md:px-20 sticky top-0 z-50 transition-colors duration-300 ">
-      {/* Left: Logo + Mobile Menu */}
+    <div className="navbar bg-base-100 shadow-md py-4 px-6 md:px-20 sticky top-0 z-50">
+      {/* Left */}
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -67,30 +53,23 @@ const Navbar = () => {
               />
             </svg>
           </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 shadow space-y-2"
-          >
+          <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 shadow space-y-2">
             {publicLinks}
-            {/* {protectedLinks} */}
           </ul>
         </div>
         <Logo />
       </div>
 
-      {/* Center: Desktop Links */}
+      {/* Center */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-2">
-          {publicLinks}
-          {/* {protectedLinks} */}
-        </ul>
+        <ul className="menu menu-horizontal px-1 space-x-2">{publicLinks}</ul>
       </div>
 
-      {/* Right: Theme toggle + User/Login */}
+      {/* Right */}
       <div className="navbar-end flex items-center gap-2">
         {/* Theme toggle */}
         <div
-          className="tooltip tooltip-bottom tooltip-primary"
+          className="lg:tooltip lg:tooltip-left tooltip-primary"
           data-tip="Change Theme"
         >
           <button
@@ -98,7 +77,7 @@ const Navbar = () => {
             onClick={toggleTheme}
           >
             {theme === "light" ? (
-              <BsMoonStarsFill className="text-base-content" />
+              <BsMoonStarsFill />
             ) : (
               <BsSunFill className="text-yellow-500" />
             )}
@@ -107,64 +86,69 @@ const Navbar = () => {
 
         {firebaseUser ? (
           <div className="flex items-center gap-3">
-            {/* Desktop: show dashboard button */}
+            {/* Desktop Dashboard */}
             <Link
               to="/dashboard"
-              className="btn btn-outline btn-primary rounded-full text-sm border-2 hidden lg:inline-flex"
+              className="btn btn-outline btn-primary hover:text-white rounded-full text-sm border-2 hidden lg:inline-flex"
             >
               My Dashboard
             </Link>
-            {/* User Menu/dropdown */}
+
+            {/* User dropdown */}
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-15 h-auto rounded-full border-2 border-primary overflow-hidden">
-                  {isLoading ? (
-                    <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+              <div
+                tabIndex={0}
+                role="button"
+                aria-label="User menu"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full border-2 border-primary overflow-hidden">
+                  {roleLoading ? (
+                    <div className="w-full h-full bg-gray-200 animate-pulse" />
                   ) : (
                     <img
                       src={
-                        dbUser?.photoURL ||
+                        photoURL ||
                         firebaseUser.photoURL ||
                         "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
                       }
-                      alt={dbUser?.name || firebaseUser.displayName}
+                      alt={name || firebaseUser.displayName}
                     />
                   )}
                 </div>
               </div>
-              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48 max-w-[90vw]">
-                <li className="pointer-events-none justify-center">
-                  <p className="font-semibold text-base-content text-sm text-center wrap-break-word">
-                    {dbUser?.name || firebaseUser?.displayName}
+
+              <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 p-2 shadow space-y-2 min-w-48">
+                <li className="pointer-events-none text-center">
+                  <p className="font-semibold text-sm">
+                    {name || firebaseUser.displayName}
                   </p>
+                  <p className="text-xs">{firebaseUser.email}</p>
                 </li>
-                <li className="pointer-events-none justify-center">
-                  <p className="text-xs text-base-content wrap-break-word">
-                    {firebaseUser?.email}
-                  </p>
-                </li>
-                {/* Mobile: Dashboard button */}
+
+                {/* Mobile Dashboard */}
                 <li className="lg:hidden">
                   <Link
                     to="/dashboard"
-                    className="btn btn-outline btn-primary btn-sm w-full rounded-full text-sm"
+                    className="btn btn-outline btn-primary hover:text-white btn-sm w-full rounded-full"
                   >
                     My Dashboard
                   </Link>
                 </li>
-                {/* Manage Profile Button */}
+
                 <li>
                   <Link
-                    to={"/userProfile"}
-                    className="btn btn-outline btn-primary btn-sm w-full rounded-full text-sm"
+                    to="/userProfile"
+                    className="btn btn-outline btn-primary hover:text-white btn-sm w-full rounded-full"
                   >
                     Manage Profile
                   </Link>
                 </li>
+
                 <li>
                   <button
                     onClick={handleLogout}
-                    className="btn btn-error btn-sm text-sm rounded-full w-full"
+                    className="btn btn-error btn-sm w-full rounded-full"
                   >
                     Logout
                   </button>
@@ -174,22 +158,26 @@ const Navbar = () => {
           </div>
         ) : (
           <>
+            {/* Desktop auth */}
             <div className="hidden lg:flex gap-2">
               <Link
-                to="/login"
-                className="btn btn-outline btn-primary rounded-full text-sm border-2"
+                to="/auth/login"
+                state={{ from: location.pathname }}
+                className="btn btn-outline btn-primary hover:text-white rounded-full text-sm border-2"
               >
                 Login
               </Link>
               <Link
-                to="/register"
-                className="btn btn-secondary rounded-full text-sm border-2 text-black"
+                to="/auth/register"
+                state={{ from: location.pathname }}
+                className="btn btn-secondary rounded-full text-sm border-2 text-gray-800 hover:bg-primary hover:text-white hover:border-primary"
               >
                 Sign Up
               </Link>
             </div>
-            {/* Mobile login/signup */}
-            <div className="dropdown dropdown-end lg:hidden">
+
+            {/* Mobile auth */}
+            <div className="dropdown dropdown-end rounded-4xl lg:hidden">
               <div tabIndex={0} className="btn btn-ghost btn-circle">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -208,10 +196,22 @@ const Navbar = () => {
               </div>
               <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-40 shadow space-y-2">
                 <li>
-                  <Link to="/login">Login</Link>
+                  <Link
+                    to="/auth/login"
+                    state={{ from: location.pathname }}
+                    className="btn btn-outline btn-sm btn-primary hover:text-white rounded-full border-2"
+                  >
+                    Login
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/register">Sign Up</Link>
+                  <Link
+                    to="/auth/register"
+                    state={{ from: location.pathname }}
+                    className="btn btn-secondary rounded-full btn-sm border-2 text-gray-800 hover:bg-primary hover:text-white hover:border-primary"
+                  >
+                    Sign Up
+                  </Link>
                 </li>
               </ul>
             </div>

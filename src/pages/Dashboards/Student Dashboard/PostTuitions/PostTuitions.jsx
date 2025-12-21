@@ -169,14 +169,14 @@ const PostTuitions = () => {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            className="btn btn-primary rounded-full"
+            className="btn btn-primary text-white rounded-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Posting..." : "Post Tuition"}
           </button>
           <button
             type="button"
-            className="btn btn-outline btn-primary rounded-full"
+            className="btn btn-outline btn-primary text-white rounded-full"
             onClick={() => reset()}
           >
             Reset

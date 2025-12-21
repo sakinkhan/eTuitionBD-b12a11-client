@@ -20,7 +20,7 @@ const Pagination = ({ currentPage, totalItems, pageSize, onPageChange }) => {
   return (
     <div className="flex justify-center gap-5 items-center mt-4">
       <button
-        className="btn btn-sm rounded-full btn-primary tooltip tooltip-primary tooltip-left"
+        className="btn btn-sm rounded-full btn-primary text-white lg:tooltip tooltip-primary lg:tooltip-left"
         data-tip="Previous Page"
         onClick={handlePrev}
         disabled={currentPage === 1 || totalItems === 0}
@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, totalItems, pageSize, onPageChange }) => {
       </span>
 
       <button
-        className="btn btn-sm rounded-full btn-primary tooltip tooltip-primary tooltip-right"
+        className="btn btn-sm rounded-full btn-primary text-white lg:tooltip tooltip-primary lg:tooltip-right"
         data-tip="Next Page"
         onClick={handleNext}
         disabled={currentPage === totalPages || totalItems === 0}

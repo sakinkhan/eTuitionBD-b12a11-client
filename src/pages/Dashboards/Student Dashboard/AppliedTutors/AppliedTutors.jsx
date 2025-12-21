@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import Pagination from "../../../../components/Pagination/Pagination";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
+import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
 
 const AppliedTutors = () => {
   const axiosSecure = useAxiosSecure();
@@ -54,9 +55,9 @@ const AppliedTutors = () => {
       cancelButtonText: "Cancel",
       customClass: {
         confirmButton:
-          "btn btn-primary hover:bg-secondary hover:text-gray-800 text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary text-white hover:bg-secondary hover:text-gray-800 text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary text-white text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     }).then(async (result) => {
@@ -92,7 +93,7 @@ const AppliedTutors = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     }).then(async (result) => {
@@ -107,7 +108,7 @@ const AppliedTutors = () => {
           confirmButtonText: "OK",
           customClass: {
             confirmButton:
-              "btn btn-primary font-semibold rounded-full px-6 py-2",
+              "btn btn-primary text-white font-semibold rounded-full px-6 py-2",
           },
           buttonsStyling: false,
         });
@@ -123,7 +124,7 @@ const AppliedTutors = () => {
           confirmButtonText: "OK",
           customClass: {
             confirmButton:
-              "btn btn-primary font-semibold rounded-full px-6 py-2",
+              "btn btn-primary text-white font-semibold rounded-full px-6 py-2",
           },
           buttonsStyling: false,
         });
@@ -145,27 +146,13 @@ const AppliedTutors = () => {
           className="mr-2"
         />
         {/* Page Size selection drop down */}
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
+          onChange={(newLimit) => {
+            setLimit(newLimit);
             setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300 "
-        >
-          <option className="bg-accent" value={5}>
-            5
-          </option>
-          <option className="bg-accent" value={10}>
-            10
-          </option>
-          <option className="bg-accent" value={20}>
-            20
-          </option>
-          <option className="bg-accent" value={50}>
-            50
-          </option>
-        </select>
+        />
       </div>
 
       {totalApps === 0 ? (

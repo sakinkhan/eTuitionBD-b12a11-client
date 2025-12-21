@@ -7,36 +7,34 @@ import { VscLoading } from "react-icons/vsc";
 
 const SocialLogin = () => {
   const { loginWithGoogle } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      // 1. Sign in with Google
       const result = await loginWithGoogle();
       const { user } = result;
-      console.log(user);
 
-      // 2. Prepare user object
+      if (!user?.email) {
+        toast.error("Google account does not have an email address.");
+        return;
+      }
+
       const userToSave = {
-        name: user.displayName,
+        name: user.displayName || "Google User",
         email: user.email,
         role: "student",
-        isAdmin: false,
-        verified: false,
-        photoURL: user.photoURL,
-        createdAt: new Date(),
+        photoURL: user.photoURL || null,
       };
 
-      // 3. Save user to backend
       await axiosSecure.post("/users", userToSave);
 
-      // 4. Success + redirect
       toast.success("Signed in with Google successfully!");
-      navigate(location.state || "/");
+
+      navigate(location.state?.from || "/", { replace: true });
     } catch (error) {
       console.error("Google sign-in error:", error);
       toast.error("Google sign-in failed. Please try again.");

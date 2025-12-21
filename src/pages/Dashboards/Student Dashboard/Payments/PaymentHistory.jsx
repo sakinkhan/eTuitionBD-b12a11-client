@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
 import Pagination from "../../../../components/Pagination/Pagination";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
+import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
 
 const PaymentHistory = () => {
   const axiosSecure = useAxiosSecure();
@@ -54,27 +55,13 @@ const PaymentHistory = () => {
           className="mr-2"
         />
         {/* Page Size selection drop down */}
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
+          onChange={(newLimit) => {
+            setLimit(newLimit);
             setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300 "
-        >
-          <option className="bg-accent" value={5}>
-            5
-          </option>
-          <option className="bg-accent" value={10}>
-            10
-          </option>
-          <option className="bg-accent" value={20}>
-            20
-          </option>
-          <option className="bg-accent" value={50}>
-            50
-          </option>
-        </select>
+        />
       </div>
 
       {totalApps === 0 ? (

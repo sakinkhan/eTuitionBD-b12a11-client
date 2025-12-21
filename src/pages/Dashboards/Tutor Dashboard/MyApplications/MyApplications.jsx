@@ -7,6 +7,7 @@ import { AiFillEdit } from "react-icons/ai";
 import ApplyModal from "../../../../components/ApplyModal/ApplyModal";
 import Swal from "sweetalert2";
 import Pagination from "../../../../components/Pagination/Pagination";
+import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
 
 const MyApplications = () => {
   const axiosSecure = useAxiosSecure();
@@ -50,7 +51,7 @@ const MyApplications = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2",
         cancelButton:
-          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2",
+          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2",
       },
       buttonsStyling: false,
     }).then(async (result) => {
@@ -66,7 +67,7 @@ const MyApplications = () => {
           icon: "success",
           customClass: {
             confirmButton:
-              "btn btn-primary font-semibold rounded-full px-6 py-2",
+              "btn btn-primary text-white font-semibold rounded-full px-6 py-2",
           },
           buttonsStyling: false,
         });
@@ -107,21 +108,13 @@ const MyApplications = () => {
             className="grow bg-transparent outline-none text-base-content placeholder-base-content/60"
           />
         </label>
-
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
+          onChange={(newLimit) => {
+            setLimit(newLimit);
             setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl border border-gray-300"
-        >
-          {[5, 10, 20, 50].map((n) => (
-            <option key={n} value={n} className="bg-accent">
-              {n}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       {totalApps === 0 ? (

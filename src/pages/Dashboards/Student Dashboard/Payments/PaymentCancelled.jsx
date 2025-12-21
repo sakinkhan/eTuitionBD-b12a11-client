@@ -13,7 +13,7 @@ const PaymentCancelled = () => {
         No payment was made. You can try again when you're ready.
       </p>
       <Link to={"/dashboard/applied-tutors"}>
-        <button className="btn btn-primary rounded-full hover:bg-secondary hover:text-gray-800">
+        <button className="btn btn-primary text-white rounded-full hover:bg-secondary hover:text-gray-800">
           Try Again
         </button>
       </Link>

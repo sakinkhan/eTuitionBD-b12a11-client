@@ -8,33 +8,36 @@ import TutorCard from "../../Tutors/TutorCard";
 import { useQuery } from "@tanstack/react-query";
 import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 import useAxios from "../../../hooks/useAxios";
+import TutorProfileModal from "../../../components/TutorProfileModal/TutorProfileModal";
 
 const LatestTutors = () => {
   const axiosPublic = useAxios();
+  const [selectedTutorId, setSelectedTutorId] = useState(null);
 
-  const [searchText, setSearchText] = useState("");
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
-
-  const { data: tutorData, isLoading } = useQuery({
-    queryKey: ["tutors", page, limit, searchText],
+  const { data, isLoading } = useQuery({
+    queryKey: ["latest-tutors"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/public-users", {
+      const res = await axiosPublic.get("/tutors/public", {
         params: {
-          searchText,
-          page,
-          limit,
+          page: 1,
+          limit: 10, // latest tutors only
         },
       });
       return res.data;
     },
-    keepPreviousData: true,
   });
 
-  const tutors =
-    tutorData?.users?.filter((user) => user.role === "tutor") || [];
+  const tutors = data?.tutors || [];
 
   if (isLoading) return <LoadingLottie />;
+
+  if (tutors.length === 0) {
+    return (
+      <div className="text-center py-20 text-gray-500">
+        No tutors available at the moment
+      </div>
+    );
+  }
 
   return (
     <div className="py-16 px-4 md:px-12 lg:px-20">
@@ -61,8 +64,7 @@ const LatestTutors = () => {
           stretch: 0,
           depth: 100,
           modifier: 1,
-          slideShadows: true,
-          scale: 1,
+          slideShadows: false,
         }}
         pagination={{ clickable: true }}
         autoplay={{ delay: 2500, disableOnInteraction: false }}
@@ -71,14 +73,23 @@ const LatestTutors = () => {
           "--swiper-pagination-color": "#ff7100",
           "--swiper-navigation-color": "#ff7100",
         }}
-        className="mySwiper pb-15!"
+        className="mySwiper pb-15! overflow-visible"
       >
         {tutors.map((tutor) => (
           <SwiperSlide key={tutor._id}>
-            <TutorCard tutor={tutor} />
+            <TutorCard
+              key={tutor._id}
+              tutor={tutor}
+              onViewProfile={() => setSelectedTutorId(tutor._id)}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
+      <TutorProfileModal
+        tutorId={selectedTutorId}
+        isOpen={!!selectedTutorId}
+        onClose={() => setSelectedTutorId(null)}
+      />
     </div>
   );
 };

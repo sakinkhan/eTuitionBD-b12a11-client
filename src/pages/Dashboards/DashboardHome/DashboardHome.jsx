@@ -1,12 +1,12 @@
 import React from "react";
-import useRole from "../../../hooks/useRole";
+import useCurrentUser from "../../../hooks/useCurrentUser";
 import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 import StudentDashboardHome from "./StudentDashboardHome";
 import TutorDashboardHome from "./TutorDashboardHome";
 import AdminDashboardHome from "./AdminDashboardHome";
 
 const DashboardHome = () => {
-  const { role, isAdmin, roleLoading } = useRole();
+  const { role, isAdmin, roleLoading } = useCurrentUser();
   if (roleLoading) {
     return <LoadingLottie></LoadingLottie>;
   }

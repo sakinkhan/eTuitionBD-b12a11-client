@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { FaChalkboardTeacher, FaHome } from "react-icons/fa";
 import { LuNotebookPen } from "react-icons/lu";
-import { Link, NavLink, Outlet } from "react-router";
+import { Link, Navigate, NavLink, Outlet } from "react-router";
 import logoImg from "../assets/logo-icon.png";
 import { VscSettingsGear } from "react-icons/vsc";
-import { IoDocumentAttachOutline, IoDocumentsSharp } from "react-icons/io5";
+import { IoDocumentAttachOutline } from "react-icons/io5";
 import { FaMoneyBillTrendUp, FaUsers, FaUsersGear } from "react-icons/fa6";
+import { GrDocumentConfig } from "react-icons/gr";
 import { ImProfile } from "react-icons/im";
 import { GiTeacher } from "react-icons/gi";
 import {
@@ -14,36 +15,36 @@ import {
   BsSunFill,
 } from "react-icons/bs";
 import { ThemeContext } from "../contexts/ThemeContext/ThemeContext";
-import useRole from "../hooks/useRole";
+import useCurrentUser from "../hooks/useCurrentUser";
 import { PiFlowArrowBold } from "react-icons/pi";
 import { TbDeviceDesktopAnalytics } from "react-icons/tb";
 import { IoMdLogOut } from "react-icons/io";
 import useAuth from "../hooks/useAuth";
 import { toast } from "react-toastify";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../hooks/useAxiosSecure";
 import LoadingLottie from "../components/Lotties/LoadingLottie";
 
 const DashboardLayout = () => {
-  const { role, isAdmin } = useRole();
+  const { role, isAdmin, name, photoURL, roleLoading, profileCompleted } =
+    useCurrentUser();
+
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { user, logOut } = useAuth();
-  const axiosSecure = useAxiosSecure();
+  // const location = useLocation();
 
-  const { data: dbUserData, isLoading } = useQuery({
-    queryKey: ["dbUser", user?.email],
-    enabled: !!user?.email,
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/users/${user.email}`);
-      return res.data;
-    },
-  });
-  const loggedInUser = dbUserData?.user || [];
-  if (!user || isLoading) return <LoadingLottie />;
+  if (!user || roleLoading) return <LoadingLottie />;
+
+  const activeNavItem =
+    "bg-primary/15 text-primary font-semibold border-l-4 border-primary";
+
+  const baseNavItem =
+    "is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right transition-all";
+
+  const disabledNavItem = "opacity-40 cursor-not-allowed";
+  const tutorLocked = role === "tutor" && !profileCompleted;
 
   const handleLogout = () => {
     logOut()
-      .then(() => toast.error("You have been logged out"))
+      .then(() => toast.info("You have been logged out"))
       .catch((err) => console.log(err));
   };
 
@@ -82,7 +83,7 @@ const DashboardLayout = () => {
           <div className="right flex items-center gap-2 px-5">
             {/* Theme toggle */}
             <div
-              className="tooltip tooltip-bottom tooltip-primary"
+              className="lg:tooltip lg:tooltip-left tooltip-primary"
               data-tip="Change Theme"
             >
               <button
@@ -98,16 +99,16 @@ const DashboardLayout = () => {
             </div>
             {/* Profile photo */}
             <div
-              className="w-10 h-10 rounded-full border-2 border-primary tooltip tooltip-primary tooltip-bottom"
-              data-tip={loggedInUser?.name}
+              className="w-10 h-10 rounded-full border-2 border-primary lg:tooltip tooltip-primary lg:tooltip-bottom"
+              data-tip={name}
             >
               <img
                 src={
-                  loggedInUser?.photoURL ||
+                  photoURL ||
                   "https://img.icons8.com/?size=48&id=kDoeg22e5jUY&format=png"
                 }
-                alt={loggedInUser?.name}
-                className="w-full h-full rounded-full overflow-hidden"
+                alt={name}
+                className="w-full h-full rounded-full overflow-hidden object-cover"
               />
             </div>
           </div>
@@ -144,15 +145,26 @@ const DashboardLayout = () => {
             </li>
             {/* Dashboard Home Button */}
             <li>
-              <Link
-                to={"/dashboard"}
-                className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                data-tip="Dashboard Home"
+              <NavLink
+                to="/dashboard"
+                end
+                onClick={(e) => {
+                  if (tutorLocked) e.preventDefault();
+                }}
+                className={({ isActive }) =>
+                  `${baseNavItem}
+                   ${tutorLocked ? disabledNavItem : ""}
+                   ${isActive && !tutorLocked ? activeNavItem : ""}`
+                }
+                data-tip={
+                  tutorLocked
+                    ? "Complete your tutor profile first"
+                    : "Dashboard Home"
+                }
               >
-                {/* Home icon */}
                 <FaHome size={20} />
                 <span className="is-drawer-close:hidden">Homepage</span>
-              </Link>
+              </NavLink>
             </li>
             {/* Our Dashboard Links */}
             {/* STUDENT DASH */}
@@ -160,7 +172,7 @@ const DashboardLayout = () => {
               <>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="My Tuitions"
                     to="/dashboard/my-tuitions"
                   >
@@ -170,7 +182,7 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="Post New Tuition"
                     to="/dashboard/post-tuitions"
                   >
@@ -182,7 +194,7 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="Applied Tutors"
                     to="/dashboard/applied-tutors"
                   >
@@ -194,7 +206,7 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="Payment History"
                     to="/dashboard/payment-history"
                   >
@@ -206,27 +218,25 @@ const DashboardLayout = () => {
                 </li>
               </>
             )}
-
             {/* TUTOR DASH */}
             {!isAdmin && role === "tutor" && (
               <>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                    data-tip="My Tutor Profile"
-                    to="/dashboard/tutor-profile-setup"
-                  >
-                    <ImProfile size={20} />
-                    <span className="is-drawer-close:hidden">
-                      My Tutor Profile
-                    </span>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                    data-tip="My Applications"
                     to="/dashboard/my-applications"
+                    onClick={(e) => {
+                      if (tutorLocked) e.preventDefault();
+                    }}
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
+                    data-tip={
+                      tutorLocked
+                        ? "Complete your tutor profile first"
+                        : "My Applications"
+                    }
                   >
                     <IoDocumentAttachOutline size={20} />
                     <span className="is-drawer-close:hidden">
@@ -236,9 +246,20 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                    data-tip="Ongoing Tuitions"
                     to="/dashboard/ongoing-tuitions"
+                    onClick={(e) => {
+                      if (tutorLocked) e.preventDefault();
+                    }}
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
+                    data-tip={
+                      tutorLocked
+                        ? "Complete your tutor profile first"
+                        : "Ongoing Tuitions"
+                    }
                   >
                     <PiFlowArrowBold size={20} />
                     <span className="is-drawer-close:hidden">
@@ -248,13 +269,46 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                    data-tip="Revenue History"
+                    onClick={(e) => {
+                      if (tutorLocked) e.preventDefault();
+                    }}
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
+                    data-tip={
+                      tutorLocked
+                        ? "Complete your tutor profile first"
+                        : "Revenue History"
+                    }
                     to="/dashboard/revenue-history"
                   >
                     <FaMoneyBillTrendUp size={20} />
                     <span className="is-drawer-close:hidden">
                       Revenue History
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/dashboard/tutor-profile-setup"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
+                    data-tip={
+                      tutorLocked
+                        ? "Complete Tutor Profile"
+                        : "Update Tutor Profile"
+                    }
+                  >
+                    <ImProfile size={20} />
+                    <span className="is-drawer-close:hidden">
+                      {tutorLocked
+                        ? "Complete Tutor Profile"
+                        : "Update Tutor Profile"}
                     </span>
                   </NavLink>
                 </li>
@@ -266,7 +320,7 @@ const DashboardLayout = () => {
               <>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="User Management"
                     to="/dashboard/user-management"
                   >
@@ -278,11 +332,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="Tuition Post Management"
                     to="/dashboard/tuition-post-management"
                   >
-                    <GiTeacher size={20} />
+                    <GrDocumentConfig size={20} />
                     <span className="is-drawer-close:hidden">
                       Tuition Post Management
                     </span>
@@ -290,7 +344,19 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    data-tip="Tutor Management"
+                    to="/dashboard/tutor-management"
+                  >
+                    <GiTeacher size={20} />
+                    <span className="is-drawer-close:hidden">
+                      Tutor Management
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
                     data-tip="Reports & Analytics"
                     to="/dashboard/reports-analytics"
                   >
@@ -307,12 +373,12 @@ const DashboardLayout = () => {
             <li className="border-t pt-3">
               <Link
                 to={"/userProfile"}
-                className="is-drawer-close:tooltip tooltip-primary is-drawer-close:tooltip-right"
-                data-tip="Profile Settings"
+                className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                data-tip="Manage Profile"
               >
                 {/* Settings icon */}
                 <VscSettingsGear size={20} />
-                <span className="is-drawer-close:hidden">Profile Settings</span>
+                <span className="is-drawer-close:hidden">Manage Profile</span>
               </Link>
             </li>
             <li>

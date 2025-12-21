@@ -8,6 +8,7 @@ import { GiCancel } from "react-icons/gi";
 import Swal from "sweetalert2";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import Pagination from "../../../../components/Pagination/Pagination";
+import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
 
 const TuitionPostManagement = () => {
   const axiosSecure = useAxiosSecure();
@@ -46,7 +47,7 @@ const TuitionPostManagement = () => {
         confirmButton:
           "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     });
@@ -82,7 +83,7 @@ const TuitionPostManagement = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     });
@@ -122,20 +123,13 @@ const TuitionPostManagement = () => {
           placeholder="Start typing to search..."
           className="mr-2"
         />
-        <select
+        <PageSizeSelect
           value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
+          onChange={(newLimit) => {
+            setLimit(newLimit);
             setPage(1);
           }}
-          className="ml-2 p-1 h-9 text-primary rounded-2xl focus:ring-1 focus:ring-primary focus:outline-none border border-gray-300"
-        >
-          {[5, 10, 20, 50].map((n) => (
-            <option key={n} value={n} className="bg-accent">
-              {n}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       {isLoading ? (
@@ -196,17 +190,18 @@ const TuitionPostManagement = () => {
                     <td>
                       <span
                         className={`badge inline-flex grow items-center justify-center 
-                        whitespace-nowrap truncate text-center
-                        px-3 py-2 leading-tight rounded-full ${
-                          post.status === "admin-approved" ||
-                          post.status === "paid"
-                            ? "badge-success"
-                            : post.status === "admin-rejected"
-                            ? "badge-error"
-                            : post.status === "admin-pending"
-                            ? "badge-warning"
-                            : "badge-info"
-                        }`}
+                          whitespace-nowrap truncate text-center
+                          px-3 py-2 leading-tight rounded-full ${
+                            post.status === "paid"
+                              ? "badge-success"
+                              : post.status === "admin-approved"
+                              ? "badge-info"
+                              : post.status === "admin-pending"
+                              ? "badge-warning"
+                              : post.status === "admin-rejected"
+                              ? "badge-error"
+                              : "badge-ghost"
+                          }`}
                       >
                         {post.status
                           ? post.status
@@ -215,10 +210,11 @@ const TuitionPostManagement = () => {
                                 (word) =>
                                   word.charAt(0).toUpperCase() + word.slice(1)
                               )
-                              .join("-")
+                              .join(" ")
                           : "-"}
                       </span>
                     </td>
+
                     <td>
                       <div className="flex items-center gap-2">
                         <button
