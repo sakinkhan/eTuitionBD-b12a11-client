@@ -49,7 +49,7 @@ const StudentSpendingLineChart = () => {
 
   if (data.length === 0) {
     return (
-      <div className="bg-base-100 rounded-xl p-6 shadow text-center text-gray-500">
+      <div className="bg-base-100 rounded-xl p-6 shadow text-center text-gray-500 h-full border border-primary">
         No payment data yet
       </div>
     );

@@ -61,7 +61,7 @@ const TutorRevenueLineChart = () => {
 
   if (data.length === 0) {
     return (
-      <div className="bg-base-100 rounded-xl p-6 shadow text-center text-gray-500">
+      <div className="bg-base-100 rounded-xl p-6 shadow text-center text-gray-500 h-full border border-primary">
         No revenue data yet
       </div>
     );
@@ -82,7 +82,7 @@ const TutorRevenueLineChart = () => {
             content={
               <CustomToolTip
                 labelMap={{ netEarnings: "Net Earnings" }}
-                valueFormatter={(value) => `৳${value}`}
+                valueFormatter={(v) => `৳${v}`}
               />
             }
           />
