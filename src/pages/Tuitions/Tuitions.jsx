@@ -4,19 +4,30 @@ import useAxios from "../../hooks/useAxios";
 import LoadingLottie from "../../components/Lotties/LoadingLottie";
 import TuitionListCard from "./TuitionListCard";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import PageSizeSelect from "../../components/PageSizeSelect/PageSizeSelect";
+import Pagination from "../../components/Pagination/Pagination";
 
 const Tuitions = () => {
   const axiosPublic = useAxios();
   const [searchText, setSearchText] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(4);
 
   const { data: tuitionsData = [], isLoading } = useQuery({
-    queryKey: ["tuitions", searchText],
+    queryKey: ["tuitions", searchText, page, limit],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/tuition-posts?search=${searchText}`);
+      const res = await axiosPublic.get(`/tuition-posts`, {
+        params: {
+          search: searchText,
+          page,
+          limit,
+        },
+      });
       return res.data;
     },
   });
   const tuitions = tuitionsData?.posts || [];
+  const totalItems = tuitionsData?.total || 0;
 
   const approvedTuitions = tuitions.filter(
     (t) => t.status === "admin-approved"
@@ -34,13 +45,21 @@ const Tuitions = () => {
         code, class etc.
       </p>
 
-      {/* Search Bar */}
+      {/* Search Bar & PageSizeSelect */}
       <div className="mb-10 flex items-center justify-center">
         <SearchBar
           value={searchText}
           onChange={setSearchText}
           placeholder="Start typing to search..."
           className="mr-2"
+        />
+        <PageSizeSelect
+          value={limit}
+          options={[4, 8, 16, 40]}
+          onChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
         />
       </div>
 
@@ -62,6 +81,18 @@ const Tuitions = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalItems > limit && (
+        <div className="mt-14 flex justify-center">
+          <Pagination
+            currentPage={page}
+            totalItems={totalItems}
+            pageSize={limit}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </div>
   );
 };

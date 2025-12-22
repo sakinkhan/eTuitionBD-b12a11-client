@@ -25,7 +25,7 @@ const TuitionListCard = ({ t }) => {
       {/* Left Panel: Tuition Details */}
       <div className="flex-1 p-6 bg-linear-to-tl from-accent/90 via-accent/30 to-accent/90 dark:from-base-300 dark:via-base-100 dark:to-base-400">
         <div className="flex items-center justify-between">
-          <p className="badge text-xs badge-info badge-xs rounded-full mb-2">
+          <p className="badge badge-info badge-sm rounded-full mb-2">
             {tuitionCode}
           </p>
           {status === "admin-approved" && (
@@ -79,7 +79,7 @@ const TuitionListCard = ({ t }) => {
         <div className="mx-auto">
           <label className="text-gray-500">Budget</label>
           <div className="text-3xl font-extrabold text-primary text-center mx-auto mb-10">
-            ৳{budget}
+            ৳ {budget}
           </div>
         </div>
         <Link

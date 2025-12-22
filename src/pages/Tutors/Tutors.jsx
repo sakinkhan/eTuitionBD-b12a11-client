@@ -19,7 +19,7 @@ const Tutors = () => {
 
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(8);
   const [selectedTutorId, setSelectedTutorId] = useState(null);
 
   const handleViewProfile = (tutorId) => {
@@ -54,18 +54,17 @@ const Tutors = () => {
   const tutors = data?.tutors || [];
   const totalItems = data?.total || 0;
 
-  console.log(totalItems);
   return (
     <div className="px-5 lg:px-20 py-10">
       {/* Title */}
       <h1 className="text-3xl md:text-4xl font-bold text-base-content text-center">
-        Available <span className="text-primary">Tutors</span>
+        Available <span className="text-primary">Tutors</span> ({totalItems})
       </h1>
       <p className="text-base-content text-center mt-2 mb-5">
         Browse tutors available on the platform
       </p>
 
-      {/* Search */}
+      {/* Search & PageSizeSelect*/}
       <div className="mb-5 flex items-center justify-center gap-2">
         <SearchBar
           value={searchText}
@@ -78,6 +77,7 @@ const Tutors = () => {
         />
         <PageSizeSelect
           value={limit}
+          options={[4, 8, 16, 40]}
           onChange={(newLimit) => {
             setLimit(newLimit);
             setPage(1);

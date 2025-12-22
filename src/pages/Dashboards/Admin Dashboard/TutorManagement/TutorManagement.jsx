@@ -82,7 +82,7 @@ const TutorManagement = () => {
   };
 
   return (
-    <div>
+    <div className="p-5">
       <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
         Manage <span className="text-primary">Tutors</span> ({totalTutors})
       </h2>

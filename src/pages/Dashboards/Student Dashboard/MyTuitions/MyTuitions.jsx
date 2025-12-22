@@ -40,14 +40,12 @@ const MyTuitions = () => {
   const totalTuitions = data.total || 0;
   const currentPage = data.page || 1;
   const pageSize = data.limit || 20;
-  console.log("Inside My tuitions", tuitions);
 
   if (isLoading) {
     return <LoadingLottie />;
   }
 
   const handleTuitionDelete = (id) => {
-    console.log(id);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -58,15 +56,13 @@ const MyTuitions = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/tuition-posts/${id}`).then((res) => {
-          console.log(res.data);
           if (res.data.deletedCount) {
-            // refresh the data in the ui
             refetch();
             Swal.fire({
               title: "Deleted!",

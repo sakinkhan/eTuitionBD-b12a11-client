@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useAuth from "../../../../hooks/useAuth";
-import TutorModal from "../../../../components/TutorModal/TutorModal";
 import Swal from "sweetalert2";
 import Pagination from "../../../../components/Pagination/Pagination";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
+import TutorProfileModal from "../../../../components/TutorProfileModal/TutorProfileModal";
 
 const AppliedTutors = () => {
   const axiosSecure = useAxiosSecure();
@@ -57,7 +57,7 @@ const AppliedTutors = () => {
         confirmButton:
           "btn btn-primary text-white hover:bg-secondary hover:text-gray-800 text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary text-white text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     }).then(async (result) => {
@@ -93,7 +93,7 @@ const AppliedTutors = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     }).then(async (result) => {
@@ -281,8 +281,8 @@ const AppliedTutors = () => {
         pageSize={pageSize}
         onPageChange={setPage}
       />
-
-      <TutorModal
+      {/* Tutor Profile Modal */}
+      <TutorProfileModal
         isOpen={!!selectedTutor}
         onClose={() => setSelectedTutor(null)}
         application={selectedTutor}

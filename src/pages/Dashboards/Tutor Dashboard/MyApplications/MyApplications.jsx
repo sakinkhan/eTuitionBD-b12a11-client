@@ -8,6 +8,7 @@ import ApplyModal from "../../../../components/ApplyModal/ApplyModal";
 import Swal from "sweetalert2";
 import Pagination from "../../../../components/Pagination/Pagination";
 import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
+import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
 
 const MyApplications = () => {
   const axiosSecure = useAxiosSecure();
@@ -18,6 +19,7 @@ const MyApplications = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
 
+  /* -------------------- Fetch Applications -------------------- */
   const { data = { applications: [], total: 0, page: 1, limit: 20 }, refetch } =
     useQuery({
       queryKey: ["my-applications", user?.email, searchText, page, limit],
@@ -33,11 +35,23 @@ const MyApplications = () => {
         return res.data;
       },
     });
+  /* -------------------- Fetch Tutor Profile -------------------- */
+  const { data: tutorProfile, isLoading: tutorLoading } = useQuery({
+    queryKey: ["tutor-me"],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get("/tutors/me");
+      return res.data?.tutor || null;
+    },
+  });
+  if (tutorLoading) return <LoadingLottie />;
 
   const applications = data.applications || [];
   const totalApps = data.total || 0;
   const currentPage = data.page || page;
   const pageSize = data.limit || limit;
+
+  console.log("Applications", applications);
 
   const handleApplicationDelete = (id) => {
     Swal.fire({
@@ -51,7 +65,7 @@ const MyApplications = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2",
         cancelButton:
-          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2",
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2",
       },
       buttonsStyling: false,
     }).then(async (result) => {
@@ -210,8 +224,9 @@ const MyApplications = () => {
         isOpen={!!editingApplication}
         onClose={() => setEditingApplication(null)}
         tutor={user}
+        tutorProfile={tutorProfile}
         application={editingApplication}
-        onSuccess={refetch}
+        onApplicationSuccess={refetch}
       />
     </div>
   );

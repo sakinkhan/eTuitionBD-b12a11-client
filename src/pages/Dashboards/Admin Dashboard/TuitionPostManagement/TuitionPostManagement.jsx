@@ -47,7 +47,7 @@ const TuitionPostManagement = () => {
         confirmButton:
           "btn btn-success text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     });
@@ -83,7 +83,7 @@ const TuitionPostManagement = () => {
         confirmButton:
           "btn btn-error text-white font-semibold rounded-full px-6 py-2 mb-2 mx-1",
         cancelButton:
-          "btn btn-primary text-white btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
+          "btn btn-primary btn-outline font-semibold rounded-full px-6 py-2 mb-2 mx-1",
       },
       buttonsStyling: false,
     });

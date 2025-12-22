@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  MdAccessTime,
   MdCancel,
   MdOutlineDescription,
   MdSubject,
@@ -8,49 +9,70 @@ import {
   MdWorkHistory,
 } from "react-icons/md";
 import { FaUserGraduate } from "react-icons/fa";
-import LoadingLottie from "../Lotties/LoadingLottie";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { PiMoney, PiSealWarningFill } from "react-icons/pi";
 import { AiTwotoneMail } from "react-icons/ai";
 import { GrPhone } from "react-icons/gr";
+import LoadingLottie from "../Lotties/LoadingLottie";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
-const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
+const TutorProfileModal = ({ isOpen, onClose, tutorId, application }) => {
   const axiosSecure = useAxiosSecure();
+  const isApplicationMode = !!application;
+  const resolvedTutorId = tutorId || application?.tutorId;
 
   const {
-    data: tutor,
+    data: fetchedTutor,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["tutor-profile", tutorId],
-    enabled: !!tutorId && isOpen,
+    queryKey: ["tutor-profile", resolvedTutorId],
+    enabled: !!resolvedTutorId && isOpen,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/tutors/${tutorId}`);
+      const res = await axiosSecure.get(`/tutors/${resolvedTutorId}`);
       return res.data.tutor;
     },
   });
 
   if (!isOpen) return null;
 
+  const tutor = isApplicationMode
+    ? {
+        // Application fields
+        name: application.tutorName,
+        photoURL: application.tutorPhoto || fetchedTutor?.photoURL,
+        email: application.tutorEmail,
+        phone: application.tutorPhone || fetchedTutor?.phone,
+        qualifications: application.qualifications,
+        experience: application.experience,
+        expectedSalary: application.expectedSalary,
+        appliedAt: application.createdAt,
+
+        // Profile-only fields
+        bio: fetchedTutor?.bio,
+        subjects: fetchedTutor?.subjects,
+        tutorStatus: fetchedTutor?.tutorStatus,
+      }
+    : fetchedTutor;
+
   return (
     <dialog className="modal modal-bottom sm:modal-middle" open>
       <div className="modal-box max-w-xl md:max-w-3xl p-9 rounded-3xl">
         {/* Loading */}
-        {isLoading && (
+        {isLoading && !isApplicationMode && (
           <div className="py-20 flex justify-center">
             <LoadingLottie />
           </div>
         )}
 
         {/* Error */}
-        {isError && (
+        {isError && !isApplicationMode && (
           <div className="text-center py-10 text-error">
             Failed to load tutor profile.
           </div>
         )}
 
         {/* Content */}
-        {!isLoading && tutor && (
+        {tutor && (
           <>
             {/* Header */}
             <div className="flex items-start gap-5">
@@ -66,54 +88,46 @@ const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="text-xl font-bold">{tutor.name}</h3>
-                  {tutor.tutorStatus === "approved" ? (
-                    <MdVerified
-                      className="text-success text-xl"
-                      title="Verified Tutor"
-                    />
-                  ) : tutor.tutorStatus === "pending" ? (
-                    <PiSealWarningFill
-                      className="text-warning text-xl"
-                      title="Verified Tutor"
-                    />
-                  ) : tutor.tutorStatus === "rejected" ? (
-                    <MdCancel
-                      className="text-error text-xl"
-                      title="Verified Tutor"
-                    />
-                  ) : (
-                    <></>
+
+                  {!isApplicationMode && tutor.tutorStatus === "approved" && (
+                    <MdVerified className="text-success text-xl" />
+                  )}
+
+                  {!isApplicationMode && tutor.tutorStatus === "pending" && (
+                    <PiSealWarningFill className="text-warning text-xl" />
+                  )}
+
+                  {!isApplicationMode && tutor.tutorStatus === "rejected" && (
+                    <MdCancel className="text-error text-xl" />
                   )}
                 </div>
 
                 <p className="text-sm opacity-70 flex items-center gap-2">
-                  {" "}
                   <span className="text-primary">
                     <AiTwotoneMail />
-                  </span>{" "}
+                  </span>
                   {tutor.email}
                 </p>
+
                 {tutor.phone && (
                   <p className="text-sm opacity-70 flex items-center gap-2">
-                    {" "}
                     <span className="text-primary">
                       <GrPhone />
-                    </span>{" "}
+                    </span>
                     {tutor.phone}
                   </p>
                 )}
 
                 <div className="mt-2 flex gap-2">
-                  <span
-                    className={`badge badge-sm rounded-full ${
-                      tutor.isActive ? "badge-success" : "badge-error"
-                    }`}
-                  >
-                    {tutor.isActive ? "Active" : "Inactive"}
-                  </span>
                   <span className="badge badge-sm rounded-full badge-outline badge-primary">
                     Tutor
                   </span>
+
+                  {isApplicationMode && (
+                    <span className="badge badge-sm rounded-full badge-secondary text-gray-800">
+                      Application
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -140,7 +154,7 @@ const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
                   <h4 className="font-semibold flex items-center gap-2">
                     <span className="text-primary">
                       <MdWorkHistory />
-                    </span>{" "}
+                    </span>
                     Experience
                   </h4>
                   <p className="text-sm opacity-80 mt-1">
@@ -148,29 +162,46 @@ const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
                   </p>
                 </div>
 
-                <div>
-                  <h4 className="font-semibold flex items-center gap-2">
-                    {" "}
-                    <span className="text-primary">
-                      <MdSubject />
-                    </span>
-                    Subjects
-                  </h4>
-                  {tutor.subjects?.length ? (
+                {!isApplicationMode && tutor.subjects?.length && (
+                  <div>
+                    <h4 className="font-semibold flex items-center gap-2">
+                      <span className="text-primary">
+                        <MdSubject />
+                      </span>
+                      Subjects
+                    </h4>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {tutor.subjects.map((s, idx) => (
                         <span
                           key={idx}
-                          className="badge badge-secondary badge-sm rounded-full text-gray-800"
+                          className="badge badge-secondary text-gray-800 badge-sm rounded-full"
                         >
                           {s}
                         </span>
                       ))}
                     </div>
-                  ) : (
-                    <p className="text-sm opacity-70">—</p>
-                  )}
-                </div>
+                  </div>
+                )}
+                {isApplicationMode && tutor.appliedAt && (
+                  <div>
+                    <h4 className="font-semibold flex items-center gap-2">
+                      <span className="text-primary">
+                        <MdAccessTime size={16} />
+                      </span>
+                      Applied On
+                    </h4>
+                    <p className="text-sm opacity-80">
+                      {new Date(tutor.appliedAt).toLocaleString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* Right */}
@@ -179,7 +210,7 @@ const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
                   <h4 className="font-semibold flex items-center gap-2">
                     <span className="text-primary">
                       <PiMoney />
-                    </span>{" "}
+                    </span>
                     Expected Salary
                   </h4>
                   <p className="text-lg font-bold">
@@ -189,15 +220,14 @@ const TutorProfileModal = ({ tutorId, isOpen, onClose }) => {
                     </span>
                   </p>
                 </div>
-
                 <div>
-                  <h4 className="font-semibold flex items-center gap-1">
+                  <h4 className="font-semibold flex items-center gap-2">
                     <span className="text-primary">
                       <MdOutlineDescription size={16} />
                     </span>
                     About
                   </h4>
-                  <p className="text-sm opacity-80 leading-relaxed ">
+                  <p className="text-sm opacity-80 leading-relaxed">
                     {tutor.bio || "No bio provided."}
                   </p>
                 </div>

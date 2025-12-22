@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -17,29 +17,32 @@ const TuitionDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  /* ----------------------------------
-     Fetch tuition details
-  ---------------------------------- */
+  // 🔐 Private page guard
+  if (!authLoading && !user) {
+    navigate("/auth/login", { replace: true });
+  }
+
+  /* -------------------- Tuition -------------------- */
   const {
-    data: tuition,
+    data: tuitionData,
     isLoading: tuitionLoading,
     isError,
   } = useQuery({
     queryKey: ["tuition-details", id],
-    enabled: !!id,
+    enabled: !!id && !!user,
     queryFn: async () => {
       const res = await axiosSecure.get(`/tuition-posts/${id}`);
       return res.data;
     },
   });
 
-  /* ----------------------------------
-     Fetch logged-in user (DB)
-  ---------------------------------- */
+  const tuition = tuitionData?.post || null;
+
+  /* -------------------- DB User -------------------- */
   const { data: dbUser } = useQuery({
     queryKey: ["db-user", user?.email],
     enabled: !!user?.email,
@@ -49,16 +52,26 @@ const TuitionDetails = () => {
     },
   });
 
-  /* ----------------------------------
-     Fetch tutor applications (only if tutor)
-  ---------------------------------- */
+  const isTutor = dbUser?.role === "tutor";
+
+  /* -------------------- Tutor Profile -------------------- */
+  const { data: tutorProfile, isLoading: tutorLoading } = useQuery({
+    queryKey: ["tutor-me"],
+    enabled: isTutor,
+    queryFn: async () => {
+      const res = await axiosSecure.get("/tutors/me");
+      return res.data?.tutor || null;
+    },
+  });
+
+  /* -------------------- Applications -------------------- */
   const {
     data: myApplications = [],
     isLoading: appsLoading,
     refetch: refetchApplications,
   } = useQuery({
-    queryKey: ["my-applications", user?.email],
-    enabled: dbUser?.role === "tutor",
+    queryKey: ["my-applications"],
+    enabled: isTutor,
     queryFn: async () => {
       const res = await axiosSecure.get("/applications/my-applications", {
         params: { page: 1, limit: 1000 },
@@ -67,45 +80,59 @@ const TuitionDetails = () => {
     },
   });
 
-  const hasApplied =
-    !!tuition &&
-    myApplications.some(
-      (app) => String(app.tuitionPostId) === String(tuition._id)
+  /* -------------------- hasApplied -------------------- */
+  const hasApplied = useMemo(() => {
+    if (!isTutor || !tuition?._id) return false;
+
+    return myApplications.some(
+      (app) =>
+        String(
+          app.tuitionPost?._id || app.tuitionPostId?._id || app.tuitionPostId
+        ) === String(tuition._id)
     );
+  }, [isTutor, myApplications, tuition?._id]);
 
-  const canApply =
-    dbUser?.role === "tutor" &&
-    dbUser?.tutorStatus === "approved" &&
-    !hasApplied;
+  /* -------------------- Button state -------------------- */
+  const tutorStatus = tutorProfile?.tutorStatus;
 
-  if (tuitionLoading || (dbUser?.role === "tutor" && appsLoading)) {
+  const buttonState = useMemo(() => {
+    if (!isTutor) return null;
+    if (!tutorProfile) return "COMPLETE_PROFILE";
+    if (hasApplied) return "APPLIED";
+    if (tutorStatus === "pending") return "PENDING";
+    if (tutorStatus === "rejected") return "REJECTED";
+    if (tutorStatus === "approved") return "APPLY";
+    return null;
+  }, [isTutor, tutorProfile, hasApplied, tutorStatus]);
+
+  const canApply = buttonState === "APPLY";
+
+  /* -------------------- Loading -------------------- */
+  if (
+    authLoading ||
+    tuitionLoading ||
+    (isTutor && (tutorLoading || appsLoading))
+  ) {
     return <LoadingLottie />;
   }
 
   if (isError || !tuition) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center text-center">
-        <p className="text-xl text-red-500">
-          Unable to load this tuition post.
-        </p>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <p className="text-xl text-red-500">Unable to load tuition post.</p>
       </div>
     );
   }
 
-  const formatDate = (dateString) =>
-    new Date(dateString).toLocaleString("en-US", {
+  /* -------------------- UI -------------------- */
+  const formatDate = (date) =>
+    new Date(date).toLocaleString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "2-digit",
-      hour12: true,
     });
-
-  const handleApplyClick = () => {
-    if (!canApply) return;
-    setIsModalOpen(true);
-  };
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-5">
@@ -114,29 +141,32 @@ const TuitionDetails = () => {
         <button
           onClick={() => navigate(-1)}
           className="btn flex items-center gap-2 px-6 py-3 rounded-full
-            bg-primary text-white hover:bg-secondary hover:text-gray-900
-            shadow-md hover:shadow-lg active:scale-95 transition-all"
+            bg-primary text-white hover:bg-secondary hover:text-gray-900"
         >
           <IoChevronBack size={18} />
           Go Back
         </button>
 
-        {dbUser?.role === "tutor" && (
+        {isTutor && (
           <button
-            onClick={handleApplyClick}
+            onClick={() => canApply && setIsModalOpen(true)}
             disabled={!canApply}
-            className={`btn px-6 py-3 rounded-full shadow-md transition-all flex items-center gap-2
+            className={`btn px-6 py-3 rounded-full flex items-center gap-2
               ${
-                !canApply
-                  ? "bg-gray-400 border-gray-400 text-gray-700 cursor-not-allowed shadow-none"
-                  : "bg-secondary border border-primary text-gray-800 hover:bg-primary hover:text-white"
+                canApply
+                  ? "bg-secondary text-gray-800 hover:bg-primary hover:text-white"
+                  : "bg-gray-400 text-gray-700 cursor-not-allowed"
               }`}
           >
-            {hasApplied
-              ? "Already Applied"
-              : dbUser?.tutorStatus !== "approved"
-              ? "Approval Pending"
-              : "Apply"}
+            {
+              {
+                APPLY: "Apply",
+                APPLIED: "Already Applied",
+                PENDING: "Approval Pending",
+                REJECTED: "Approval Rejected",
+                COMPLETE_PROFILE: "Complete Tutor Profile",
+              }[buttonState]
+            }
             <GrSend />
           </button>
         )}
@@ -147,6 +177,7 @@ const TuitionDetails = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         tutor={user}
+        tutorProfile={tutorProfile}
         tuitionPostId={tuition._id}
         onApplicationSuccess={() => {
           refetchApplications();
@@ -155,48 +186,30 @@ const TuitionDetails = () => {
       />
 
       {/* Tuition Card */}
-      <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 p-8 rounded-2xl shadow-lg border border-primary">
-        {/* Header */}
+      <div className="bg-linear-to-br from-accent/90 via-accent/30 to-accent/90 p-8 rounded-2xl border border-primary">
         <div className="relative border-b-2 border-primary pb-6 mb-6 pt-8">
-          <span className="absolute top-0 left-0 badge badge-info badge-sm rounded-full">
+          <span className="absolute top-0 left-0 badge badge-info badge-sm">
             {tuition.tuitionCode}
           </span>
 
-          {/* Status Icon */}
           {tuition.status === "admin-approved" && (
-            <VscVerifiedFilled
-              className="absolute top-0 right-0 text-success size-7 tooltip tooltip-primary"
-              data-tip="Approved Post"
-            />
+            <VscVerifiedFilled className="absolute top-0 right-0 text-success size-7" />
           )}
           {tuition.status === "admin-pending" && (
-            <PiSealWarningFill
-              className="absolute top-0 right-0 text-warning size-7 tooltip tooltip-primary"
-              data-tip="Pending Approval"
-            />
+            <PiSealWarningFill className="absolute top-0 right-0 text-warning size-7" />
           )}
           {tuition.status === "admin-rejected" && (
-            <AiFillCloseCircle
-              className="absolute top-0 right-0 text-error size-7 tooltip tooltip-primary"
-              data-tip="Rejected Post"
-            />
+            <AiFillCloseCircle className="absolute top-0 right-0 text-error size-7" />
           )}
 
-          <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
-            <h1 className="text-3xl md:text-4xl font-bold">
-              {tuition.subject}
-            </h1>
-
-            <div>
-              <p className="text-gray-500">Budget</p>
-              <p className="text-3xl font-bold">
-                ৳ <span className="text-primary">{tuition.budget}</span>/mo
-              </p>
-            </div>
+          <div className="flex justify-between items-end gap-4">
+            <h1 className="text-3xl font-bold">{tuition.subject}</h1>
+            <p className="text-3xl font-bold flex items-center gap-1">
+              ৳<span className="text-primary">{tuition.budget}</span>/mo
+            </p>
           </div>
         </div>
 
-        {/* Info Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           <Info label="Location" value={tuition.location} />
           <Info label="Class / Grade" value={tuition.classLevel} />
@@ -205,18 +218,14 @@ const TuitionDetails = () => {
           <Info label="Schedule" value={tuition.schedule || "Not provided"} />
         </div>
 
-        {/* Description */}
         <div className="mt-8">
           <p className="text-sm text-gray-500">Description</p>
-          <p className="mt-2 leading-relaxed">{tuition.description}</p>
+          <p className="mt-2">{tuition.description}</p>
         </div>
 
-        {/* Dates */}
         <div className="border-t-2 border-primary mt-10 pt-4 text-sm text-gray-500">
           <p>Posted: {formatDate(tuition.createdAt)}</p>
-          {tuition.updatedAt && (
-            <p>Last Updated: {formatDate(tuition.updatedAt)}</p>
-          )}
+          {tuition.updatedAt && <p>Updated: {formatDate(tuition.updatedAt)}</p>}
         </div>
       </div>
     </div>

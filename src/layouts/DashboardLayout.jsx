@@ -172,7 +172,11 @@ const DashboardLayout = () => {
               <>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="My Tuitions"
                     to="/dashboard/my-tuitions"
                   >
@@ -182,7 +186,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="Post New Tuition"
                     to="/dashboard/post-tuitions"
                   >
@@ -194,7 +202,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="Applied Tutors"
                     to="/dashboard/applied-tutors"
                   >
@@ -206,7 +218,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="Payment History"
                     to="/dashboard/payment-history"
                   >
@@ -320,7 +336,11 @@ const DashboardLayout = () => {
               <>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="User Management"
                     to="/dashboard/user-management"
                   >
@@ -332,7 +352,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="Tuition Post Management"
                     to="/dashboard/tuition-post-management"
                   >
@@ -344,7 +368,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="Tutor Management"
                     to="/dashboard/tutor-management"
                   >
@@ -356,7 +384,11 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink
-                    className="is-drawer-close:tooltip mx-auto tooltip-primary is-drawer-close:tooltip-right"
+                    className={({ isActive }) =>
+                      `${baseNavItem}     ${
+                        tutorLocked ? disabledNavItem : ""
+                      } ${isActive && !tutorLocked ? activeNavItem : ""}`
+                    }
                     data-tip="Reports & Analytics"
                     to="/dashboard/reports-analytics"
                   >

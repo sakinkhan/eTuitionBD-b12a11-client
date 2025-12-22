@@ -9,12 +9,12 @@ const ApplyModal = ({
   isOpen,
   onClose,
   tutor,
+  tutorProfile,
   tuitionPostId,
   application,
   onApplicationSuccess,
 }) => {
   const axiosSecure = useAxiosSecure();
-
   const {
     register,
     handleSubmit,
@@ -25,14 +25,17 @@ const ApplyModal = ({
   useEffect(() => {
     if (!isOpen) return;
 
+    // priority: application -> tutorProfile -> empty
     reset({
       name: tutor?.displayName || "",
       email: tutor?.email || "",
-      qualifications: application?.qualifications || "",
-      experience: application?.experience || "",
-      expectedSalary: application?.expectedSalary || "",
+      qualifications:
+        application?.qualifications ?? tutorProfile?.qualifications ?? "",
+      experience: application?.experience ?? tutorProfile?.experience ?? "",
+      expectedSalary:
+        application?.expectedSalary ?? tutorProfile?.expectedSalary ?? "",
     });
-  }, [isOpen, application, tutor, reset]);
+  }, [isOpen, application, tutorProfile, tutor, reset]);
 
   if (!isOpen) return null;
 
@@ -87,6 +90,7 @@ const ApplyModal = ({
       onApplicationSuccess?.();
       onClose();
     } catch (err) {
+      console.error("Apply submit error:", err.response || err);
       const message = err.response?.data?.error;
 
       if (message === "Already applied to this tuition") {
@@ -101,7 +105,6 @@ const ApplyModal = ({
           buttonsStyling: false,
         });
 
-        // sync UI with backend truth
         onApplicationSuccess?.();
         onClose();
         return;
@@ -177,10 +180,17 @@ const ApplyModal = ({
           <label className="label text-sm">Expected Salary</label>
           <input
             type="number"
-            {...register("expectedSalary", { required: "Required" })}
+            {...register("expectedSalary", {
+              required: "Required",
+              min: { value: 1, message: "Must be greater than 0" },
+            })}
             className="input input-bordered w-full rounded-full"
           />
-
+          {errors.expectedSalary && (
+            <p className="text-red-500 text-sm">
+              {errors.expectedSalary.message}
+            </p>
+          )}
           <button
             disabled={isSubmitting}
             type="submit"
