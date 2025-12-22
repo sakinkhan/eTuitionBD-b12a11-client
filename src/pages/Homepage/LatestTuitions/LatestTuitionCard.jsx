@@ -20,13 +20,14 @@ const LatestTuitionCard = ({ post }) => {
   } = post;
 
   return (
-    <div className="card w-65 md:w-75 h-100 mx-auto bg-linear-to-tr from-accent/90 via-accent/30 to-accent/90 shadow-sm rounded-3xl overflow-hidden flex flex-col border border-primary">
+    <div className="card w-65 md:w-80 h-100 mx-auto bg-linear-to-tr from-accent/90 via-accent/30 to-accent/90 shadow-sm rounded-3xl overflow-hidden flex flex-col border border-primary">
       <div className="card-body flex flex-col justify-between h-full">
         <div>
-          <span className="badge badge-sm badge-warning flex items-center gap-1">
-            <FaLocationDot />
-            {location}
+          <span className="badge badge-sm badge-warning flex items-center gap-1 max-w-[200px] truncate">
+            <FaLocationDot className="shrink-0" />
+            <span className="truncate">{location}</span>
           </span>
+
           {/* Status Icon */}
           {status === "admin-approved" && (
             <VscVerifiedFilled
