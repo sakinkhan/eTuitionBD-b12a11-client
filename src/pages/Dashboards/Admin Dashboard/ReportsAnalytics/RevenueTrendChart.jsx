@@ -78,7 +78,7 @@ const RevenueTrendChart = ({
       {/* Chart */}
       <div className="flex-1 min-h-0 w-full overflow-hidden">
         {chartData.length > 0 && (
-          <ResponsiveContainer width="100%" aspect={1.1}>
+          <ResponsiveContainer width="100%" aspect="100%">
             <BarChart
               data={chartData}
               margin={{ left: 0, right: 0, top: 10, bottom: 10 }}
