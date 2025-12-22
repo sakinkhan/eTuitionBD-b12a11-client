@@ -8,7 +8,7 @@ import AdminDashboardHome from "./AdminDashboardHome";
 const DashboardHome = () => {
   const { role, roleLoading } = useCurrentUser();
 
-  if (roleLoading) {
+  if (roleLoading || !role) {
     return <LoadingLottie></LoadingLottie>;
   }
 
@@ -20,7 +20,11 @@ const DashboardHome = () => {
     return <TutorDashboardHome></TutorDashboardHome>;
   }
 
-  return <div className="p-10 text-center">Role not assigned</div>;
+  return (
+    <div className="p-10 text-center">
+      Your Dashboard is getting ready... please reload the page.
+    </div>
+  );
 };
 
 export default DashboardHome;
