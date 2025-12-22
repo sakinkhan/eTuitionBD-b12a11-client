@@ -9,23 +9,26 @@ import Swal from "sweetalert2";
 import SearchBar from "../../../../components/SearchBar/SearchBar";
 import Pagination from "../../../../components/Pagination/Pagination";
 import PageSizeSelect from "../../../../components/PageSizeSelect/PageSizeSelect";
+import { TiArrowUnsorted } from "react-icons/ti";
 
 const TuitionPostManagement = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const {
     data: tuitionPostsData,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["tuition-posts", searchText, page, limit],
+    queryKey: ["tuition-posts", searchText, page, limit, sortBy, sortOrder],
     queryFn: async () => {
       const res = await axiosSecure.get(`/tuition-posts/admin-dashboard`, {
-        params: { search: searchText, page, limit },
+        params: { search: searchText, page, limit, sortBy, sortOrder },
       });
       return res.data;
     },
@@ -35,6 +38,7 @@ const TuitionPostManagement = () => {
   const totalItems = tuitionPostsData?.total || 0;
   const pageSize = limit;
   const currentPage = page;
+  console.log(tuitionPosts);
 
   const handleApprove = async (tuitionId) => {
     const result = await Swal.fire({
@@ -108,6 +112,15 @@ const TuitionPostManagement = () => {
     }
   };
 
+  const handleSort = (field) => {
+    if (sortBy === field) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(field);
+      setSortOrder("desc");
+    }
+  };
+
   return (
     <div className="p-5">
       <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
@@ -149,8 +162,24 @@ const TuitionPostManagement = () => {
                 <th>Tuition Info</th>
                 <th>Student Name</th>
                 <th>Contact Email</th>
-                <th>Budget</th>
-                <th>Date Posted</th>
+                <th
+                  className="cursor-pointer"
+                  onClick={() => handleSort("budget")}
+                >
+                  <div className="flex items-center gap-1 whitespace-nowrap">
+                    <span>Budget</span>
+                    <TiArrowUnsorted />
+                  </div>
+                </th>
+                <th
+                  className="cursor-pointer"
+                  onClick={() => handleSort("createdAt")}
+                >
+                  <div className="flex items-center gap-1 whitespace-nowrap">
+                    <span>Date Posted</span>
+                    <TiArrowUnsorted />
+                  </div>
+                </th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>

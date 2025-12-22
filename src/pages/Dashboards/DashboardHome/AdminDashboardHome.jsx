@@ -45,14 +45,21 @@ const AdminDashboardHome = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminKpiCard
+          title="Pending Approvals"
+          value={pendingData?.totals?.totalPending ?? 0}
+          subtext="Requires attention"
+        />
+        <AdminKpiCard
           title="Gross Revenue"
-          value={`৳${grossRevenue.toLocaleString()}`}
+          value={grossRevenue.toLocaleString()}
+          prefix="৳ "
           subtext="Last 7 days"
         />
 
         <AdminKpiCard
           title="Platform Earnings"
-          value={`৳${platformRevenue.toLocaleString()}`}
+          value={platformRevenue.toLocaleString()}
+          prefix="৳ "
           subtext="Last 7 days"
         />
 
@@ -60,12 +67,6 @@ const AdminDashboardHome = () => {
           title="Payments Completed"
           value={paymentsCount}
           subtext="Last 7 days"
-        />
-
-        <AdminKpiCard
-          title="Pending Approvals"
-          value={pendingData?.totals?.totalPending ?? 0}
-          subtext="Requires attention"
         />
       </div>
 
