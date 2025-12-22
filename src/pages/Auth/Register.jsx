@@ -43,8 +43,7 @@ const Register = () => {
       setLoading(true);
 
       // 1. Register user in Firebase
-      const result = await registerUser(data.email, data.password);
-      console.log("User registered:", result.user);
+      await registerUser(data.email, data.password);
 
       // 2. Upload image to imgbb
       const formData = new FormData();
@@ -93,7 +92,7 @@ const Register = () => {
         navigate("/", { replace: true });
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       toast.error(err?.message || "Registration failed");
     } finally {
       setLoading(false);

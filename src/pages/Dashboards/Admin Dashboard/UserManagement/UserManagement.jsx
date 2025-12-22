@@ -18,7 +18,7 @@ const UserManagement = () => {
   const axiosSecure = useAxiosSecure();
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(10);
   const [editingUser, setEditingUser] = useState(null);
 
   // Fetch users with pagination

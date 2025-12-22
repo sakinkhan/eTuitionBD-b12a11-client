@@ -9,29 +9,57 @@ import Pagination from "../../components/Pagination/Pagination";
 
 const Tuitions = () => {
   const axiosPublic = useAxios();
+
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(4);
 
-  const { data: tuitionsData = [], isLoading } = useQuery({
-    queryKey: ["tuitions", searchText, page, limit],
+  // 🔹 Sort state
+  const [sort, setSort] = useState({
+    sortBy: "createdAt",
+    sortOrder: "desc", // newest first by default
+  });
+
+  const { data: tuitionsData = {}, isLoading } = useQuery({
+    queryKey: ["tuitions", searchText, sort, page, limit],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/tuition-posts`, {
+      const res = await axiosPublic.get("/tuition-posts", {
         params: {
           search: searchText,
+          sortBy: sort.sortBy,
+          sortOrder: sort.sortOrder,
           page,
           limit,
         },
       });
       return res.data;
     },
+    keepPreviousData: true,
   });
+
   const tuitions = tuitionsData?.posts || [];
   const totalItems = tuitionsData?.total || 0;
 
   const approvedTuitions = tuitions.filter(
     (t) => t.status === "admin-approved"
   );
+
+  const handleSortChange = (value) => {
+    switch (value) {
+      case "date-asc":
+        setSort({ sortBy: "createdAt", sortOrder: "asc" });
+        break;
+      case "budget-asc":
+        setSort({ sortBy: "budget", sortOrder: "asc" });
+        break;
+      case "budget-desc":
+        setSort({ sortBy: "budget", sortOrder: "desc" });
+        break;
+      default:
+        setSort({ sortBy: "createdAt", sortOrder: "desc" });
+    }
+    setPage(1);
+  };
 
   return (
     <div className="mx-auto px-5 md:px-20 py-10">
@@ -40,19 +68,28 @@ const Tuitions = () => {
         Available <span className="text-primary">Tuition</span> Listings (
         {approvedTuitions.length})
       </h1>
-      <p className="text-base-content text-center mt-2 mb-5">
-        Find tuition opportunities based on your subject, location, tuition
-        code, class etc.
+      <p className="text-base-content text-center mt-2 mb-6">
+        Browse and sort tuition opportunities easily.
       </p>
 
-      {/* Search Bar & PageSizeSelect */}
-      <div className="mb-10 flex items-center justify-center">
+      {/* Search + Sort + Page Size */}
+      <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
         <SearchBar
           value={searchText}
           onChange={setSearchText}
-          placeholder="Start typing to search..."
-          className="mr-2"
+          placeholder="Search by class, subject, location..."
         />
+        {/* Sort */}
+        <select
+          className="select select-bordered rounded-full w-50 text-primary"
+          onChange={(e) => handleSortChange(e.target.value)}
+        >
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="budget-asc">Budget: Low → High</option>
+          <option value="budget-desc">Budget: High → Low</option>
+        </select>
+
         <PageSizeSelect
           value={limit}
           options={[4, 8, 16, 40]}
@@ -63,13 +100,13 @@ const Tuitions = () => {
         />
       </div>
 
-      {/* Tuition Cards / Loading */}
+      {/* Tuition Cards */}
       <div className="min-h-[200px]">
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
             <LoadingLottie />
           </div>
-        ) : tuitions.length === 0 ? (
+        ) : approvedTuitions.length === 0 ? (
           <p className="text-center text-lg text-base-content/70 mt-20">
             No tuitions found.
           </p>

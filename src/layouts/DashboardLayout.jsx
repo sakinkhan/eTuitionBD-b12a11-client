@@ -45,7 +45,7 @@ const DashboardLayout = () => {
   const handleLogout = () => {
     logOut()
       .then(() => toast.info("You have been logged out"))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   return (

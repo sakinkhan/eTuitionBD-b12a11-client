@@ -80,7 +80,7 @@ const EditUserModal = ({ user, isOpen, onClose, onSave }) => {
       setLoading(false);
       onClose();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setLoading(false);
     }
   };

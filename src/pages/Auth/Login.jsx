@@ -30,10 +30,8 @@ const Login = () => {
   const handleLogin = async (data) => {
     try {
       setLoading(true);
-      const result = await logInUser(data.email, data.password);
-      console.log(result);
+      await logInUser(data.email, data.password);
       toast.success("You have logged in Successfully");
-      console.log("Redirecting to:", location.state?.from);
       navigate(location.state?.from || "/", { replace: true });
     } catch (err) {
       toast.error(err.message || "Login failed");

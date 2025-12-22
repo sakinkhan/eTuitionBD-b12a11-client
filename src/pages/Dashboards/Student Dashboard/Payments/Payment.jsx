@@ -19,8 +19,6 @@ const Payment = () => {
     return <LoadingLottie />;
   }
 
-  console.log(tuitionPost);
-
   return (
     <div>
       <p className="text-2xl">Please Pay here </p>

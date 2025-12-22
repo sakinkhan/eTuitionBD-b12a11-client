@@ -3,44 +3,66 @@ import PrimaryButton from "../../components/Buttons/PrimaryButton";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdStars } from "react-icons/md";
 import learningImg from "../../assets/hero1.jpg";
+import useAxios from "../../hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
+import LoadingLottie from "../../components/Lotties/LoadingLottie";
 
 const WhyChooseUs = () => {
+  const axiosPublic = useAxios();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["latest-tutors"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/tutors/public", {
+        params: {
+          page: 1,
+          limit: 10,
+        },
+      });
+      return res.data;
+    },
+  });
+
+  if (isLoading) return <LoadingLottie />;
+
+  const tutors = data?.tutors || [];
+
   return (
     <section className="relative px-5 lg:px-20 py-16 bg-linear-to-bl from-primary/20 via-secondary/20 to-primary/10">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left Side */}
         <div className="relative">
-          {/* Main card image */}
-          <div className="relative rounded-4xl overflow-hidden shadow-lg h-60 md:h-[280px] lg:h-[300px]">
-            {/* hover 3D image */}
-            <div className="hover-3d">
-              {/* content */}
-              <figure className="w-full h-full">
+          {/* Image Card */}
+          <div className="relative w-full aspect-4/3 sm:aspect-16/10 lg:aspect-video rounded-4xl overflow-hidden shadow-lg">
+            {/* Hover 3D Wrapper */}
+            <div className="hover-3d absolute inset-0">
+              {/* Image */}
+              <figure className="absolute inset-0">
                 <img
                   src={learningImg}
-                  alt="3D card"
-                  className="w-full h-full object-cover"
+                  alt="Learning experience"
+                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </figure>
-              {/* 8 empty divs needed for the 3D effect */}
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
+
+              {/* Required empty divs for 3D effect */}
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
+              <div />
             </div>
 
             {/* Top-right rating badge */}
-            <div className="absolute right-4 top-4 flex items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md backdrop-blur animate-bounce-slow delay-500">
+            <div className="absolute top-4 right-4 z-10 flex items-center gap-2 rounded-xl bg-white px-3 py-2 shadow-md backdrop-blur animate-bounce-slow">
               <div
                 className="flex h-8 w-8 items-center justify-center rounded-full"
                 style={{ background: "var(--color-secondary)" }}
               >
-                {/* Star icon */}
-                <MdStars />
+                <MdStars className="text-white" />
               </div>
               <div className="text-sm">
                 <p className="font-semibold text-gray-900">
@@ -52,34 +74,39 @@ const WhyChooseUs = () => {
           </div>
 
           {/* Bottom-left enrolled badge */}
-          <div className="absolute -bottom-6 left-2 flex items-center gap-3 rounded-xl bg-white/90 px-3 py-2 shadow-md backdrop-blur animate-bounce-slow">
+          <div className="absolute bottom-3 left-3 sm:-bottom-6 sm:left-2 z-10 flex items-center gap-3 rounded-xl bg-white/90 px-3 py-2 shadow-md backdrop-blur animate-bounce-slow">
             <div>
               <p className="text-xs font-medium text-gray-500">
                 Enrolled Tutors
               </p>
-              <p className="text-sm font-semibold text-gray-900">36k+</p>
+              <p className="text-sm font-semibold text-primary">36k+</p>
             </div>
 
-            {/* Avatars TODO!! */}
+            {/* Avatars */}
             <div className="flex -space-x-2">
-              {[
-                "/images/av-1.jpg",
-                "/images/av-2.jpg",
-                "/images/av-3.jpg",
-                "/images/av-4.jpg",
-                "/images/av-5.jpg",
-              ].map((src, idx) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt={`Student ${idx + 1}`}
-                  className="h-8 w-8 rounded-full border-2 border-white object-cover"
-                />
-              ))}
+              {isLoading
+                ? [...Array(5)].map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="h-8 w-8 rounded-full bg-gray-200 border-2 border-primary animate-pulse"
+                    />
+                  ))
+                : tutors
+                    .filter((tutor) => tutor.photoURL)
+                    .slice(0, 5)
+                    .map((tutor, idx) => (
+                      <img
+                        key={tutor._id || idx}
+                        src={tutor.photoURL}
+                        alt={tutor.name || `Tutor ${idx + 1}`}
+                        className="h-8 w-8 rounded-full border-2 border-primary object-cover"
+                      />
+                    ))}
             </div>
           </div>
         </div>
-        {/* right Content */}
+
+        {/* Right Content */}
         <div>
           <p
             className="flex items-center gap-2 text-md font-semibold"
@@ -87,18 +114,19 @@ const WhyChooseUs = () => {
           >
             Why Choose Us
           </p>
+
           <h2 className="mt-3 text-3xl sm:text-4xl font-bold leading-tight text-base-content">
             Our Commitment to <span className="text-primary">Excellence,</span>
             <br className="hidden sm:block" />
             Learn, Grow & Success.
           </h2>
+
           <p className="mt-4 text-base-content/80 max-w-xl">
             At <span className="text-primary font-medium">eTuitionBD</span>,
-            we're committed to connecting students with the right tutors to make
+            we’re committed to connecting students with the right tutors to make
             learning effective and accessible. Our platform empowers students to
-            achieve their goals while providing tutors with meaningful teaching
-            opportunities, creating a brighter future for everyone through
-            education.
+            achieve their goals while giving tutors meaningful teaching
+            opportunities.
           </p>
 
           {/* Feature List */}
@@ -106,13 +134,10 @@ const WhyChooseUs = () => {
             {[
               "9/10 Average Satisfaction Rate",
               "96% Completion Rate",
-              "Transparent Pricing - Clear, upfront fees with no hidden charges.",
+              "Transparent Pricing with no hidden charges",
             ].map((item) => (
               <li key={item} className="flex items-center gap-3">
-                <span className="">
-                  {/* Check Icon */}
-                  <FaCheckCircle className="text-secondary" />
-                </span>
+                <FaCheckCircle className="text-secondary shrink-0" />
                 <span className="text-base-content">{item}</span>
               </li>
             ))}
@@ -120,7 +145,7 @@ const WhyChooseUs = () => {
 
           {/* CTA */}
           <div className="mt-8">
-            <PrimaryButton to="/about" label="Read More"></PrimaryButton>
+            <PrimaryButton to="/about" label="Read More" />
           </div>
         </div>
       </div>

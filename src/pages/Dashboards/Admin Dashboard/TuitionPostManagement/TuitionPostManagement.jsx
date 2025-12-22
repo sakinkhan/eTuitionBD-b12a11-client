@@ -38,7 +38,6 @@ const TuitionPostManagement = () => {
   const totalItems = tuitionPostsData?.total || 0;
   const pageSize = limit;
   const currentPage = page;
-  console.log(tuitionPosts);
 
   const handleApprove = async (tuitionId) => {
     const result = await Swal.fire({

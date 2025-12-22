@@ -6,9 +6,8 @@ import TutorDashboardHome from "./TutorDashboardHome";
 import AdminDashboardHome from "./AdminDashboardHome";
 
 const DashboardHome = () => {
-  const { role, isAdmin, roleLoading } = useCurrentUser();
+  const { role, roleLoading } = useCurrentUser();
 
-  console.log(role);
   if (roleLoading) {
     return <LoadingLottie></LoadingLottie>;
   }

@@ -34,7 +34,6 @@ const RevenueHistory = () => {
   const currentPage = page;
   const pageSize = data.limit || 20;
 
-  console.log("RevenueHistory", revenues);
   const totalEarnings = revenues.reduce(
     (sum, item) => sum + item.tutorEarning,
     0

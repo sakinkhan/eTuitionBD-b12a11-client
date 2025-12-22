@@ -99,13 +99,6 @@ const ReportsAnalytics = () => {
               </button>
             );
           })}
-
-          <button
-            disabled
-            className="px-3 py-1.5 rounded-lg text-sm font-medium border border-base-300 text-base-content/50 cursor-not-allowed"
-          >
-            Custom
-          </button>
         </div>
       </div>
 

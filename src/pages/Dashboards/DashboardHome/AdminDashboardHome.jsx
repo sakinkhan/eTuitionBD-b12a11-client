@@ -9,8 +9,6 @@ import useAuth from "../../../hooks/useAuth";
 const AdminDashboardHome = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
-  console.log(user);
-
   //  Fetch Revenue data
   const { data: revenueData, isLoading: revenueLoading } = useQuery({
     queryKey: ["admin-revenue-summary"],
@@ -39,7 +37,8 @@ const AdminDashboardHome = () => {
   return (
     <div className="p-5 space-y-5">
       <h2 className="text-2xl md:text-4xl font-bold text-center py-5">
-        Welcome to your Dashboard, <span className="text-primary">{user.displayName}!</span>
+        Welcome to your Dashboard,{" "}
+        <span className="text-primary">{user.displayName}!</span>
       </h2>
 
       {/* KPI Cards */}

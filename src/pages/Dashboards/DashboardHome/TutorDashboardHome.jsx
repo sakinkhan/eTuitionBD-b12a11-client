@@ -17,8 +17,6 @@ const TutorDashboardHome = () => {
     },
   });
 
-  console.log(stats);
-
   const { netEarnings = 0, ongoingTuitions = 0, totalApplications = 0 } = stats;
 
   if (isLoading) return <LoadingLottie />;
