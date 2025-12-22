@@ -210,7 +210,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "user-management",
+        path: "admin/user-management",
         element: (
           <AdminRoute>
             <UserManagement></UserManagement>
@@ -218,7 +218,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "tuition-post-management",
+        path: "admin/tuition-post-management",
         element: (
           <AdminRoute>
             <TuitionPostManagement></TuitionPostManagement>
@@ -226,7 +226,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "tutor-management",
+        path: "admin/tutor-management",
         element: (
           <AdminRoute>
             <TutorManagement></TutorManagement>
@@ -234,7 +234,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "reports-analytics",
+        path: "admin/reports-analytics",
         element: (
           <AdminRoute>
             <ReportsAnalytics></ReportsAnalytics>

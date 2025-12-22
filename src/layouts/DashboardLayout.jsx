@@ -342,7 +342,7 @@ const DashboardLayout = () => {
                       } ${isActive && !tutorLocked ? activeNavItem : ""}`
                     }
                     data-tip="User Management"
-                    to="/dashboard/user-management"
+                    to="/dashboard/admin/user-management"
                   >
                     <FaUsersGear size={20} />
                     <span className="is-drawer-close:hidden">
@@ -358,7 +358,7 @@ const DashboardLayout = () => {
                       } ${isActive && !tutorLocked ? activeNavItem : ""}`
                     }
                     data-tip="Tuition Post Management"
-                    to="/dashboard/tuition-post-management"
+                    to="/dashboard/admin/tuition-post-management"
                   >
                     <GrDocumentConfig size={20} />
                     <span className="is-drawer-close:hidden">
@@ -374,7 +374,7 @@ const DashboardLayout = () => {
                       } ${isActive && !tutorLocked ? activeNavItem : ""}`
                     }
                     data-tip="Tutor Management"
-                    to="/dashboard/tutor-management"
+                    to="/dashboard/admin/tutor-management"
                   >
                     <GiTeacher size={20} />
                     <span className="is-drawer-close:hidden">
@@ -390,7 +390,7 @@ const DashboardLayout = () => {
                       } ${isActive && !tutorLocked ? activeNavItem : ""}`
                     }
                     data-tip="Reports & Analytics"
-                    to="/dashboard/reports-analytics"
+                    to="/dashboard/admin/reports-analytics"
                   >
                     <TbDeviceDesktopAnalytics size={22} />
                     <span className="is-drawer-close:hidden">
