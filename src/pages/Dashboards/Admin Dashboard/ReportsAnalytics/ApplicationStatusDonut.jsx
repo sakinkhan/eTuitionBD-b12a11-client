@@ -26,7 +26,7 @@ const ApplicationStatusDonut = ({ approvedCount = 0, rejectedCount = 0 }) => {
   }
 
   return (
-    <div className="bg-base-100 rounded-xl p-4 shadow-lg border border-primary">
+    <div className="bg-base-100 rounded-xl p-5 shadow-lg border border-primary h-[480px] min-h-0 flex flex-col">
       {/* Header */}
       <div className="mb-3">
         <h3 className="text-lg font-semibold text-base-content">

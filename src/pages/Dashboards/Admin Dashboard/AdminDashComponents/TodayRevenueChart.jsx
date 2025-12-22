@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import CustomToolTip from "../ReportsAnalytics/CustomToolTip";
 
 const TodayRevenueChart = ({ data = [] }) => {
   const navigate = useNavigate();
@@ -67,20 +68,15 @@ const TodayRevenueChart = ({ data = [] }) => {
             <YAxis tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
 
             <Tooltip
-              contentStyle={{
-                borderRadius: "8px",
-                border: "none",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-              }}
-              formatter={(value, name) => {
-                if (name === "platformFee") {
-                  return [`৳${value.toLocaleString()}`, "Platform Earnings"];
-                }
-                if (name === "tutorEarning") {
-                  return [`৳${value.toLocaleString()}`, "Tutor Payout"];
-                }
-                return value;
-              }}
+              content={
+                <CustomToolTip
+                  labelMap={{
+                    tutorEarning: "Tutor",
+                    platformFee: "Platform",
+                  }}
+                  valueFormatter={(value) => `৳${value}`}
+                />
+              }
             />
 
             {/* Platform earnings (bottom stack) */}

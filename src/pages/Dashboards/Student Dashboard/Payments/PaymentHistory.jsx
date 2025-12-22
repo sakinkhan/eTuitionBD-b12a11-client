@@ -28,7 +28,7 @@ const PaymentHistory = () => {
     });
 
   const payments = data.payments || [];
-  const totalApps = data.total || 0;
+  const totalItems = data.total || 0;
   const currentPage = data.page || 1;
   const pageSize = data.limit || 20;
 
@@ -37,7 +37,7 @@ const PaymentHistory = () => {
   return (
     <div className="p-5">
       <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
-        <span className="text-primary">Payment</span> History ({totalApps})
+        <span className="text-primary">Payment</span> History ({totalItems})
       </h2>
       <div className="mb-6 text-lg font-semibold text-center">
         Total Spent:{" "}
@@ -64,7 +64,7 @@ const PaymentHistory = () => {
         />
       </div>
 
-      {totalApps === 0 ? (
+      {totalItems === 0 ? (
         <p className="text-gray-500 text-center py-10">
           No payment records found.
         </p>
@@ -116,7 +116,7 @@ const PaymentHistory = () => {
       {/* Pagination controls */}
       <Pagination
         currentPage={page}
-        totalItems={totalApps}
+        totalItems={totalItems}
         pageSize={pageSize}
         onPageChange={setPage}
       />

@@ -4,9 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 import AdminKpiCard from "../Admin Dashboard/AdminDashComponents/AdminKpiCard";
+import useAuth from "../../../hooks/useAuth";
 
 const AdminDashboardHome = () => {
   const axiosSecure = useAxiosSecure();
+  const { user } = useAuth();
+  console.log(user);
 
   //  Fetch Revenue data
   const { data: revenueData, isLoading: revenueLoading } = useQuery({
@@ -28,9 +31,6 @@ const AdminDashboardHome = () => {
 
   if (revenueLoading || pendingLoading) return <LoadingLottie />;
 
-  console.log("revenueData", revenueData);
-  console.log("pendingData", pendingData);
-
   const paymentsCount = revenueData?.totals?.paymentsCompleted ?? 0;
   const revTotals = revenueData?.totals || {};
   const grossRevenue = revTotals.grossRevenue ?? 0;
@@ -38,8 +38,8 @@ const AdminDashboardHome = () => {
 
   return (
     <div className="p-5 space-y-5">
-      <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
-        Welcome to <span className="text-primary">Admin Dashboard</span>
+      <h2 className="text-2xl md:text-4xl font-bold text-center py-5">
+        Welcome to your Dashboard, <span className="text-primary">{user.displayName}!</span>
       </h2>
 
       {/* KPI Cards */}

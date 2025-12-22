@@ -31,7 +31,7 @@ const UserDistributionPie = ({ data = [] }) => {
   const totalUsers = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="bg-base-100 border border-primary rounded-2xl p-5 shadow-lg">
+    <div className="bg-base-100 border border-primary rounded-2xl p-5 shadow-lg h-[480px] min-h-0 flex flex-col">
       {/* Header */}
       <div className="mb-3">
         <h3 className="text-lg font-semibold text-base-content">
@@ -41,14 +41,14 @@ const UserDistributionPie = ({ data = [] }) => {
       </div>
 
       {/* Chart */}
-      <div className="h-[300px] w-full min-w-0 overflow-hidden">
+      <div className="h-[300px] w-full min-w-0 overflow-hidden ">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              outerRadius={120}
+              outerRadius={110}
               dataKey="value"
               labelLine={false}
               label={renderCustomizedLabel}
@@ -71,7 +71,7 @@ const UserDistributionPie = ({ data = [] }) => {
       </div>
 
       {/* Legend */}
-      <div className="flex justify-center gap-4 mt-4 text-sm">
+      <div className="flex justify-center gap-4 text-sm">
         {data.map((item, i) => (
           <div key={item.name} className="flex items-center gap-2">
             <span
@@ -84,7 +84,7 @@ const UserDistributionPie = ({ data = [] }) => {
       </div>
 
       {/* Total users (matches ApplicationStatusDonut style) */}
-      <div className="mt-4 text-center">
+      <div className="mt-2 text-center">
         <p className="text-xs text-base-content/60">Total Users</p>
         <p className="text-xl font-bold text-primary">{totalUsers}</p>
       </div>

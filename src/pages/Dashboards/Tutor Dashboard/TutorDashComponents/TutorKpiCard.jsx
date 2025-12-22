@@ -1,6 +1,7 @@
+import React from "react";
 import CountUp from "react-countup";
 
-const AdminKpiCard = ({ title, value = 0, subtext, prefix = "" }) => {
+const TutorKpiCard = ({ title, value = 0, subtext, prefix = "" }) => {
   const numericValue =
     typeof value === "number"
       ? value
@@ -25,4 +26,4 @@ const AdminKpiCard = ({ title, value = 0, subtext, prefix = "" }) => {
   );
 };
 
-export default AdminKpiCard;
+export default TutorKpiCard;

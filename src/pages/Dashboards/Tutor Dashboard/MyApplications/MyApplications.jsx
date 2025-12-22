@@ -51,8 +51,6 @@ const MyApplications = () => {
   const currentPage = data.page || page;
   const pageSize = data.limit || limit;
 
-  console.log("Applications", applications);
-
   const handleApplicationDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",

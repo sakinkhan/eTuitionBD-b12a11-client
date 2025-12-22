@@ -63,13 +63,8 @@ const ReportsAnalytics = () => {
       { name: "Admins", value: admins },
     ];
   })();
-
-  console.log(data);
-
   const totals = data?.totals || {};
   const chartData = data?.data || [];
-
-  // Fetching user data
 
   return (
     <div className="p-5">

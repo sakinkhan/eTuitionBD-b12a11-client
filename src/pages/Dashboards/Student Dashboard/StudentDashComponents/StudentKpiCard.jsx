@@ -1,11 +1,11 @@
+import React from "react";
 import CountUp from "react-countup";
 
-const AdminKpiCard = ({ title, value = 0, subtext, prefix = "" }) => {
+const StudentKpiCard = ({ title, value = 0, subtext, prefix = "" }) => {
   const numericValue =
     typeof value === "number"
       ? value
       : Number(String(value).replace(/[^\d.-]/g, ""));
-
   return (
     <div className="bg-linear-to-bl from-accent/90 via-accent/30 to-accent/90 border border-primary rounded-2xl p-5 shadow-lg">
       <p className="text-sm font-semibold text-base-content/60">{title}</p>
@@ -25,4 +25,4 @@ const AdminKpiCard = ({ title, value = 0, subtext, prefix = "" }) => {
   );
 };
 
-export default AdminKpiCard;
+export default StudentKpiCard;

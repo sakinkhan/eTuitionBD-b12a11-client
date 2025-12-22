@@ -33,8 +33,6 @@ const OngoingTuitions = () => {
   const currentPage = page;
   const pageSize = limit;
 
-  console.log("ongoing tuitions", tuitions);
-
   return (
     <div className="p-5">
       <h2 className="text-2xl md:text-3xl font-bold text-center py-5">
