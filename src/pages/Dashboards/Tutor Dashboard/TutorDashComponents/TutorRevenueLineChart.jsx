@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
+import CustomToolTip from "../../Admin Dashboard/ReportsAnalytics/CustomToolTip";
 
 const PLATFORM_FEE_RATE = 0.1; // 10%
 
@@ -78,8 +79,12 @@ const TutorRevenueLineChart = () => {
           <XAxis dataKey="date" />
           <YAxis tickFormatter={(v) => `৳${v}`} />
           <Tooltip
-            formatter={(v) => [`৳${v}`, "Net Earnings"]}
-            labelFormatter={(label) => `Date: ${label}`}
+            content={
+              <CustomToolTip
+                labelMap={{ netEarnings: "Net Earnings" }}
+                valueFormatter={(value) => `৳${value}`}
+              />
+            }
           />
           <Line
             type="monotone"

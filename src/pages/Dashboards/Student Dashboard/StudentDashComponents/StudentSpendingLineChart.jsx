@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import LoadingLottie from "../../../../components/Lotties/LoadingLottie";
+import CustomToolTip from "../../Admin Dashboard/ReportsAnalytics/CustomToolTip";
 
 const StudentSpendingLineChart = () => {
   const axiosSecure = useAxiosSecure();
@@ -69,8 +70,12 @@ const StudentSpendingLineChart = () => {
             <XAxis dataKey="date" />
             <YAxis tickFormatter={(v) => `৳${v}`} />
             <Tooltip
-              formatter={(v) => [`৳${v}`, "Spent"]}
-              labelFormatter={(label) => `Date: ${label}`}
+              content={
+                <CustomToolTip
+                  labelMap={{ amount: "Spent" }}
+                  valueFormatter={(value) => `৳${value}`}
+                />
+              }
             />
             <Line
               type="monotone"

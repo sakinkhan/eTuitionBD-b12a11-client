@@ -4,7 +4,7 @@ import { getAuth } from "firebase/auth";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://etuitionbd-sakinkhan-server.vercel.app",
 });
 
 const useAxiosSecure = () => {

@@ -117,54 +117,6 @@ const RevenueTrendChart = ({
           </ResponsiveContainer>
         )}
       </div>
-
-      {/* <div className="h-80 w-full min-w-0 overflow-hidden flex-1">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            margin={{ left: 0, right: 0, top: 10, bottom: 10 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.2} />
-
-            <XAxis
-              dataKey="date"
-              tick={{ fontSize: 11 }}
-              textAnchor="end"
-              height={50}
-              axisLine={false}
-              tickLine={false}
-            />
-
-            <YAxis tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-
-            <Tooltip
-              content={
-                <CustomToolTip
-                  labelMap={{
-                    tutorEarning: "Tutor",
-                    platformFee: "Platform",
-                  }}
-                  valueFormatter={(value) => `৳${value}`}
-                />
-              }
-            />
-
-            <Bar
-              dataKey="platformFee"
-              stackId="revenue"
-              fill="#e0c303"
-              radius={[6, 6, 0, 0]}
-            />
-
-            <Bar
-              dataKey="tutorEarning"
-              stackId="revenue"
-              fill="#ff7100"
-              radius={[6, 6, 0, 0]}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div> */}
     </div>
   );
 };
