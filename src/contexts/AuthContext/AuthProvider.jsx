@@ -18,43 +18,63 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const registerUser = (email, password) => {
+  /* -------------------- Auth Actions -------------------- */
+
+  const registerUser = async (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    try {
+      return await createUserWithEmailAndPassword(auth, email, password);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const logInUser = (email, password) => {
+  const logInUser = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    try {
+      return await signInWithEmailAndPassword(auth, email, password);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const loginWithGoogle = () => {
+  const loginWithGoogle = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    try {
+      return await signInWithPopup(auth, googleProvider);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     setLoading(true);
-    return signOut(auth);
+    try {
+      await signOut(auth);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateUserProfile = (profile) => {
+  const updateUserProfile = async (profile) => {
+    if (!auth.currentUser) return;
     return updateProfile(auth.currentUser, profile);
   };
 
   const resetPassword = async (email) => {
-    return await sendPasswordResetEmail(email);
+    return sendPasswordResetEmail(auth, email);
   };
 
-  // observe user state
+  /* -------------------- Observe Auth State -------------------- */
+
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null);
       setLoading(false);
     });
-    return () => {
-      unSubscribe();
-    };
+
+    return () => unsubscribe();
   }, []);
 
   const authInfo = {
@@ -68,7 +88,9 @@ const AuthProvider = ({ children }) => {
     resetPassword,
   };
 
-  return <AuthContext value={authInfo}>{children}</AuthContext>;
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

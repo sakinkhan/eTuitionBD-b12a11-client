@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
 import ForgotPassword from "./ForgetPassword";
 import SocialLogin from "./SocialLogin";
 
@@ -14,44 +14,52 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm();
+
   const emailValue = watch("email");
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { logInUser } = useAuth();
   const navigate = useNavigate();
-  const { user, logInUser } = useAuth();
   const location = useLocation();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-  // Email & Password Login
+
+  /* -------------------- Email & Password Login -------------------- */
   const handleLogin = async (data) => {
+    setLoading(true);
+
     try {
-      setLoading(true);
       await logInUser(data.email, data.password);
-      toast.success("You have logged in Successfully");
+
+      toast.success("Logged in successfully");
       navigate(location.state?.from || "/", { replace: true });
     } catch (err) {
-      toast.error(err.message || "Login failed");
+      console.error("Login error:", err);
+
+      toast.error(
+        err?.code === "auth/invalid-credential"
+          ? "Invalid email or password"
+          : "Login failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
-  // If already logged in
-  useEffect(() => {
-    if (user) {
-      navigate(location.state?.from || "/", { replace: true });
-    }
-  }, [user, navigate, location.state]);
 
   return (
     <div className="flex items-center justify-center md:w-120">
       <title>eTuitionBD - Login</title>
-      <div className="card w-full max-w-md md:max-w-lg lg:max-w-xl shadow-2xl py-8 px-10 transition-colors duration-300 rounded-3xl border-2 bg-accent/60 border-primary">
+
+      <div className="card w-full max-w-md md:max-w-lg lg:max-w-xl shadow-2xl py-8 px-10 rounded-3xl border-2 bg-accent/60 border-primary">
         <h1 className="text-3xl font-bold text-primary">Welcome Back!</h1>
-        <p className="text-base-content">Sign in to your account and join us</p>
+        <p className="text-base-content">
+          Sign in to your account and continue
+        </p>
 
         <form
           onSubmit={handleSubmit(handleLogin)}
@@ -59,14 +67,12 @@ const Login = () => {
         >
           <fieldset className="fieldset">
             {/* Email */}
-            <label
-              className="label text-[16px] text-base-content"
-              htmlFor="email"
-            >
-              Email
-            </label>
+            <label className="label text-[16px] text-base-content">Email</label>
+
             <input
-              id="email"
+              type="email"
+              placeholder="Your Email"
+              className="input input-bordered w-full text-[16px] rounded-full"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -74,10 +80,8 @@ const Login = () => {
                   message: "Invalid email format",
                 },
               })}
-              type="email"
-              className="input input-bordered w-full text-[16px] rounded-full"
-              placeholder="Your Email"
             />
+
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.email.message}
@@ -85,33 +89,32 @@ const Login = () => {
             )}
 
             {/* Password */}
-            <label
-              className="label text-[16px] text-base-content"
-              htmlFor="password"
-            >
+            <label className="label text-[16px] text-base-content">
               Password
             </label>
 
             <div className="relative">
               <input
-                id="password"
                 type={showPassword ? "text" : "password"}
+                placeholder="Your Password"
+                className="input input-bordered w-full text-[16px] rounded-full pr-10"
                 {...register("password", {
                   required: "Password is required",
-                  minLength: { value: 8, message: "At least 8 characters" },
+                  minLength: {
+                    value: 8,
+                    message: "At least 8 characters",
+                  },
                   pattern: {
                     value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/,
                     message: "Must include uppercase, lowercase, and a number",
                   },
                 })}
-                className="input input-bordered w-full text-[16px] rounded-full pr-10"
-                placeholder="Your Password"
               />
 
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute z-10 right-3 top-1/2 -translate-y-1/2 text-base-content"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content"
               >
                 {showPassword ? (
                   <IoIosEyeOff size={20} />
@@ -126,35 +129,40 @@ const Login = () => {
                 {errors.password.message}
               </p>
             )}
+
+            {/* Forgot Password */}
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="text-[15px] text-primary hover:underline mb-2 cursor-pointer text-left"
+              className="text-[15px] text-primary hover:underline mb-2 text-left"
             >
               Forgot password?
             </button>
 
-            {/* Forgot Password Modal */}
             <ForgotPassword
               isOpen={modalOpen}
               onClose={() => setModalOpen(false)}
               defaultEmail={emailValue}
             />
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className={`btn w-full mt-5 border-0 text-[16px] transition-all duration-200 rounded-full 
-              ${
-                loading ? "opacity-60 cursor-not-allowed" : "hover:scale-[1.02]"
-              } 
-              bg-primary hover:bg-secondary text-black`}
+              className={`btn w-full mt-5 rounded-full border-0 text-[16px]
+                ${
+                  loading
+                    ? "opacity-60 cursor-not-allowed"
+                    : "hover:scale-[1.02]"
+                }
+                bg-primary hover:bg-secondary text-black`}
             >
               {loading ? "Logging in..." : "Login"}
             </button>
 
+            {/* Register */}
             <p className="py-3 text-center font-semibold text-[16px]">
-              Don't have an account? Please{" "}
+              Don’t have an account?{" "}
               <Link
                 to="/auth/register"
                 state={{ from: location.state?.from }}
@@ -163,8 +171,9 @@ const Login = () => {
                 Register
               </Link>
             </p>
-            {/* Google login*/}
-            <SocialLogin></SocialLogin>
+
+            {/* Social Login */}
+            <SocialLogin />
           </fieldset>
         </form>
       </div>
