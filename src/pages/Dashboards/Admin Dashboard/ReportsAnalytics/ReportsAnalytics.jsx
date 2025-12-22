@@ -6,6 +6,7 @@ import RevenueTrendChart from "./RevenueTrendChart";
 import AdminKpiCard from "../AdminDashComponents/AdminKpiCard";
 import AdminTransactionTable from "./AdminTransactionTable";
 import ApplicationStatusDonut from "./ApplicationStatusDonut";
+import UserDistributionPie from "./UserDistributionPie";
 
 const dateRanges = [
   { label: "Today", value: "today" },
@@ -24,7 +25,7 @@ const ReportsAnalytics = () => {
   const [dateRange, setDateRange] = useState("last_7_days");
 
   const rangeLabel = rangeLabelMap[dateRange] || "Selected period";
-
+  //  Revenue query
   const { data, isLoading } = useQuery({
     queryKey: ["admin-revenue-summary", dateRange],
     queryFn: async () => {
@@ -34,13 +35,41 @@ const ReportsAnalytics = () => {
       return res.data;
     },
   });
+  //  Users query
+  const { data: usersData = [], isLoading: usersLoading } = useQuery({
+    queryKey: ["admin-users"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/users");
+      return res.data?.users || [];
+    },
+  });
 
-  if (isLoading) return <LoadingLottie />;
+  if (isLoading || usersLoading) return <LoadingLottie />;
+
+  const userDistribution = (() => {
+    let students = 0;
+    let tutors = 0;
+    let admins = 0;
+
+    usersData.forEach((user) => {
+      if (user.role === "student") students++;
+      else if (user.role === "tutor") tutors++;
+      else if (user.role === "admin") admins++;
+    });
+
+    return [
+      { name: "Students", value: students },
+      { name: "Tutors", value: tutors },
+      { name: "Admins", value: admins },
+    ];
+  })();
 
   console.log(data);
 
   const totals = data?.totals || {};
   const chartData = data?.data || [];
+
+  // Fetching user data
 
   return (
     <div className="p-5">
@@ -109,18 +138,26 @@ const ReportsAnalytics = () => {
             subtext={rangeLabel}
           />
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <div className="grid grid-col-1 gap-2 min-w-0">
-            {/* Revenue trend */}
-            <RevenueTrendChart
-              data={chartData}
-              dateRangeLabel={rangeLabelMap[dateRange] || "Selected period"}
-            />
-            {/* Application Status Donut */}
-            <ApplicationStatusDonut
-              approvedCount={totals.applicationsApproved}
-              rejectedCount={totals.applicationsRejected}
-            />
+        <div className="grid grid-cols-1 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 min-w-0">
+            <div>
+              {/* Revenue trend */}
+              <RevenueTrendChart
+                data={chartData}
+                dateRangeLabel={rangeLabelMap[dateRange] || "Selected period"}
+              />
+            </div>
+            <div>
+              {/* Application Status Donut */}
+              <ApplicationStatusDonut
+                approvedCount={totals.applicationsApproved}
+                rejectedCount={totals.applicationsRejected}
+              />
+            </div>
+            <div>
+              {/* Users distribution pie */}
+              <UserDistributionPie data={userDistribution} />
+            </div>
           </div>
           <div className="min-w-0">
             {/* Transaction Summary */}

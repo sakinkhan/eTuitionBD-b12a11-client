@@ -27,9 +27,13 @@ const ApplicationStatusDonut = ({ approvedCount = 0, rejectedCount = 0 }) => {
 
   return (
     <div className="bg-base-100 rounded-xl p-4 shadow-lg border border-primary">
-      <h3 className="text-lg font-semibold mb-3 text-center">
-        Tutor <span className="text-primary">Application</span> Outcomes
-      </h3>
+      {/* Header */}
+      <div className="mb-3">
+        <h3 className="text-lg font-semibold text-base-content">
+          Tutor <span className="text-primary">Application</span> Outcomes
+        </h3>
+        <p className="text-sm text-base-content/60">Breakdown by Application statuses</p>
+      </div>
 
       <div className="h-[300px] w-full min-w-0 overflow-hidden">
         <ResponsiveContainer width="100%" height="100%">
