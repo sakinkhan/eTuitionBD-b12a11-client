@@ -175,7 +175,7 @@ const PostTuitions = () => {
           </button>
           <button
             type="button"
-            className="btn btn-outline btn-primary text-white rounded-full"
+            className="btn btn-outline btn-primary rounded-full"
             onClick={() => reset()}
           >
             Reset

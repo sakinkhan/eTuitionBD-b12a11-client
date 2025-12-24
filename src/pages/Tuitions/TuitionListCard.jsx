@@ -79,7 +79,7 @@ const TuitionListCard = ({ t }) => {
         <div className="mx-auto">
           <label className="text-gray-500">Budget</label>
           <div className="text-3xl font-extrabold text-primary text-center mx-auto mb-10">
-            ৳ {budget}
+            ৳ {budget.toLocaleString("en-GB")}/mo
           </div>
         </div>
         <Link

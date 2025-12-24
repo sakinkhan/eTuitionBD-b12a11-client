@@ -39,7 +39,12 @@ const LatestTuitionCard = ({ post }) => {
             <h2 className="font-bold text-lg sm:text-xl md:text-2xl line-clamp-2">
               {subject}
             </h2>
-            <span className="text-sm md:text-xl">৳{budget}/mo</span>
+            <span className="text-sm md:text-xl">
+              {" "}
+              <span className="text-primary font-semibold">
+                ৳{budget.toLocaleString("en-GB")}/mo
+              </span>
+            </span>
           </div>
         </div>
 

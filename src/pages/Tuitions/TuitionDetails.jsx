@@ -21,7 +21,6 @@ const TuitionDetails = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 🔐 Private page guard
   if (!authLoading && !user) {
     navigate("/auth/login", { replace: true });
   }
@@ -203,9 +202,13 @@ const TuitionDetails = () => {
           )}
 
           <div className="flex justify-between items-end gap-4">
-            <h1 className="text-3xl font-bold">{tuition.subject}</h1>
-            <p className="text-3xl font-bold flex items-center gap-1">
-              ৳<span className="text-primary">{tuition.budget}</span>/mo
+            <h1 className="text-xl sm:text-3xl font-bold leading-tight">
+              {tuition.subject}
+            </h1>
+            <p className="text-xl sm:text-3xl font-bold flex items-center gap-1 whitespace-nowrap">
+              <span className="text-primary">
+                ৳ {tuition.budget.toLocaleString("en-GB")}/mo
+              </span>
             </p>
           </div>
         </div>
