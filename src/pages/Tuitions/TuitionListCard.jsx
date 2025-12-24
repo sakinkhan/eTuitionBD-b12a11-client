@@ -75,10 +75,10 @@ const TuitionListCard = ({ t }) => {
       </div>
 
       {/* Right Panel: Budget & Button */}
-      <div className="flex flex-col justify-center items-center md:items-end p-6 bg-base-200 border-t md:border-t-0 md:border-l border-secondary w-full md:w-56">
+      <div className="flex flex-col justify-center items-center md:items-end p-6 bg-base-200 border-t md:border-t-0 md:border-l border-secondary w-full md:w-66">
         <div className="mx-auto">
           <label className="text-gray-500">Budget</label>
-          <div className="text-3xl font-extrabold text-primary text-center mx-auto mb-10">
+          <div className="text-3xl font-extrabold text-primary text-center mx-auto mb-10 flex items-center">
             ৳ {budget.toLocaleString("en-GB")}/mo
           </div>
         </div>
