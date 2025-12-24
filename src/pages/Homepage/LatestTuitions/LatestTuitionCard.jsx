@@ -23,7 +23,7 @@ const LatestTuitionCard = ({ post }) => {
     <div className="card w-65 md:w-80 h-100 mx-auto bg-linear-to-tr from-accent/90 via-accent/30 to-accent/90 shadow-sm rounded-3xl overflow-hidden flex flex-col border border-primary">
       <div className="card-body flex flex-col justify-between h-full">
         <div>
-          <span className="badge badge-sm badge-warning flex items-center gap-1 max-w-[200px] truncate">
+          <span className="badge badge-sm badge-warning flex items-center gap-1 max-w-[130px] truncate">
             <FaLocationDot className="shrink-0" />
             <span className="truncate">{location}</span>
           </span>
@@ -36,23 +36,25 @@ const LatestTuitionCard = ({ post }) => {
             />
           )}
           <div className="mt-2">
-            <h2 className="text-3xl font-bold">{subject}</h2>
-            <span className="text-xl">৳{budget}/mo</span>
+            <h2 className="font-bold text-lg sm:text-xl md:text-2xl line-clamp-2">
+              {subject}
+            </h2>
+            <span className="text-sm md:text-xl">৳{budget}/mo</span>
           </div>
         </div>
 
         <div>
           <div className="mt-6 flex gap-2 text-sm items-center">
             <PiStudentBold className="text-primary" />
-            {studentName}
+            <span className="truncate">{studentName}</span>
           </div>
           <div className="flex gap-2 text-sm items-center">
             <AiTwotoneMail className="text-primary" />
-            {contactEmail}
+            <span className="truncate">{contactEmail}</span>
           </div>
           <div className="flex gap-2 text-sm items-center">
             <RiCalendarScheduleLine className="text-primary" />
-            {schedule}
+            <span className="truncate">{schedule}</span>
           </div>
           <div className="mt-6">
             <Link

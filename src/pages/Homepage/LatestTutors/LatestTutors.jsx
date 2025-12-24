@@ -40,7 +40,7 @@ const LatestTutors = () => {
       const res = await axiosPublic.get("/tutors/public", {
         params: {
           page: 1,
-          limit: 10, // latest tutors only
+          limit: 10,
         },
       });
       return res.data;
@@ -82,7 +82,7 @@ const LatestTutors = () => {
         preventClicks={false}
         preventClicksPropagation={false}
         coverflowEffect={{
-          rotate: 50,
+          rotate: 40,
           stretch: 0,
           depth: 100,
           modifier: 1,
@@ -98,6 +98,22 @@ const LatestTutors = () => {
         style={{
           "--swiper-pagination-color": "#ff7100",
           "--swiper-navigation-color": "#ff7100",
+        }}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+            centeredSlides: false,
+          },
+          640: {
+            slidesPerView: 1.2,
+            centeredSlides: true,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
         }}
         className="mySwiper pb-15! overflow-visible"
       >
