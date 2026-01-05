@@ -1,4 +1,4 @@
-### 1) **eTuitionBD**
+### **eTuitionBD**
 
 **Repositories:**  
 - **Client:** [View Repository](https://github.com/sakinkhan/eTuitionBD-b12a11-client.git)  
