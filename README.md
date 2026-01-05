@@ -1,44 +1,30 @@
-README must contain project name, purpose, features, live URL, packages used.
+### 1) **eTuitionBD**
 
-# eTuitionBD: Tuition Management System
+**Repositories:**  
+- **Client:** [View Repository](https://github.com/sakinkhan/eTuitionBD-b12a11-client.git)  
+- **Server:** [View Repository](https://github.com/sakinkhan/eTuitionBD-b12a11-server.git)  
 
-## Project Overview
+**Live:** 
+[View Live Application](https://etuitionbd-sakinkhan.web.app/)
 
-The Tuition Management System is a complete platform designed to bring students, tutors, and administrators together in one digital space. It allows students to post tuition requirements, tutors to apply for classes, and admins to oversee and regulate all activities. The system simplifies the process of finding qualified tutors, ensures verified tuition posts, and provides smooth communication and payment tracking.
+**Overview:**  
+A full-featured tuition management platform that connects students, tutors, and administrators through structured workflows for tuition posting, tutor applications, communication, and payments.
 
-## Purpose
+**Tech:**  
+React · Tailwind CSS · DaisyUI · Firebase · Vercel
 
-Finding the right tutor or tuition can often be confusing and time-consuming. This platform solves real problems by:
+**System Scope & Scale:**  
+- Supports multiple user roles (students, tutors, administrators)  
+- Manages end-to-end tuition lifecycle from posting to approval  
+- Designed for concurrent users and real-world workflow complexity  
 
-- Helping students find verified, qualified tutors easily.
-- Reducing friction between students and tutors with automated workflows.
-- Enabling digital tracking of classes, transparent payment processing, and structured communication.
-- Supporting admins in monitoring, regulating, and managing the overall system efficiently.
+**How the System Works (Workflow):**  
+1. Students register and post tuition requirements (class, subject, budget, location, schedule).  
+2. Tutors browse available tuition posts and apply to relevant opportunities.  
+3. Administrators review submissions, verify tutors, and approve or reject tuition posts to ensure platform integrity.  
 
-## Features
-
-- **Student Portal**: Register, post tuition requirements (class, subject, schedule, budget, location), and track tutor applications.
-- **Tutor Portal**: Browse tuition posts, apply to suitable classes, and communicate with students.
-- **Admin Dashboard**: Verify tutors, approve or reject tuition posts, handle disputes, and monitor platform performance.
-- **Secure Payments**: Track tuition payments and manage finances transparently.
-- **Communication Tools**: Built-in messaging for students and tutors to coordinate effectively.
-
-## How It Works (Workflow)
-
-1. A student registers and posts a tuition requirement.
-2. Tutors browse available posts and apply for the ones that match their skills.
-3. Admin reviews tutor applications, verifies credentials, and approves or rejects posts.
-4. Admin oversees the platform, manages disputes, and monitors overall performance.
-
-## Live URL
-
-Check out the live project here: //TBD
-
-## Technologies & Packages Used
-
-- **Frontend**: React, React Router, Tailwind CSS, DaisyUI
-- **Backend**: Node.js, Express (or your backend framework)
-- **Database**: MongoDB / PostgreSQL (depending on your setup)
-- **Authentication**: Firebase Auth / JWT
-- **Icons & UI**: React Icons, DaisyUI components
-- **Notifications**: React Toastify, Sweet Alert
+**Key Capabilities:**  
+- Role-based access control and secure authentication  
+- Structured tuition posting and tutor application workflows  
+- Admin oversight for monitoring, verification, and regulation of activity  
+- Scalable frontend architecture designed for maintainability  
