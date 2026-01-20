@@ -8,6 +8,7 @@ import PlatformStatistics from "./PlatformStatistics/PlatformStatistics";
 import FeaturedSuccessStories from "./FeaturedSuccessStories/FeaturedSuccessStories";
 import TuitionCategories from "./TuitionCategories/TuitionCategories";
 import Newsletter from "./Newsletter/Newsletter";
+import TakeNextStep from "./TakeNextStep/TakeNextStep";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       <WhyChooseUs></WhyChooseUs>
       <LatestTutors></LatestTutors>
       <PlatformStatistics></PlatformStatistics>
+      <TakeNextStep></TakeNextStep>
       <FeaturedSuccessStories></FeaturedSuccessStories>
       <TuitionCategories></TuitionCategories>
       <Newsletter></Newsletter>

@@ -72,7 +72,7 @@ const LatestTuitions = () => {
         breakpoints={{
           0: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
-          1024: { slidesPerView: 4 },
+          1024: { slidesPerView: 3 },
         }}
         style={{
           "--swiper-pagination-color": "#ff7100",

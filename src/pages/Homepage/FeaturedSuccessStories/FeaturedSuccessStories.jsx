@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FaStar } from "react-icons/fa6";
-import useAxios from "../../../hooks/useAxios";
-import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 
 const defaultTestimonials = [
   {
@@ -28,7 +26,8 @@ const defaultTestimonials = [
     role: "Student",
     rating: 5,
     text: "Struggled with Math until I joined eTuitionBD. Now I'm getting A+ scores. Highly recommended!",
-    image: "https://www.profilebakery.com/wp-content/uploads/2025/05/sunset-shooting-2-796x1024.jpg",
+    image:
+      "https://www.profilebakery.com/wp-content/uploads/2025/05/sunset-shooting-2-796x1024.jpg",
   },
   {
     id: 4,
@@ -41,30 +40,6 @@ const defaultTestimonials = [
 ];
 
 const FeaturedSuccessStories = () => {
-  const [testimonials, setTestimonials] = useState(defaultTestimonials);
-  const [loading, setLoading] = useState(true);
-  const axiosInstance = useAxios();
-
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const response = await axiosInstance.get("/api/testimonials");
-        if (response.data && response.data.length > 0) {
-          setTestimonials(response.data.slice(0, 4));
-        }
-      } catch (error) {
-        console.error("Error fetching testimonials:", error);
-        // Keep default testimonials if API fails
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTestimonials();
-  }, [axiosInstance]);
-  
-  if (loading) return <LoadingLottie></LoadingLottie>;
-
   return (
     <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-base-100">
       <div className="max-w-6xl mx-auto">
@@ -80,7 +55,7 @@ const FeaturedSuccessStories = () => {
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((testimonial) => (
+          {defaultTestimonials.map((testimonial) => (
             <div
               key={testimonial.id}
               className="p-6 rounded-xl bg-base-200 border border-base-300
@@ -117,7 +92,6 @@ const FeaturedSuccessStories = () => {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

@@ -116,26 +116,6 @@ const PlatformStatistics = () => {
     return <LoadingLottie />;
   }
 
-  const handlePostTuition = () => {
-    // If not logged in, redirect to login
-    if (!firebaseUser) {
-      navigate("/auth/login", { state: { from: location.pathname } });
-      return;
-    }
-
-    // If logged in as student, allow to post tuition
-    if (role === "student") {
-      navigate("/dashboard/post-tuitions");
-      return;
-    }
-
-    // If logged in as tutor or admin, show error
-    if (role === "tutor" || role === "admin") {
-      toast.error("Oops, you have to login as a Student to post a tuition");
-      return;
-    }
-  };
-
   return (
     <section
       ref={ref}
@@ -190,30 +170,6 @@ const PlatformStatistics = () => {
               <p className="text-sm text-base-content/60">{stat.description}</p>
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="text-center mt-12 sm:mt-16">
-          <p className="text-base-content/70 mb-4">
-            Find verified tutors or post a tuition in minutes — simple, secure,
-            and transparent.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/tutors"
-              className="px-8 py-3 rounded-full font-semibold
-              bg-primary text-white hover:bg-secondary hover:text-black cursor-pointer transition"
-            >
-              Find a Tutor
-            </Link>
-            <button
-              onClick={handlePostTuition}
-              className="px-8 py-3 rounded-full font-semibold
-              bg-secondary text-black hover:bg-primary hover:text-white cursor-pointer transition"
-            >
-              Post a Tuition
-            </button>
-          </div>
         </div>
       </div>
     </section>
