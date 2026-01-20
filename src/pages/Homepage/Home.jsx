@@ -4,6 +4,10 @@ import LatestTuitions from "./LatestTuitions/LatestTuitions";
 import LatestTutors from "./LatestTutors/LatestTutors";
 import WhyChooseUs from "./WhyChooseUs";
 import HowPlatformWorks from "./HowPlatformWorks";
+import PlatformStatistics from "./PlatformStatistics/PlatformStatistics";
+import FeaturedSuccessStories from "./FeaturedSuccessStories/FeaturedSuccessStories";
+import TuitionCategories from "./TuitionCategories/TuitionCategories";
+import Newsletter from "./Newsletter/Newsletter";
 
 const Home = () => {
   return (
@@ -12,6 +16,10 @@ const Home = () => {
       <LatestTuitions></LatestTuitions>
       <WhyChooseUs></WhyChooseUs>
       <LatestTutors></LatestTutors>
+      <PlatformStatistics></PlatformStatistics>
+      <FeaturedSuccessStories></FeaturedSuccessStories>
+      <TuitionCategories></TuitionCategories>
+      <Newsletter></Newsletter>
       <HowPlatformWorks></HowPlatformWorks>
     </div>
   );

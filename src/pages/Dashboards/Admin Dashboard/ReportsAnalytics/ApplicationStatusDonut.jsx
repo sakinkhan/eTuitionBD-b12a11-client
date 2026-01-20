@@ -19,7 +19,7 @@ const ApplicationStatusDonut = ({ approvedCount = 0, rejectedCount = 0 }) => {
 
   if (total === 0) {
     return (
-      <div className="h-[300px] flex items-center justify-center text-base-content/60">
+      <div className="flex items-center justify-center text-base-content/60 border border-primary rounded-xl h-[480px]">
         No application data available
       </div>
     );
@@ -32,7 +32,9 @@ const ApplicationStatusDonut = ({ approvedCount = 0, rejectedCount = 0 }) => {
         <h3 className="text-lg font-semibold text-base-content">
           Tutor <span className="text-primary">Application</span> Outcomes
         </h3>
-        <p className="text-sm text-base-content/60">Breakdown by Application statuses</p>
+        <p className="text-sm text-base-content/60">
+          Breakdown by Application statuses
+        </p>
       </div>
 
       <div className="h-[300px] w-full min-w-0 overflow-hidden">

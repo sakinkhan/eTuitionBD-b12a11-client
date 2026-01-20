@@ -89,10 +89,13 @@ const AdminTransactionTable = ({ dateRange }) => {
           <tbody>
             {transactions.map((tx) => (
               <tr key={tx._id}>
-                <td>
-                  <span className="badge badge-info badge-sm rounded-full">
+                <td className="max-w-[140px] sm:max-w-none">
+                  <span
+                    className="badge badge-info badge-xs md:badge-sm rounded-full max-w-full truncate px-2"
+                    title={tx.tuitionCode}
+                  >
                     {tx.tuitionCode}
-                  </span>{" "}
+                  </span>
                 </td>
                 <td>{new Date(tx.paidAt).toLocaleDateString()}</td>
                 <td className="font-mono text-xs">{tx.displayTransactionId}</td>

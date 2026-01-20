@@ -34,6 +34,7 @@ import TutorProfileSetup from "../pages/Tutors/TutorProfileSetup";
 import TutorManagement from "../pages/Dashboards/Admin Dashboard/TutorManagement/TutorManagement";
 import TutorProfileGuard from "./TutorProfileGuard";
 import PublicRoute from "./PublicRoute";
+import Career from "../pages/Career/Career";
 
 export const router = createBrowserRouter([
   // Root Layout
@@ -68,6 +69,11 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         element: <About></About>,
+        hydrateFallbackElement: <LoadingLottie />,
+      },
+      {
+        path: "/career",
+        element: <Career></Career>,
         hydrateFallbackElement: <LoadingLottie />,
       },
       {
