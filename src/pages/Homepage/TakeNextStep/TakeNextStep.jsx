@@ -29,7 +29,7 @@ const TakeNextStep = () => {
     }
   };
   return (
-    <div className="bg-base-200 py-20">
+    <div className="bg-linear-to from-base-200 to-base-400 py-20">
       {/* Header */}
       <div className="text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-base-content mb-3">

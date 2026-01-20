@@ -18,11 +18,11 @@ const Home = () => {
       <WhyChooseUs></WhyChooseUs>
       <LatestTutors></LatestTutors>
       <PlatformStatistics></PlatformStatistics>
-      <TakeNextStep></TakeNextStep>
       <FeaturedSuccessStories></FeaturedSuccessStories>
       <TuitionCategories></TuitionCategories>
       <Newsletter></Newsletter>
       <HowPlatformWorks></HowPlatformWorks>
+      <TakeNextStep></TakeNextStep>
     </div>
   );
 };
