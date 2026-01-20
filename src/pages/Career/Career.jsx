@@ -60,7 +60,7 @@ const Career = () => {
   };
 
   const inputBase =
-    "w-full px-4 py-2.5 rounded-full border text-sm outline-none transition " +
+    "w-full px-4 py-2.5 rounded-lg border text-sm outline-none transition " +
     "bg-base-100 text-base-content border-base-300 " +
     "focus:ring-2 focus:ring-primary focus:border-transparent " +
     "dark:bg-base-200 dark:text-base-content dark:border-base-300 dark:placeholder-base-content/50";
@@ -78,7 +78,7 @@ const Career = () => {
       >
         {/* Header */}
         <header className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-primary mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-base-content mb-2">
             Join Our Team
           </h1>
           <p className="text-base-content/70">
@@ -119,7 +119,6 @@ const Career = () => {
                 autoComplete="name"
                 required
                 className={inputBase}
-                placeholder="Your full name"
               />
             </div>
 
@@ -133,7 +132,6 @@ const Career = () => {
                 autoComplete="email"
                 required
                 className={inputBase}
-                placeholder="Your email address"
               />
             </div>
 
@@ -146,7 +144,6 @@ const Career = () => {
                 autoComplete="tel"
                 required
                 className={inputBase}
-                placeholder="Your phone number"
               />
             </div>
 
@@ -192,7 +189,7 @@ const Career = () => {
                 name="resume"
                 onChange={handleChange}
                 required
-                className={`${inputBase} file:text-sm file:border-0 file:bg-transparent file-input`}
+                className={`${inputBase} file:text-sm file:border-0 file:bg-transparent`}
               />
             </div>
           </div>
@@ -205,8 +202,7 @@ const Career = () => {
               value={formData.coverLetter}
               onChange={handleChange}
               required
-              className={`${inputBase} rounded-xl`}
-              placeholder="Write your cover letter here..."
+              className={`${inputBase} resize-none`}
             />
           </div>
 
@@ -215,8 +211,8 @@ const Career = () => {
               type="submit"
               disabled={loading}
               className="flex-1 rounded-full py-3 text-sm font-semibold
-                bg-primary text-white hover:bg-secondary hover:text-black
-                disabled:opacity-60 transition cursor-pointer"
+                bg-primary text-primary-content hover:bg-primary-focus
+                disabled:opacity-60 transition"
             >
               {loading ? "Submitting…" : "Submit Application"}
             </button>
@@ -225,7 +221,7 @@ const Career = () => {
               type="button"
               onClick={() => setFormData(initialState)}
               className="flex-1 rounded-full py-3 text-sm font-semibold
-                bg-gray-300 text-black hover:bg-gray-400 hover:text-white transition"
+                bg-secondary text-secondary-content hover:bg-secondary-focus transition"
             >
               Clear
             </button>

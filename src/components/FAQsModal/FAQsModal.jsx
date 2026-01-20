@@ -1,9 +1,49 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext/ThemeContext";
+import { FaChevronDown } from "react-icons/fa6";
 
 const FAQsModal = ({ isOpen, onClose }) => {
   const { theme } = useContext(ThemeContext);
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   if (!isOpen) return null;
+
+  const faqs = [
+    {
+      question: "How do I find a tutor?",
+      answer:
+        "Browse our tutor directory, filter by subject and availability, and connect with tutors that match your needs. You can view their profiles, ratings, and availability before booking.",
+    },
+    {
+      question: "How do I become a tutor?",
+      answer:
+        "Sign up as a tutor, complete your profile with qualifications, and start posting tuition sessions. Students can then apply to your sessions.",
+    },
+    {
+      question: "Is the platform safe?",
+      answer:
+        "Yes! We prioritize security with encrypted data, verified user profiles, and secure payment processing. All transactions are protected.",
+    },
+    {
+      question: "How do payments work?",
+      answer:
+        "Payments are processed securely through our platform. Tutors receive payments after each completed session, typically within 2-3 business days.",
+    },
+    {
+      question: "Can I cancel or reschedule a session?",
+      answer:
+        "Yes! You can reschedule or cancel sessions with at least 24 hours notice. Cancellations made less than 24 hours before may incur a fee.",
+    },
+    {
+      question: "What subjects are available?",
+      answer:
+        "We cover a wide range of subjects including Mathematics, Science, Languages, Entrance Exams, and Professional Skills. Browse our categories for the complete list.",
+    },
+  ];
+
+  const toggleExpand = (index) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
@@ -15,7 +55,7 @@ const FAQsModal = ({ isOpen, onClose }) => {
 
       {/* Modal */}
       <div
-        className="relative w-full max-w-3xl max-h-[85vh] overflow-hidden
+        className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden
         rounded-xl shadow-xl bg-base-100"
       >
         {/* Header */}
@@ -23,8 +63,8 @@ const FAQsModal = ({ isOpen, onClose }) => {
           className="flex items-center justify-between px-6 py-4 border-b
           border-base-300"
         >
-          <h2 className="text-xl font-semibold text-primary">
-            FAQs – eTuitionBD
+          <h2 className="text-xl font-semibold text-base-content">
+            Frequently Asked Questions
           </h2>
           <button
             onClick={onClose}
@@ -35,83 +75,61 @@ const FAQsModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
+        <div className="px-6 py-5 overflow-y-auto max-h-[calc(85vh-120px)]">
+          <div className="space-y-3">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="border border-base-300 rounded-lg overflow-hidden
+                hover:border-primary transition-colors"
+              >
+                <button
+                  onClick={() => toggleExpand(index)}
+                  className="w-full px-5 py-4 flex items-center justify-between
+                  bg-base-200 hover:bg-base-300 transition-colors text-left"
+                >
+                  <h3 className="font-semibold text-base-content">
+                    {faq.question}
+                  </h3>
+                  <FaChevronDown
+                    size={16}
+                    className={`text-primary transition-transform duration-300 ${
+                      expandedIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {expandedIndex === index && (
+                  <div
+                    className="px-5 py-4 bg-base-100 border-t border-base-300
+                  text-base-content/80 text-sm"
+                  >
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
         <div
-          className="px-6 py-5 overflow-y-auto text-sm leading-relaxed
-          text-base-content space-y-4 max-h-[calc(85vh-120px)]"
+          className="px-6 py-4 border-t border-base-300
+          flex justify-between items-center"
         >
-          <section>
-            <h3 className="font-semibold mb-1">1. What is eTuitionBD?</h3>
-            <p>
-              eTuitionBD is an online platform that connects students with
-              verified tutors for both online and in-person tuition.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="font-semibold mb-1">
-              2. How do students find tutors?
-            </h3>
-            <p>
-              Students post tuition requirements. Tutors apply, and students
-              choose the best match based on profile, experience, and expected
-              salary.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="font-semibold mb-1">
-              3. How do tutors apply for tuition?
-            </h3>
-            <p>
-              Tutors browse available tuition posts and apply by submitting
-              qualifications, experience, and expected salary through the
-              platform.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="font-semibold mb-1">
-              4. Is tutor approval guaranteed?
-            </h3>
-            <p>
-              No. Approval depends on the student’s decision after reviewing
-              tutor applications. Payment confirmation is required for final
-              approval.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="font-semibold mb-1">5. How are payments handled?</h3>
-            <p>
-              Payments are processed securely through third-party payment
-              gateways. Tutors are considered approved only after successful
-              payment.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="font-semibold mb-1">
-              6. Can I edit or delete my posts?
-            </h3>
-            <p>
-              Yes. Students can edit or delete tuition posts, and tutors can
-              update or withdraw applications until they are approved.
-            </p>
-          </section>
-
-          <section>
-            <h3 className="font-semibold mb-1">
-              7. What happens if there is a dispute?
-            </h3>
-            <p>
-              eTuitionBD may assist in reviewing disputes, but the platform does
-              not guarantee outcomes between students and tutors.
-            </p>
-          </section>
-
-          <p className="text-xs text-base-content/60 pt-4">
-            Last updated: January 2026
+          <p className="text-sm text-base-content/60">
+            Can't find your answer?{" "}
+            <a href="#" className="text-primary hover:underline">
+              Contact support
+            </a>
           </p>
+          <button
+            onClick={onClose}
+            className="px-5 py-2 rounded-full text-sm font-semibold
+              bg-primary text-primary-content hover:bg-primary-focus transition"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

@@ -1,131 +1,142 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext/ThemeContext";
-import PrimaryButton from "../../components/Buttons/PrimaryButton";
 
 const TermsOfUseModal = ({ isOpen, onClose }) => {
   const { theme } = useContext(ThemeContext);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      {/* Modal */}
-      <div
-        className="relative w-full max-w-3xl max-h-[85vh] overflow-hidden
-        rounded-xl shadow-xl bg-base-100"
+        className={`${
+          theme === "dark"
+            ? "bg-base-100 text-base-content"
+            : "bg-base-100 text-base-content"
+        } rounded-lg w-full max-w-2xl shadow-xl`}
       >
         {/* Header */}
-        <div
-          className="flex items-center justify-between px-6 py-4 border-b
-          border-base-300"
-        >
-          <h2 className="text-xl font-semibold text-primary">
-            Terms of Use – eTuitionBD
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-base-content/60 hover:text-base-content transition"
-          >
-            ✕
-          </button>
+        <div className="border-b border-base-300 p-6">
+          <h2 className="text-2xl font-bold">Terms of Use</h2>
+          <p className="text-sm text-base-content/70 mt-1">
+            Please read our terms carefully
+          </p>
         </div>
 
-        {/* Content */}
-        <div
-          className="px-6 py-5 overflow-y-auto text-sm leading-relaxed
-          text-base-content space-y-4 max-h-[calc(85vh-120px)]"
-        >
-          <p>
-            Welcome to{" "}
-            <span className="font-bold text-primary">eTuitionBD</span>. By
-            accessing or using this platform, you agree to follow these Terms of
-            Use. Please read them carefully.
-          </p>
-
+        {/* Scrollable Content */}
+        <div className="max-h-[calc(85vh-120px)] overflow-y-auto p-6 space-y-4">
+          {/* 1. Acceptance of Terms */}
           <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              1. Platform Purpose
+            <h3 className="text-lg font-semibold mb-2">
+              1. Acceptance of Terms
             </h3>
-            <p>
-              eTuitionBD connects students with tutors for educational services.
-              We act as a facilitator, not as an employer, agent, or guarantor
-              of outcomes.
+            <p className="text-sm text-base-content/80 leading-relaxed">
+              By accessing and using eTuitionBD, you accept and agree to be
+              bound by the terms and provision of this agreement. If you do not
+              agree to abide by the above, please do not use this service.
             </p>
           </section>
 
+          {/* 2. User Accounts */}
           <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              2. User Responsibilities
-            </h3>
-            <ul className="list-disc pl-5 space-y-1">
-              <li>Provide accurate and up-to-date information</li>
-              <li>Use the platform only for lawful purposes</li>
-              <li>Respect other users and platform rules</li>
-              <li>Do not misuse data, payments, or communication tools</li>
+            <h3 className="text-lg font-semibold mb-2">2. User Accounts</h3>
+            <p className="text-sm text-base-content/80 leading-relaxed mb-2">
+              You are responsible for maintaining the confidentiality of your
+              account and password and for restricting access to your computer.
+              You agree to accept responsibility for all activities that occur
+              under your account or password.
+            </p>
+            <ul className="text-sm text-base-content/80 leading-relaxed ml-4 space-y-1">
+              <li>• Keep your password secure and confidential</li>
+              <li>• Notify us immediately of unauthorized access</li>
+              <li>• Accept all risks of unauthorized access</li>
             </ul>
           </section>
 
+          {/* 3. User Conduct */}
           <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              3. Account & Access
+            <h3 className="text-lg font-semibold mb-2">3. User Conduct</h3>
+            <p className="text-sm text-base-content/80 leading-relaxed mb-2">
+              Users agree not to transmit any unlawful, threatening, abusive,
+              defamatory, obscene, or otherwise objectionable material.
+            </p>
+            <ul className="text-sm text-base-content/80 leading-relaxed ml-4 space-y-1">
+              <li>• Do not post false or misleading information</li>
+              <li>• Do not engage in harassment or bullying</li>
+              <li>• Do not violate any intellectual property rights</li>
+              <li>• Do not attempt to gain unauthorized access</li>
+            </ul>
+          </section>
+
+          {/* 4. Payments and Fees */}
+          <section>
+            <h3 className="text-lg font-semibold mb-2">4. Payments and Fees</h3>
+            <p className="text-sm text-base-content/80 leading-relaxed mb-2">
+              Tutors and students agree to comply with all payment terms and
+              conditions set out in their tuition agreements.
+            </p>
+            <ul className="text-sm text-base-content/80 leading-relaxed ml-4 space-y-1">
+              <li>• eTuitionBD does not hold payments in escrow</li>
+              <li>• Parties must arrange payment directly</li>
+              <li>• Platform charges apply as stated in pricing</li>
+              <li>• All prices are in Bangladeshi Taka (BDT)</li>
+            </ul>
+          </section>
+
+          {/* 5. Limitation of Liability */}
+          <section>
+            <h3 className="text-lg font-semibold mb-2">
+              5. Limitation of Liability
             </h3>
-            <p>
-              You are responsible for maintaining the confidentiality of your
-              account credentials. Any activity under your account is your
-              responsibility.
+            <p className="text-sm text-base-content/80 leading-relaxed">
+              eTuitionBD is provided on an "as-is" basis. We make no warranties,
+              expressed or implied, and hereby disclaim and negate all other
+              warranties including, without limitation, implied warranties or
+              conditions of merchantability, fitness for a particular purpose,
+              and non-infringement of intellectual property or other violation
+              of rights.
             </p>
           </section>
 
+          {/* 6. Modification of Terms */}
           <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              4. Payments & Transactions
+            <h3 className="text-lg font-semibold mb-2">
+              6. Modification of Terms
             </h3>
-            <p>
-              Payments are processed through secure third-party providers.
-              eTuitionBD is not liable for disputes between students and tutors
-              after successful payment completion.
+            <p className="text-sm text-base-content/80 leading-relaxed">
+              eTuitionBD reserves the right to modify these terms and conditions
+              at any time. Your continued use of the site following the posting
+              of revised terms means that you accept and agree to the changes.
             </p>
           </section>
 
+          {/* 7. Termination */}
           <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              5. Content & Conduct
-            </h3>
-            <p>
-              Users must not post false, misleading, abusive, or inappropriate
-              content. Violations may result in suspension or permanent account
-              removal.
+            <h3 className="text-lg font-semibold mb-2">7. Termination</h3>
+            <p className="text-sm text-base-content/80 leading-relaxed">
+              eTuitionBD may terminate your access to the platform at any time,
+              with or without cause. Upon termination, your right to use the
+              site will immediately cease. All sections that should by their
+              nature remain in effect after termination shall survive.
             </p>
           </section>
 
-          <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              6. Termination
-            </h3>
-            <p>
-              We reserve the right to suspend or terminate accounts that violate
-              these terms or harm the platform’s integrity.
+          {/* Last Updated */}
+          <div className="pt-4 border-t border-base-300">
+            <p className="text-xs text-base-content/60">
+              Last updated: January 20, 2026
             </p>
-          </section>
+          </div>
+        </div>
 
-          <section>
-            <h3 className="font-semibold text-base-content mb-1">
-              7. Changes to Terms
-            </h3>
-            <p>
-              These terms may be updated from time to time. Continued use of
-              eTuitionBD indicates acceptance of the latest version.
-            </p>
-          </section>
-
-          <p className="text-xs text-base-content/60 pt-4">
-            Last updated: January 2026
-          </p>
+        {/* Footer with Close Button */}
+        <div className="border-t border-base-300 p-4 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-6 py-2 bg-primary text-primary-content rounded-full hover:bg-primary/90 transition font-semibold"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
