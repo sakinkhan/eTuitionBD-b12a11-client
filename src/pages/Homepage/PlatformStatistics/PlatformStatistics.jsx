@@ -7,10 +7,6 @@ import {
   FaHandshake,
   FaMapLocationDot,
 } from "react-icons/fa6";
-import { Link, useNavigate, useLocation } from "react-router";
-import { toast } from "react-toastify";
-import useAuth from "../../../hooks/useAuth";
-import useCurrentUser from "../../../hooks/useCurrentUser";
 import useAxios from "../../../hooks/useAxios";
 import LoadingLottie from "../../../components/Lotties/LoadingLottie";
 
@@ -23,10 +19,6 @@ const statsIcons = [
 
 const PlatformStatistics = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { user: firebaseUser } = useAuth();
-  const { role } = useCurrentUser() || {};
   const axiosInstance = useAxios();
 
   const [statsData, setStatsData] = useState([]);
